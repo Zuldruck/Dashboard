@@ -1,0 +1,120 @@
+{
+    "client": {
+        "host": ""
+    },
+    "server": {
+        "current_time": 0,
+        "services": [{
+            "name": "Epitech Intranet",
+            "widgets": [{
+                "name": "Leaderboard",
+                "description": "Display of the leaderboard by gpa per city",
+                "params": [{
+                    "name": "city",
+                    "type": "string"
+                }]
+            }, {
+                "name": "Students Card",
+                "description": "Display the student card of the authenticated user",
+                "params": [{
+                    "name": "showGpa",
+                    "type": "integer"
+                }]
+            }]
+        }, {
+            "name": "Spotify",
+            "widgets": [{
+                "name": "Player",
+                "description": "Player Spotify that plays user playlist",
+                "params": [{
+                    "name": "playlist",
+                    "type": "string"
+                }]
+            }]
+        }, {
+            "name": "Football",
+            "widgets": [{
+                "name": "Top Scorers",
+                "description": "Leaderboard of the top scorers by league",
+                "params": [{
+                    "name": "league",
+                    "type": "string"
+                }]
+            }, {
+                "name": "Top Red Cards",
+                "description": "Leaderboard of the top red cards players by league",
+                "params": [{
+                    "name": "league",
+                    "type": "string"
+                }]
+            }]
+        }, {
+            "name": "OpenData Montpellier",
+            "widgets": [{
+                "name": "Vélomagg Disponibility",
+                "description": "Vélomagg disponibility by parking",
+                "params": [{
+                    "name": "parking",
+                    "type": "string"
+                }]
+            }, {
+                "name": "Cars Parking Disponibility",
+                "description": "Cars parking disponibility by parking",
+                "params": [{
+                    "name": "parking",
+                    "type": "string"
+                }]
+            }]
+        }, {
+            "name": "Twitter",
+            "widgets": [{
+                "name": "User Feed",
+                "description": "Display the user's feed",
+                "params": []
+            }, {
+                "name": "User Card",
+                "description": "Display the user informations card",
+                "params": [{
+                    "name": "showFollowers",
+                    "type": "integer"
+                }, {
+                    "name": "showFollowing",
+                    "type": "integer"
+                }, {
+                    "name": "showPseudo",
+                    "type": "integer"
+                }, {
+                    "name": "showPhoto",
+                    "type": "integer"
+                }]
+            }]
+        }, {
+            "name": "Outlook",
+            "widgets": [{
+                "name": "Mails",
+                "description": "Display users's mails",
+                "params": [{
+                    "name": "showOnlyNonRead",
+                    "type": "integer"
+                }]
+            }]
+        }, {
+            "name": "Cocktails",
+            "widgets": [{
+                "name": "Cocktail list",
+                "description": "Display cocktail list by ingredient",
+                "params": [{
+                    "name": "ingredient",
+                    "type": "string"
+                }]
+            }, {
+                "name": "Cocktail Popularity",
+                "description": "Display the cocktails leaderboard by popularity",
+                "params": [{
+                    "name": "showAlcohoolicCocktail",
+                    "type": "integer"
+                }]
+            }]
+        }]
+    }
+}
