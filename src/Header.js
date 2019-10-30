@@ -13,20 +13,18 @@ export class Header extends Component {
 
     render() {
         return (
-            <div>
-                <Layout.Header style={{ background: '#fff', padding: 0 }}>
-                    <Icon
-                        className="trigger"
-                        type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-                        onClick={() => {
-                            this.setState({
-                                collapsed: !this.state.collapsed,
-                            });
-                            this.state.toggle();
-                        }}
-                    />
-                </Layout.Header>
-            </div>
+            <Layout.Header style={{ background: '#fff', padding: 0 }}>
+                <Icon
+                    className="trigger"
+                    type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                    onClick={() => {
+                        this.setState({
+                            collapsed: !this.state.collapsed,
+                        });
+                        this.state.toggle();
+                    }}
+                />
+            </Layout.Header>
         )
     }
 }
