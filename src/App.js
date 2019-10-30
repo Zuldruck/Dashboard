@@ -6,8 +6,7 @@ import { Layout } from 'antd';
 
 const { Content } = Layout;
 
-
-export class App extends Component {
+export default class App extends Component {
 
     constructor() {
         super();
@@ -24,30 +23,31 @@ export class App extends Component {
 
     render() {
         return (
-            <div>
-                <Layout>
-                    <Sidebar
-                        collapsed={this.state.collapsed}
+            <Layout>
+                <Sidebar
+                    collapsed={this.state.collapsed}
+                />
+                <Layout
+                    style={{
+                        height: "100vh"
+                    }}
+                >
+                    <Header 
+                        toggle={this.toggle}
                     />
-                    <Layout>
-                        <Header 
-                            toggle={this.toggle}
-                        />
-                        <Content
-                            style={{
-                                margin: '24px 16px',
-                                padding: 24,
-                                background: '#fff',
-                                minHeight: 280,
-                            }}
-                        >
-                            Content
-                        </Content>
-                    </Layout>
+                    <Content
+                        style={{
+                            margin: '24px 16px',
+                            padding: 24,
+                            background: '#fff',
+                            minHeight: 280,
+                        }}
+                    >
+                        Content
+                    </Content>
                 </Layout>
-            </div>
+            </Layout>
         );
     }
 }
 
-export default App;
