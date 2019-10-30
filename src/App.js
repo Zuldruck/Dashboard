@@ -1,26 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react'
 import './App.css';
+import { Header } from './Header';
+import Sidebar from './Sidebar';
+import { Layout } from 'antd';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const { Content } = Layout;
+
+
+export class App extends Component {
+
+    constructor() {
+        super();
+        this.state = {
+            collapsed: false,
+        };
+    }
+
+    toggle = () => {
+        this.setState({
+            collapsed: !this.state.collapsed,
+        });
+    }
+
+    render() {
+        return (
+            <div>
+                <Layout>
+                    <Sidebar
+                        collapsed={this.state.collapsed}
+                    />
+                    <Layout>
+                        <Header 
+                            toggle={this.toggle}
+                        />
+                        <Content
+                            style={{
+                                margin: '24px 16px',
+                                padding: 24,
+                                background: '#fff',
+                                minHeight: 280,
+                            }}
+                        >
+                            Content
+                        </Content>
+                    </Layout>
+                </Layout>
+            </div>
+        );
+    }
 }
 
 export default App;
