@@ -62,10 +62,11 @@ def register():
         if all_users[x]['email'] == login:
             return json.dumps({"error": "404", "message": "An account already exists with this email address"})
 
-    loginUser = {"email": login, "password": hashed, "admin": admin}
+    loginUser = {"email": login, "password": hashed, "admin": admin, "access_token": "0"}
     res = db.child("users").push(loginUser, user['idToken'])
-    #return a success
-    return jsonify(res)
+    # return a success
+    return json.dumps({"success": "200", "message": "user registered."})
+
 
 @loginManagement.route('/login', methods=['POST'])
 def login():
@@ -93,8 +94,10 @@ def login():
     for x in all_users:
         if all_users[x]['email'] == login:
             if isPasswordValid(all_users[x]['password'], password):
-                #update access token in database
-                return json.dumps({"success": "200", "access_token": secrets.token_hex(20)})
+                # update access token in database
+                access_token = secrets.token_hex(20)
+                db.child("users").child(x).update({"access_token": access_token}, user['idToken'])
+                return json.dumps({"success": "200", "access_token": access_token})
             else:
                 return json.dumps({"error": "404", "message": "Wrong password or username"})
 
@@ -122,14 +125,22 @@ def delete():
     from index import db, user
 
     login = request.form["login"]
-    acces_token = request.form["acces_token"]
+    access_token = request.form["access_token"]
+    right_access = 0
 
-    #check user who own access_token got admin right
+    # check user who own access_token got admin right
 
     all_users = db.child("users").get(user['idToken']).val()
 
     for x in all_users:
-        if all_users[x]['email'] == login:
+        if all_users[x]["access_token"] == access_token and all_users[x]["admin"] == "1":
+            right_access = 1
+            break
+    if right_access == 1:
+        for x in all_users:
+            if all_users[x]["email"] == login:
+                db.child("users").child(x).remove(user['idToken'])
+                return json.dumps({"success": "200", "message": "user deleted."})
 
     return json.dumps({"error": "404", "message": "anything found in the database."})
 
@@ -157,17 +168,19 @@ def modifyPermission():
     login = request.form["login"]
     access_token = request.form["access_token"]
     admin = request.form["admin"]
-
-    #check user who own access_token got admin right
+    right_access = 0
+    # check user who own access_token got admin right
 
     all_users = db.child("users").get(user['idToken']).val()
 
     for x in all_users:
-        if all_users[x]['email'] == login:
-            if isPasswordValid(all_users[x]['password'], password):
+        if all_users[x]["access_token"] == access_token and all_users[x]["admin"] == "1":
+            right_access = 1
+            break
+    if right_access == 1:
+        for x in all_users:
+            if all_users[x]["email"] == login:
                 db.child("users").child(x).update({"admin": admin}, user['idToken'])
                 return json.dumps({"success": "200", "message": "Account updated"})
-            else:
-                return json.dumps({"error": "404", "message": "WRONG PASSWORD."})
 
     return json.dumps({"error": "404", "message": "anything found in the database."})
