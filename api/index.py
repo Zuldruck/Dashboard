@@ -23,13 +23,6 @@ db = firebase.database()
 auth = firebase.auth()
 user = auth.sign_in_with_email_and_password("lucas.sanchez@epitech.eu", "dashboard1234")
 
-
-@app.route('/')
-def root():
-    users = db.child('users').get(user['idToken'])
-    return jsonify(users.val())
-
-
 @app.route('/about')
 def about():
     file = open("../about.json", "r")

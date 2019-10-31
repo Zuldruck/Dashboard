@@ -9,11 +9,23 @@ import {
     Switch,
     Route,
   } from "react-router-dom";
+import Login from './Login';
 
 export default class App extends Component {
+
+    constructor() {
+        super();
+        this.state = {
+            loggedIn: false,
+        }
+    }
+
     render() {
         return (
             <Router>
+                <Route exact path="/login">
+                    <Login />
+                </Route>
                 <Dashboard>
                     <Switch>
                         <Route exact path="/">
