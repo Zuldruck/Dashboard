@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 import json
 import requests
 from requests.exceptions import HTTPError
@@ -12,11 +12,12 @@ def getCompetitions():
     getCompetitions will return you all the competition that the API have.
 
     Format json which are returned :
-      "country_name": x['country_name'] --> name of the country.
-      "league_id": x['league_id']       --> Unique ID of the competition (needed for few other requests)
-      "league_name": x['league_name'],  --> name of the league.
+    "country_name": x['country_name'] --> name of the country.
+    "league_id": x['league_id']       --> Unique ID of the competition (needed for few other requests)
+    "league_name": x['league_name'],  --> name of the league.
     :rtype: object
     """
+
     from index import db, user
     country = ""
     competitions = []
@@ -48,14 +49,14 @@ def getCompetitions():
         for x in response.json():
             if x == "error":
                 print("Error Request: " + response.json()['message'])
-                return response.json()
+                return jsonify({"success": 404, "message": "Error when fetching competitions."})
             tmpDict = {
                 "country_name": x['country_name'],
                 "league_id": x['league_id'],
                 "league_name": x['league_name'],
             }
             competitions.append(tmpDict)
-    return json.dumps(competitions)
+    return jsonify(competitions)
 
 
 def getLeagueByName(countryName, leagueName):
@@ -88,44 +89,39 @@ def rankLeague():
     @league = the competition name that you target in the country chosen. \n
 
     An exemple with this route :
-        url : "http://127.0.0.1:5000/services/football/rank" \n
-        league=Ligue 1 \n
-        country=France \n
-        url + param : http://127.0.0.1:5000/services/football/rank?league=Ligue 1&country=France \n \n
+    url : "http://127.0.0.1:5000/services/football/rank" \n
+    league=Ligue 1 \n
+    country=France \n
+    url + param : http://127.0.0.1:5000/services/football/rank?league=Ligue 1&country=France \n \n
 
     An example of output :
-        [
-           {
-              "name":"Paris SG", \n
-              "position":"1", \n
-              "match_played":"11", \n
-              "match_winned":"9", \n
-              "match_draw":"0", \n
-              "match_loosed":"2" \n
-           },\n
-           {
-              "name":"Nantes", \n
-              "position":"2", \n
-              "match_played":"11", \n
-              "match_winned":"6", \n
-              "match_draw":"1", \n
-              "match_loosed":"4" \n
-           },
-            ...
-        ]
-    :return: <br>The function will return a list of dict which will contained this kind of variable : <br><br>
-        ⚫ name of the club. <br>
-        ⚫ position in the ranking (sort in order by default). <br>
-        ⚫ count of played match. <br>
-        ⚫ count of won match. <br>
-        ⚫ count of draw match. <br>
-        ⚫ count of loosed match. <br><br>
-        If there is problem with the name of the country or the league our API will return this kind of json : <br><br>
-        {
-            "error": 404,
-            "message": "No league found (please check your plan)!!"
-        }
+    "name":"Paris SG", \n
+    "position":"1", \n
+    "match_played":"11", \n
+    "match_winned":"9", \n
+    "match_draw":"0", \n
+    "match_loosed":"2" \n
+    next:
+    "name":"Nantes", \n
+    "position":"2", \n
+    "match_played":"11", \n
+    "match_winned":"6", \n
+    "match_draw":"1", \n
+    "match_loosed":"4" \n
+    :return: The function will return a list of dict which will contained this kind of variable. \n
+    ⚫ name of the club. \n
+    ⚫ position in the ranking (sort in order by default). \n
+    ⚫ count of played match. \n
+    ⚫ count of won match. \n
+    ⚫ count of draw match. \n
+    ⚫ count of loosed match. \n
+    If there is problem with the name of the country or the league our API will return this kind of json :
+    {
+    "error": 404,
+    "message": "No league found (please check your plan)!!"
+    }
     """
+
     from index import db, user
 
     country = request.args.get("country")
@@ -161,7 +157,7 @@ def rankLeague():
         for x in response.json():
             if x == "error":
                 print("Error Request: " + response.json()['message'])
-                return response.json()
+                return jsonify({"success": 404, "message": "Error when fetching rank leagues."})
             tmpDict = {
                 "name": x['team_name'],
                 "position": x['overall_league_position'],
@@ -171,7 +167,7 @@ def rankLeague():
                 "match_loosed": x['overall_league_L']
             }
             teams.append(tmpDict)
-    return json.dumps(teams)
+    return jsonify(teams)
 
 
 @footballpage.route('/services/football/live', methods=['GET'])
@@ -190,32 +186,22 @@ def liveScore():
             url + param : http://127.0.0.1:5000/services/football/live?league=Coupe de la Ligue\n
 
         An example of output :
-            [
-               {
-                  "match_hometeam_name":"Amiens",\n
-                  "match_hometeam_score":"3",\n
-                  "match_awayteam_name":"Angers",\n
-                  "match_awayteam_score":"2"\n
-               },\n
-               {
-                  "match_hometeam_name":"Montpellier",\n
-                  "match_hometeam_score":"3",\n
-                  "match_awayteam_name":"Nancy",\n
-                  "match_awayteam_score":"2"\n
-               },
-               ...
-            ]
-        :return: <br>The function will return a list of dict which will contained this kind of variable :<br><br>
-            ⚫ name of the club  [HOME]<br>
-            ⚫ score of the club  [HOME]<br>
-            ⚫ name of the club  [AWAY]<br>
-            ⚫ score of the club  [AWAY]<br><br>
-            If there is no event today the API will return this kind of json :<br>
-            {
-                "error": 404,
-                "message": "No event found (please check your plan)!"
-            }
-        """
+            "match_hometeam_name":"Amiens",\n
+            "match_hometeam_score":"3",\n
+            "match_awayteam_name":"Angers",\n
+            "match_awayteam_score":"2"\n
+
+        :return:
+            The function will return a list of dict which will contained this kind of variable :
+            name of the club  [HOME]
+            score of the club  [HOME]
+            name of the club  [AWAY]
+            score of the club  [AWAY]
+            If there is no event today the API will return this kind of json :
+            "error": 404,
+            "message": "No event found (please check your plan)!"
+    """
+
     from index import db, user
 
     country = request.args.get("country")
@@ -253,7 +239,7 @@ def liveScore():
         for x in response.json():
             if x == "error":
                 print("Error Request: " + response.json()['message'])
-                return response.json()
+                return jsonify({"success": 404, "message": "Error when fetching live scores."})
             if x['match_live'] == '1':
                 tmpDict = {
                     "match_hometeam_name": x['match_hometeam_name'],
@@ -263,4 +249,4 @@ def liveScore():
                 }
                 teams.append(tmpDict)
         print(teams)
-    return json.dumps(teams)
+    return jsonify(teams)

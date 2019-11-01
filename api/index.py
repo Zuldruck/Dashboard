@@ -1,6 +1,7 @@
 from flask import Flask
 from footballAPI import footballpage
 from loginManagement import loginManagement
+from cocktailAPI import cocktailPage
 
 from flask import jsonify
 import pyrebase
@@ -16,6 +17,7 @@ key = os.path.join(os.path.dirname(__file__), 'server.key')
 app = Flask(__name__)
 app.register_blueprint(footballpage)
 app.register_blueprint(loginManagement)
+app.register_blueprint(cocktailPage)
 
 CORS(app)
 
@@ -38,7 +40,6 @@ def about():
     about_json = json.loads(content)
     about_json["server"]["current_time"] = int(time.time())
     return jsonify(about_json)
-
 
 if __name__ == '__main__':
     context = (cer, key)
