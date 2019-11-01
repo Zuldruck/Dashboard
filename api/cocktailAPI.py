@@ -96,11 +96,13 @@ def getAllCocktailsWithGlasses():
          url : "http://127.0.0.1:5000/services/cocktail/cocktailGlasses"\n
          param : "glasses=Cocktail_glass"
 
-         output :\n -{"name": "9 1/2 Weeks", "pic": "https://www.thecocktaildb.com/images/media/drink/xvwusr1472669302.jpg", "id": "16108"},
-                  -{"name": "A. J.", "pic": "https://www.thecocktaildb.com/images/media/drink/uryyrr1472811418.jpg", "id": "17833"},\n
+         output :
+         {"name": "9 1/2 Weeks", "pic": "https://www.thecocktaildb.com/images/media/drink/xvwusr1472669302.jpg", "id": "16108"},
+         {"name": "A. J.", "pic": "https://www.thecocktaildb.com/images/media/drink/uryyrr1472811418.jpg", "id": "17833"},\n
 
          :return: list of dict.
     """
+
 
     cocktails = []
 

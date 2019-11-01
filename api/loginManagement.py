@@ -42,9 +42,9 @@ def register():
             login=simon1.provost@epitech.eu\n
             password=1p54er7H#\n
             admin=1\n
-    :return: <br>
-        Error  : {"error": "404", "message": "An account already exists with this email address"} <br>
-        Success : {"success": "200", "message": "user registered."} .<br>
+    :return:
+        Error  : {"error": "404", "message": "An account already exists with this email address"}
+        Success : {"success": "200", "message": "user registered."} .
 
     """
     from index import db, user
@@ -79,9 +79,9 @@ def login():
             http://127.0.0.1:5000/login\n
             login=simon1.provost@epitech.eu\n
             password=1p54er7H#\n
-    :return: <br>
-        Error: {"error": "404", "message": "Wrong password or username"} <br>
-        Success: {"success": "200", "access_token": access_token}<br>
+    :return:
+        Error: {"error": "404", "message": "Wrong password or username"}
+        Success: {"success": "200", "access_token": access_token}
 
     """
     from index import db, user
@@ -117,8 +117,8 @@ def delete():
                 login=simon1.provost@epitech.eu\n
                 access_token=$2b$12$mmML0e8FfPoKsLKyrTidje7lf9erfSu2OkV4NOUV.NuK7IF4z6CoW\n
 
-       :return: <br>
-           {"error": "404", "message": "Either the access_token doesn't have the right access or your user didn't exist in our database."} <br>
+       :return:
+           {"error": "404", "message": "Either the access_token doesn't have the right access or your user didn't exist in our database."}
            Success:{"success": "200", "message": "user deleted."}. br>
 
        """
@@ -161,9 +161,9 @@ def modifyPermission():
             access_token=$2b$12$mmML0e8FfPoKsLKyrTidje7lf9erfSu2OkV4NOUV.NuK7IF4z6CoW\n
             admin=1\n
 
-    :return: json string will be return.<br>
-        Error: {"error": "404", "message": "Either the access_token doesn't have the right access or your user didn't exist in our database."}<br>
-        Success: {"success": "200", "message": "Account updated"}<br>
+    :return: json string will be return.
+        Error: {"error": "404", "message": "Either the access_token doesn't have the right access or your user didn't exist in our database."}
+        Success: {"success": "200", "message": "Account updated"}
     """
     from index import db, user
 
