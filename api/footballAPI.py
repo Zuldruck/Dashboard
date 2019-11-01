@@ -95,26 +95,26 @@ def rankLeague():
     url + param : http://127.0.0.1:5000/services/football/rank?league=Ligue 1&country=France \n \n
 
     An example of output :
-    "name":"Paris SG", \n
-    "position":"1", \n
-    "match_played":"11", \n
-    "match_winned":"9", \n
-    "match_draw":"0", \n
-    "match_loosed":"2" \n
-    next:
-    "name":"Nantes", \n
-    "position":"2", \n
-    "match_played":"11", \n
-    "match_winned":"6", \n
-    "match_draw":"1", \n
-    "match_loosed":"4" \n
+        "name":"Paris SG", \n
+        "position":"1", \n
+        "match_played":"11", \n
+        "match_winned":"9", \n
+        "match_draw":"0", \n
+        "match_loosed":"2" \n
+        next:
+        "name":"Nantes", \n
+        "position":"2", \n
+        "match_played":"11", \n
+        "match_winned":"6", \n
+        "match_draw":"1", \n
+        "match_loosed":"4" \n
     :return: The function will return a list of dict which will contained this kind of variable. \n
-    ⚫ name of the club. \n
-    ⚫ position in the ranking (sort in order by default). \n
-    ⚫ count of played match. \n
-    ⚫ count of won match. \n
-    ⚫ count of draw match. \n
-    ⚫ count of loosed match. \n
+        ⚫ name of the club. \n
+        ⚫ position in the ranking (sort in order by default). \n
+        ⚫ count of played match. \n
+        ⚫ count of won match. \n
+        ⚫ count of draw match. \n
+        ⚫ count of loosed match. \n
     If there is problem with the name of the country or the league our API will return this kind of json :
     {
     "error": 404,

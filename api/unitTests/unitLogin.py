@@ -29,7 +29,7 @@ class UnitTestsLoginManagement(unittest.TestCase):
         except Exception as err:
             print(f'Other error occurred: {err}')  # Python 3.6
         else:
-            str = '{"error": "404", "message": "An account already exists with this email address"}'
+            str = '{"success": "404", "message": "An account already exists with this email address"}'
             self.assertEqual(response.text, str)
             return
         self.assertEqual(1, 2)
@@ -104,7 +104,7 @@ class UnitTestsLoginManagement(unittest.TestCase):
         except Exception as err:
             print(f'Other error occurred: {err}')  # Python 3.6
         else:
-            str = '{"error": "404", "message": "Either the access_token doesn\'t have the right access or your user didn\'t exist in our database."}'
+            str = '{"success": "404", "message": "Either the access_token doesn\'t have the right access or your user didn\'t exist in our database."}'
             self.assertEqual(response.text, str)
             return
         self.assertEqual(1, 2)
@@ -222,7 +222,7 @@ class UnitTestsLoginManagement(unittest.TestCase):
             except Exception as err:
                 print(f'Other error occurred: {err}')  # Python 3.6
             else:
-                str = '{"error": "404", "message": "Either the access_token doesn\'t have the right access or your user didn\'t exist in our database."}'
+                str = '{"success": "404", "message": "Either the access_token doesn\'t have the right access or your user didn\'t exist in our database."}'
                 self.assertEqual(response.text, str)
                 # api-endpoint
                 url = "http://127.0.0.1:5000/delete"
