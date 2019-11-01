@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './login.css';
+import axios from 'axios';
+import { message } from 'antd';
 
 export class Login extends Component {
     
@@ -17,12 +19,46 @@ export class Login extends Component {
     
     handleSubmit = (event) => {
         event.preventDefault();
+
+        if (this.state.sliderClass === ''
+        || this.state.sliderClass === 'bounceRight') {
+            axios.post("https://0.0.0.0:5000/login", {
+                login: this.state.loginEmail,
+                password: this.state.loginPassword,
+            }).then((response) => {
+                if (response.data.success !== 200) {
+                    message.error(response.data.message)
+                    return;
+                }
+                localStorage.setItem('access_token', response.data.access_token);
+                localStorage.setItem('email', this.state.loginEmail);
+                window.location.replace('http://localhost:3000/')
+            })
+        } else {
+            if (this.state.registerPassword !== this.state.registerRepeatedPassword) {
+                message.warning('Passwords do not match', 3);
+                return;
+            }
+            axios.post("https://0.0.0.0:5000/register", {
+                login: this.state.registerEmail,
+                password: this.state.registerPassword,
+                admin: 0,
+            }).then((response) => {
+                if (response.data.success !== 200) {
+                    message.error(response.data.message)
+                    return;
+                }
+                localStorage.setItem('access_token', response.data.access_token);
+                localStorage.setItem('email', this.state.registerEmail);
+                window.location.replace('http://localhost:3000/')
+            })
+        }
     }
 
     handleInputChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
-        })
+        });
     }
 
     render() {
@@ -33,7 +69,6 @@ export class Login extends Component {
                         <div className="user_options-text">
                             <div className="user_options-unregistered">
                                 <h2 className="user_unregistered-title">Don't have an account?</h2>
-                                <p className="user_unregistered-text">Banjo tote bag bicycle rights, High Life sartorial cray craft beer whatever street art fap.</p>
                                 <button className="user_unregistered-signup" id="signup-button" onClick={() => {
                                     this.setState({
                                         sliderClass: 'bounceLeft'
@@ -42,7 +77,6 @@ export class Login extends Component {
                             </div>
                             <div className="user_options-registered">
                                 <h2 className="user_registered-title">Have an account?</h2>
-                                <p className="user_registered-text">Banjo tote bag bicycle rights, High Life sartorial cray craft beer whatever street art fap.</p>
                                 <button className="user_registered-login" id="login-button" onClick={() => {
                                     this.setState({
                                         sliderClass: 'bounceRight'

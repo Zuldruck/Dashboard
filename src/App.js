@@ -23,11 +23,11 @@ export default class App extends Component {
     render() {
         return (
             <Router>
-                <Route exact path="/login">
-                    <Login />
-                </Route>
-                <Dashboard>
-                    <Switch>
+                <Switch>
+                    <Route exact path="/login">
+                        <Login />
+                    </Route>
+                    <Dashboard>
                         <Route exact path="/">
                             <Home />
                         </Route>
@@ -37,8 +37,8 @@ export default class App extends Component {
                         <Route exact path="/widgets">
                             <Widgets />
                         </Route>
-                    </Switch>
-                </Dashboard>
+                    </Dashboard>
+                </Switch>
 
             </Router>
         );

@@ -6,16 +6,24 @@ from flask import jsonify
 import pyrebase
 import json
 import time
+from flask_cors import CORS
+from OpenSSL import SSL
+import os
+
+cer = os.path.join(os.path.dirname(__file__), 'server.crt')
+key = os.path.join(os.path.dirname(__file__), 'server.key')
 
 app = Flask(__name__)
 app.register_blueprint(footballpage)
 app.register_blueprint(loginManagement)
 
+CORS(app)
+
 config = {
     "apiKey": "AIzaSyAT3jR4FM2Aj-V90sYfVpOv2O96j2H6x5Y",
     "authDomain": "dashboard-d7ebf.firebaseapp.com",
     "databaseURL": "https://dashboard-d7ebf.firebaseio.com",
-    "storageBucket": "dashboard-d7ebf.appspot.com"
+    "storageBucket": "dashboard-d7ebf.appspot.com",
 }
 
 firebase = pyrebase.initialize_app(config)
@@ -33,4 +41,5 @@ def about():
 
 
 if __name__ == '__main__':
-    app.run()
+    context = (cer, key)
+    app.run(host='0.0.0.0', debug=True, ssl_context=context)
