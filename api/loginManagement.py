@@ -2,9 +2,9 @@ import json
 import secrets
 
 import bcrypt
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 
-loginManagement = Blueprint('loginManagement', __name__, template_folder='templates')
+loginManagement = Blueprint('loginManagement', __name__)
 
 
 def makePasswordHash(password):
@@ -35,7 +35,7 @@ def register():
     register will add the user information to our database.\n
     @login = login of the user(email).\n
     @password = password of the user.\n
-    @admin = the admin permission of the user in our plateform. (1 || 0) \n
+    @admin = the admin permission of the user in our platejson. (1 || 0) \n
 
     example of request :
             http://127.0.0.1:5000/register\n
@@ -49,9 +49,9 @@ def register():
     """
     from index import db, user
 
-    login = request.form["login"]
-    password = request.form["password"]
-    admin = request.form["admin"]
+    login = request.json["login"]
+    password = request.json["password"]
+    admin = request.json["admin"]
 
     hashed = makePasswordHash(password)
 
@@ -59,11 +59,12 @@ def register():
 
     for x in all_users:
         if all_users[x]['email'] == login:
-            return json.dumps({"error": "404", "message": "An account already exists with this email address"})
+            return jsonify({"success": 404, "message": "An account already exists with this email address"})
 
+    access_token = secrets.token_hex(20)
     loginUser = {"email": login, "password": hashed, "admin": admin, "access_token": "0"}
-    res = db.child("users").push(loginUser, user['idToken'])
-    return json.dumps({"success": "200", "message": "user registered."})
+    db.child("users").push(loginUser, user['idToken'])
+    return jsonify({"success": 200, "message": "User registered.", "access_token": access_token})
 
 
 @loginManagement.route('/login', methods=['POST'])
@@ -86,8 +87,8 @@ def login():
     """
     from index import db, user
 
-    login = request.form["login"]
-    password = request.form["password"]
+    login = request.json["login"]
+    password = request.json["password"]
 
     all_users = db.child("users").get(user['idToken']).val()
 
@@ -96,11 +97,11 @@ def login():
             if isPasswordValid(all_users[x]['password'], password):
                 access_token = secrets.token_hex(20)
                 db.child("users").child(x).update({"access_token": access_token}, user['idToken'])
-                return json.dumps({"success": "200", "access_token": access_token})
+                return jsonify({"success": 200, "access_token": access_token})
             else:
-                return json.dumps({"error": "404", "message": "Wrong password or username"})
+                return jsonify({"success": 404, "message": "Wrong password or username"})
 
-    return json.dumps({"error": "404", "message": "Wrong password or username"})
+    return jsonify({"success": 404, "message": "Wrong password or username"})
 
 
 @loginManagement.route('/delete', methods=['POST'])
@@ -125,8 +126,8 @@ def delete():
 
     from index import db, user
 
-    login = request.form["login"]
-    access_token = request.form["access_token"]
+    login = request.json["login"]
+    access_token = request.json["access_token"]
     right_access = 0
 
     all_users = db.child("users").get(user['idToken']).val()
@@ -139,9 +140,9 @@ def delete():
         for x in all_users:
             if all_users[x]["email"] == login:
                 db.child("users").child(x).remove(user['idToken'])
-                return json.dumps({"success": "200", "message": "user deleted."})
+                return jsonify({"success": 200, "message": "user deleted."})
 
-    return json.dumps({"error": "404", "message": "Either the access_token doesn't have the right access or your user "
+    return jsonify({"success": 404, "message": "Either the access_token doesn't have the right access or your user "
                                                   "didn't exist in our database."})
 
 
@@ -167,9 +168,9 @@ def modifyPermission():
     """
     from index import db, user
 
-    login = request.form["login"]
-    access_token = request.form["access_token"]
-    admin = request.form["admin"]
+    login = request.json["login"]
+    access_token = request.json["access_token"]
+    admin = request.json["admin"]
     right_access = 0
     # check user who own access_token got admin right
 
@@ -183,7 +184,7 @@ def modifyPermission():
         for x in all_users:
             if all_users[x]["email"] == login:
                 db.child("users").child(x).update({"admin": admin}, user['idToken'])
-                return json.dumps({"success": "200", "message": "Account updated"})
+                return jsonify({"success": 200, "message": "Account updated"})
 
-    return json.dumps({"error": "404", "message": "Either the access_token doesn't have the right access or your user "
+    return jsonify({"success": 404, "message": "Either the access_token doesn't have the right access or your user "
                                                   "didn't exist in our database."})

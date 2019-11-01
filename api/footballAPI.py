@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 import json
 import requests
 from requests.exceptions import HTTPError
@@ -49,14 +49,14 @@ def getCompetitions():
         for x in response.json():
             if x == "error":
                 print("Error Request: " + response.json()['message'])
-                return response.json()
+                return jsonify({"success": 404, "message": "Error when fetching competitions."})
             tmpDict = {
                 "country_name": x['country_name'],
                 "league_id": x['league_id'],
                 "league_name": x['league_name'],
             }
             competitions.append(tmpDict)
-    return json.dumps(competitions)
+    return jsonify(competitions)
 
 
 def getLeagueByName(countryName, leagueName):
@@ -157,7 +157,7 @@ def rankLeague():
         for x in response.json():
             if x == "error":
                 print("Error Request: " + response.json()['message'])
-                return response.json()
+                return jsonify({"success": 404, "message": "Error when fetching rank leagues."})
             tmpDict = {
                 "name": x['team_name'],
                 "position": x['overall_league_position'],
@@ -167,7 +167,7 @@ def rankLeague():
                 "match_loosed": x['overall_league_L']
             }
             teams.append(tmpDict)
-    return json.dumps(teams)
+    return jsonify(teams)
 
 
 @footballpage.route('/services/football/live', methods=['GET'])
@@ -239,7 +239,7 @@ def liveScore():
         for x in response.json():
             if x == "error":
                 print("Error Request: " + response.json()['message'])
-                return response.json()
+                return jsonify({"success": 404, "message": "Error when fetching live scores."})
             if x['match_live'] == '1':
                 tmpDict = {
                     "match_hometeam_name": x['match_hometeam_name'],
@@ -249,4 +249,4 @@ def liveScore():
                 }
                 teams.append(tmpDict)
         print(teams)
-    return json.dumps(teams)
+    return jsonify(teams)

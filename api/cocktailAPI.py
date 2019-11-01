@@ -1,7 +1,7 @@
 import json
 
 import requests
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from requests.exceptions import HTTPError
 
 cocktailPage = Blueprint('cocktailPage', __name__, template_folder='templates')
@@ -49,7 +49,7 @@ def getCocktailWithIngredient():
                     "id": x['idDrink'],
                 }
                 cocktails.append(tmpDict)
-    return json.dumps(cocktails)
+    return jsonify(cocktails)
 
 
 @cocktailPage.route('/services/cocktail/listGlasses', methods=['GET'])
@@ -84,7 +84,7 @@ def getListOfDifferentGlasses():
                     "name": x['strGlass'],
                 }
                 glasses.append(tmpDict)
-    return json.dumps(glasses)
+    return jsonify(glasses)
 
 
 @cocktailPage.route('/services/cocktail/cocktailGlasses', methods=['GET'])
@@ -130,4 +130,4 @@ def getAllCocktailsWithGlasses():
                     "id": x['idDrink'],
                 }
                 cocktails.append(tmpDict)
-    return json.dumps(cocktails)
+    return jsonify(cocktails)
