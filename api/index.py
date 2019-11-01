@@ -1,6 +1,7 @@
 from flask import Flask
 from footballAPI import footballpage
 from loginManagement import loginManagement
+from cocktailAPI import cocktailPage
 
 from flask import jsonify
 import pyrebase
@@ -10,6 +11,7 @@ import time
 app = Flask(__name__)
 app.register_blueprint(footballpage)
 app.register_blueprint(loginManagement)
+app.register_blueprint(cocktailPage)
 
 config = {
     "apiKey": "AIzaSyAT3jR4FM2Aj-V90sYfVpOv2O96j2H6x5Y",
