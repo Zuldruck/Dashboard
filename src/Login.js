@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './login.css';
 import axios from 'axios';
-import { message } from 'antd';
+import { Row, Col, message } from 'antd';
 
 export class Login extends Component {
     
@@ -14,11 +14,14 @@ export class Login extends Component {
             registerPassword: '',
             registerRepeatedPassword: '',
             sliderClass: '',
+            isLoading: false,
         }
     }
     
     handleSubmit = (event) => {
         event.preventDefault();
+
+        this.setState({isLoading: true});
 
         if (this.state.sliderClass === ''
         || this.state.sliderClass === 'bounceRight') {
@@ -26,12 +29,14 @@ export class Login extends Component {
                 login: this.state.loginEmail,
                 password: this.state.loginPassword,
             }).then((response) => {
+                this.setState({isLoading: false});
                 if (response.data.success !== 200) {
                     message.error(response.data.message)
                     return;
                 }
                 localStorage.setItem('access_token', response.data.access_token);
                 localStorage.setItem('email', this.state.loginEmail);
+                localStorage.setItem('isAdmin', response.data.is_admin);
                 window.location.replace('http://localhost:3000/')
             })
         } else {
@@ -44,12 +49,14 @@ export class Login extends Component {
                 password: this.state.registerPassword,
                 admin: 0,
             }).then((response) => {
+                this.setState({isLoading: false});
                 if (response.data.success !== 200) {
                     message.error(response.data.message)
                     return;
                 }
                 localStorage.setItem('access_token', response.data.access_token);
                 localStorage.setItem('email', this.state.registerEmail);
+                localStorage.setItem('isAdmin', false);
                 window.location.replace('http://localhost:3000/')
             })
         }
@@ -86,7 +93,21 @@ export class Login extends Component {
                         </div>
                         <div className={"user_options-forms " + this.state.sliderClass} id="user_options-forms">
                             <div className="user_forms-login">
-                                <h2 className="forms_title">Login</h2>
+                                <Row>
+                                    <Col span={18}>
+                                        <h2 className="forms_title">Login</h2>
+                                    </Col>
+                                    <Col span={6}>
+                                        {this.state.isLoading ?
+                                            <div className="spinner">
+                                                <div className="bounce1"></div>
+                                                <div className="bounce2"></div>
+                                                <div className="bounce3"></div>
+                                            </div>
+                                        :
+                                            <div></div>}
+                                    </Col>
+                                </Row>
                                 <form className="forms_form" onSubmit={this.handleSubmit}>
                                     <fieldset className="forms_fieldset">
                                         <div className="forms_field">
@@ -103,7 +124,21 @@ export class Login extends Component {
                                 </form>
                             </div>
                             <div className="user_forms-signup">
-                                <h2 className="forms_title">Sign Up</h2>
+                                <Row>
+                                    <Col span={18}>
+                                        <h2 className="forms_title">Sign Up</h2>
+                                    </Col>
+                                    <Col span={6}>
+                                        {this.state.isLoading ?
+                                            <div className="spinner">
+                                                <div className="bounce1"></div>
+                                                <div className="bounce2"></div>
+                                                <div className="bounce3"></div>
+                                            </div>
+                                        :
+                                            <div></div>}
+                                    </Col>
+                                </Row>
                                 <form className="forms_form" onSubmit={this.handleSubmit}>
                                     <fieldset className="forms_fieldset">
                                         <div className="forms_field">

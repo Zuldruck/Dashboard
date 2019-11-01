@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom';
 
 export class Services extends Component {
 
@@ -7,9 +8,15 @@ export class Services extends Component {
         this.state = {
             loggedIn: false,
         }
+        if (localStorage.getItem("access_token") !== null)
+            this.state.loggedIn = true
     }
 
     render() {
+        if (!this.state.loggedIn)
+            return (
+                <Redirect to="/login"/>
+            )
         return (
             <div>
                 Services

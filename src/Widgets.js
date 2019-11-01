@@ -8,15 +8,15 @@ export class Widgets extends Component {
         this.state = {
             loggedIn: false,
         }
+        if (localStorage.getItem("access_token") !== null)
+            this.state.loggedIn = true
     }
 
     render() {
-        if (!this.state.loggedIn) {
+        if (!this.state.loggedIn)
             return (
                 <Redirect to="/login"/>
-            );
-        }
-
+            )
         return (
             <div>
                 Widgets

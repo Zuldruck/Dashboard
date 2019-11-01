@@ -1,3 +1,7 @@
+body {
+    font-size: 16px;
+}
+
 .App {
   text-align: center;
 }
@@ -36,6 +40,7 @@
 .logo {
     height: 32px;
     margin: 16px;
+    padding-top: 8px;
     color: #198ffc;
     font-size: 22px;
     text-align: center;

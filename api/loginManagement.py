@@ -82,7 +82,7 @@ def login():
             password=1p54er7H#\n
     :return:
         Error: {"error": "404", "message": "Wrong password or username"}
-        Success: {"success": "200", "access_token": access_token}
+        Success: {"success": "200", "access_token": access_token, "is_admin": True}
 
     """
     from index import db, user
@@ -97,7 +97,8 @@ def login():
             if isPasswordValid(all_users[x]['password'], password):
                 access_token = secrets.token_hex(20)
                 db.child("users").child(x).update({"access_token": access_token}, user['idToken'])
-                return jsonify({"success": 200, "access_token": access_token})
+                admin = all_users[x]["admin"]
+                return jsonify({"success": 200, "access_token": access_token, "is_admin": True if admin == 1 else False})
             else:
                 return jsonify({"success": 404, "message": "Wrong password or username"})
 
