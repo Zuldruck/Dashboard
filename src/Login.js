@@ -71,8 +71,9 @@ export class Login extends Component {
         });
     }
 
-    render() {
 
+
+    render() {
         const responseFacebook = (responseData) => {
             axios.post("https://0.0.0.0:5000/loginWithFacebook", {
                 email: responseData['email'],
@@ -84,10 +85,16 @@ export class Login extends Component {
                 }
                 localStorage.setItem('access_token', response.data.access_token);
                 localStorage.setItem('email', responseData['email']);
+                message.success("Welcome " + responseData['email'])
             })
         }
 
         const responseGoogle = (responseData) => {
+
+            if (responseData['error'] === 'undefined') {
+                message.error(responseData['error'] );
+                return;
+            }
             axios.post("https://0.0.0.0:5000/loginWithGoogle", {
                 email: responseData['profileObj']['email'],
                 accessToken: responseData['accessToken'],
@@ -97,7 +104,8 @@ export class Login extends Component {
                     return;
                 }
                 localStorage.setItem('access_token', response.data.access_token);
-                localStorage.setItem('email', responseData['email']);
+                localStorage.setItem('email', responseData['profileObj']['email']);
+                message.success("Welcome " + responseData['profileObj']['email'])
             })
         }
 
@@ -139,7 +147,7 @@ export class Login extends Component {
                                                 <div className="bounce2"></div>
                                                 <div className="bounce3"></div>
                                             </div>
-                                        :
+                                            :
                                             <div></div>}
                                     </Col>
                                 </Row>
@@ -186,7 +194,7 @@ export class Login extends Component {
                                                 <div className="bounce2"></div>
                                                 <div className="bounce3"></div>
                                             </div>
-                                        :
+                                            :
                                             <div></div>}
                                     </Col>
                                 </Row>

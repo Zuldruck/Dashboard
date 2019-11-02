@@ -49,14 +49,14 @@ def getCompetitions():
         for x in response.json():
             if x == "error":
                 print("Error Request: " + response.json()['message'])
-                return jsonify({"success": 404, "message": "Error when fetching competitions."})
+                return json.dumps({"success": 404, "message": "Error when fetching competitions."})
             tmpDict = {
                 "country_name": x['country_name'],
                 "league_id": x['league_id'],
                 "league_name": x['league_name'],
             }
             competitions.append(tmpDict)
-    return jsonify(competitions)
+    return json.dumps(competitions)
 
 
 def getLeagueByName(countryName, leagueName):
@@ -79,7 +79,20 @@ def getLeagueByName(countryName, leagueName):
     return -1
 
 
-@footballpage.route('/services/football/rank', methods=['GET'])
+def isRightToken(token):
+    from index import db, user
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        print("FIREBASE : " + all_users[x]["access_token"])
+        print("token : " + str(token))
+        if all_users[x]["access_token"] == token:
+            return 1
+    return 0
+
+
+@footballpage.route('/services/football/rank', methods=['POST'])
 def rankLeague():
     """
     rankLeague is the route which will be called when the user want to know the rank of the popular competition in the world of the football. \n
@@ -124,8 +137,13 @@ def rankLeague():
 
     from index import db, user
 
-    country = request.args.get("country")
-    league = request.args.get("league")
+    country = request.json["country"]
+    league = request.json["league"]
+    access_token = request.json["access_token"]
+
+    if isRightToken(str(access_token)) == 0:
+        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+
     league_id = getLeagueByName(country, league)
     print(league_id)
     teams = []
@@ -170,7 +188,7 @@ def rankLeague():
     return jsonify(teams)
 
 
-@footballpage.route('/services/football/live', methods=['GET'])
+@footballpage.route('/services/football/live', methods=['POST'])
 def liveScore():
     """
         liveScore is the route which will be called when the user want to know actual live score of the popular competitions match in the world of the football today.
@@ -204,8 +222,13 @@ def liveScore():
 
     from index import db, user
 
-    country = request.args.get("country")
-    league = request.args.get("league")
+    country = request.json["country"]
+    league = request.json["league"]
+    access_token = request.json["access_token"]
+
+    if isRightToken(access_token) == 0:
+        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+
     league_id = getLeagueByName(country, league)
     print(league_id)
     teams = []
@@ -248,5 +271,4 @@ def liveScore():
                     "match_awayteam_score": x['match_awayteam_score'],
                 }
                 teams.append(tmpDict)
-        print(teams)
     return jsonify(teams)
