@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import './login.css';
 import axios from 'axios';
 import { Row, Col, message } from 'antd';
+import ReactDOM from 'react-dom';
+import FacebookLogin from 'react-facebook-login';
+import GoogleLogin from 'react-google-login';
 
 export class Login extends Component {
-    
+
     constructor() {
         super();
         this.state = {
@@ -17,14 +20,14 @@ export class Login extends Component {
             isLoading: false,
         }
     }
-    
+
     handleSubmit = (event) => {
         event.preventDefault();
 
         this.setState({isLoading: true});
 
         if (this.state.sliderClass === ''
-        || this.state.sliderClass === 'bounceRight') {
+            || this.state.sliderClass === 'bounceRight') {
             axios.post("https://0.0.0.0:5000/login", {
                 login: this.state.loginEmail,
                 password: this.state.loginPassword,
@@ -69,10 +72,41 @@ export class Login extends Component {
     }
 
     render() {
+
+        const responseFacebook = (responseData) => {
+            axios.post("https://0.0.0.0:5000/loginWithFacebook", {
+                email: responseData['email'],
+                accessToken: responseData['accessToken'],
+            }).then((response) => {
+                if (response.data.success !== 200) {
+                    message.error(response.data.message)
+                    return;
+                }
+                localStorage.setItem('access_token', response.data.access_token);
+                localStorage.setItem('email', responseData['email']);
+            })
+        }
+
+        const responseGoogle = (responseData) => {
+            axios.post("https://0.0.0.0:5000/loginWithGoogle", {
+                email: responseData['profileObj']['email'],
+                accessToken: responseData['accessToken'],
+            }).then((response) => {
+                if (response.data.success !== 200) {
+                    message.error(response.data.message)
+                    return;
+                }
+                localStorage.setItem('access_token', response.data.access_token);
+                localStorage.setItem('email', responseData['email']);
+            })
+        }
+
         return (
             <div>
+
                 <section className="user">
                     <div className="user_options-container">
+
                         <div className="user_options-text">
                             <div className="user_options-unregistered">
                                 <h2 className="user_unregistered-title">Don't have an account?</h2>
@@ -91,6 +125,7 @@ export class Login extends Component {
                                 }}>Login</button>
                             </div>
                         </div>
+
                         <div className={"user_options-forms " + this.state.sliderClass} id="user_options-forms">
                             <div className="user_forms-login">
                                 <Row>
@@ -108,6 +143,22 @@ export class Login extends Component {
                                             <div></div>}
                                     </Col>
                                 </Row>
+                                <FacebookLogin
+                                    appId="2810738258964599" //APP ID NOT CREATED YET
+                                    fields="name,email"
+                                    callback={responseFacebook}
+                                    icon="fa-facebook"
+                                />
+                                <br />
+                                <br />
+                                <GoogleLogin
+                                    clientId="401491189230-f5p17phmphk4upsol9tkrgdkga2vasd6.apps.googleusercontent.com" //CLIENTID NOT CREATED YET
+                                    buttonText="LOGIN WITH GOOGLE"
+                                    onSuccess={responseGoogle}
+                                    onFailure={responseGoogle}
+                                />
+                                <br />
+                                <br />
                                 <form className="forms_form" onSubmit={this.handleSubmit}>
                                     <fieldset className="forms_fieldset">
                                         <div className="forms_field">
@@ -159,7 +210,10 @@ export class Login extends Component {
                         </div>
                     </div>
                 </section>
+
             </div>
+
+
         )
     }
 }
