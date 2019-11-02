@@ -13,7 +13,7 @@ export class Header extends Component {
 
     render() {
         return (
-            <Layout.Header style={{ background: '#fff', padding: 0 }}>
+            <Layout.Header style={{ background: '#fff', padding: 0, width: '100%' }}>
                 <Icon
                     className="trigger"
                     type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}

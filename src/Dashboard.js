@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { Header } from './Header';
 import Sidebar from './Sidebar';
-import { Layout } from 'antd';
+import { Layout, Row } from 'antd';
 
 const { Content } = Layout;
 
@@ -23,29 +23,29 @@ export class Dashboard extends Component {
 
     render() {
         return (
-            <Layout>
+            <Layout
+                style={{
+                    minHeight: '100vh',
+                }}
+            >
                 <Sidebar
                     collapsed={this.state.collapsed}
                 />
-                <Layout
-                    style={{
-                        height: "100vh"
-                    }}
-                >
-                    <Header 
-                        toggle={this.toggle}
-                    />
-                    <Content
-                        style={{
-                            margin: '24px 16px',
-                            padding: 24,
-                            background: '#fff',
-                            minHeight: 280,
-                        }}
-                    >
-                        {this.props.children}
-                    </Content>
-                </Layout>
+                <div style={{
+                    width: '100%'
+                }}>
+                        <Header toggle={this.toggle} />
+                        <Content
+                            style={{
+                                margin: '24px 16px',
+                                padding: 24,
+                                background: '#fff',
+                                minHeight: 280,
+                            }}
+                        >
+                            {this.props.children}
+                        </Content>
+                </div>
             </Layout>
         );
     }
