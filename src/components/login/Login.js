@@ -5,6 +5,8 @@ import { Row, Col, message } from 'antd';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import { adminAction } from '../../actions';
+import FacebookLogin from 'react-facebook-login';
+import GoogleLogin from 'react-google-login';
 
 class Login extends Component {
     
@@ -23,14 +25,14 @@ class Login extends Component {
         if (localStorage.getItem("access_token") !== null)
             this.state.loggedIn = true
     }
-    
+
     handleSubmit = (event) => {
         event.preventDefault();
 
         this.setState({isLoading: true});
 
         if (this.state.sliderClass === ''
-        || this.state.sliderClass === 'bounceRight') {
+            || this.state.sliderClass === 'bounceRight') {
             axios.post("https://0.0.0.0:5000/login", {
                 login: this.state.loginEmail,
                 password: this.state.loginPassword,
@@ -41,7 +43,6 @@ class Login extends Component {
                     return;
                 }
                 localStorage.setItem('access_token', response.data.access_token);
-                localStorage.setItem('email', this.state.loginEmail);
                 localStorage.setItem('widgets', null);
                 this.props.setAdmin(response.data.is_admin);
                 this.props.history.push('/');
@@ -65,7 +66,6 @@ class Login extends Component {
                     return;
                 }
                 localStorage.setItem('access_token', response.data.access_token);
-                localStorage.setItem('email', this.state.registerEmail);
                 localStorage.setItem('widgets', null);
                 this.props.setAdmin(false);
                 this.props.history.push('/');
@@ -82,15 +82,58 @@ class Login extends Component {
         });
     }
 
+
+
     render() {
         if (this.state.loggedIn)
             return (
                 <Redirect to="/" />
             )
+        const responseFacebook = (responseData) => {
+            axios.post("https://0.0.0.0:5000/loginWithFacebook", {
+                email: responseData['email'],
+                accessToken: responseData['accessToken'],
+            }).then((response) => {
+                if (response.data.success !== 200) {
+                    message.error(response.data.message)
+                    return;
+                }
+                localStorage.setItem('access_token', response.data.access_token);
+                localStorage.setItem('widgets', null);
+                this.props.setAdmin(response.data.admin);
+                this.props.history.push('/');
+            })
+        }
+
+        const responseGoogle = (responseData) => {
+
+            if (responseData['error'] === 'undefined') {
+                message.error(responseData['error'] );
+                return;
+            }
+            axios.post("https://0.0.0.0:5000/loginWithGoogle", {
+                email: responseData['profileObj']['email'],
+                accessToken: responseData['accessToken'],
+            }).then((response) => {
+                if (response.data.success !== 200) {
+                    message.error(response.data.message)
+                    return;
+                }
+                console.log(response.data)
+                localStorage.setItem('access_token', response.data.access_token);
+                localStorage.setItem('widgets', null);
+                
+                this.props.setAdmin(response.data.admin);
+                this.props.history.push('/');
+            })
+        }
+
         return (
             <div>
+
                 <section className="user">
                     <div className="user_options-container">
+
                         <div className="user_options-text">
                             <div className="user_options-unregistered">
                                 <h2 className="user_unregistered-title">Don't have an account?</h2>
@@ -109,6 +152,7 @@ class Login extends Component {
                                 }}>Login</button>
                             </div>
                         </div>
+
                         <div className={"user_options-forms " + this.state.sliderClass} id="user_options-forms">
                             <div className="user_forms-login">
                                 <Row>
@@ -122,10 +166,25 @@ class Login extends Component {
                                                 <div className="bounce2"></div>
                                                 <div className="bounce3"></div>
                                             </div>
-                                        :
-                                            <div></div>}
+                                            : ''}
                                     </Col>
                                 </Row>
+                                <FacebookLogin
+                                    appId="2810738258964599" //APP ID NOT CREATED YET
+                                    fields="name,email"
+                                    callback={responseFacebook}
+                                    icon="fa-facebook"
+                                />
+                                <br />
+                                <br />
+                                <GoogleLogin
+                                    clientId="401491189230-f5p17phmphk4upsol9tkrgdkga2vasd6.apps.googleusercontent.com" //CLIENTID NOT CREATED YET
+                                    buttonText="LOGIN WITH GOOGLE"
+                                    onSuccess={responseGoogle}
+                                    onFailure={responseGoogle}
+                                />
+                                <br />
+                                <br />
                                 <form className="forms_form" onSubmit={this.handleSubmit}>
                                     <fieldset className="forms_fieldset">
                                         <div className="forms_field">
@@ -153,8 +212,7 @@ class Login extends Component {
                                                 <div className="bounce2"></div>
                                                 <div className="bounce3"></div>
                                             </div>
-                                        :
-                                            <div></div>}
+                                            : ''}
                                     </Col>
                                 </Row>
                                 <form className="forms_form" onSubmit={this.handleSubmit}>
@@ -177,7 +235,10 @@ class Login extends Component {
                         </div>
                     </div>
                 </section>
+
             </div>
+
+
         )
     }
 }

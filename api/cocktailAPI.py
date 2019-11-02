@@ -7,7 +7,20 @@ from requests.exceptions import HTTPError
 cocktailPage = Blueprint('cocktailPage', __name__, template_folder='templates')
 
 
-@cocktailPage.route('/services/cocktail/ingredients', methods=['GET'])
+def isRightToken(token):
+    from index import db, user
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        print("FIREBASE : " + all_users[x]["access_token"])
+        print("token : " + str(token))
+        if all_users[x]["access_token"] == token:
+            return 1
+    return 0
+
+
+@cocktailPage.route('/services/cocktail/ingredients', methods=['POST'])
 def getCocktailWithIngredient():
     """
     getCocktailWithIngredient -> This function will send you all the cocktails with the ingredient given in body args.
@@ -22,7 +35,12 @@ def getCocktailWithIngredient():
     :return: list of dict.
     """
 
-    ingredient = request.args.get("ingredient")
+    ingredient = request.json["ingredient"]
+    access_token = request.json["access_token"]
+
+    if isRightToken(access_token) == 0:
+        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+
     cocktails = []
 
     # api-endpoint
@@ -52,7 +70,7 @@ def getCocktailWithIngredient():
     return jsonify(cocktails)
 
 
-@cocktailPage.route('/services/cocktail/listGlasses', methods=['GET'])
+@cocktailPage.route('/services/cocktail/listGlasses', methods=['POST'])
 def getListOfDifferentGlasses():
     """
       getListOfDifferentGlasses -> This function will send you in json format all the glasses that the API contains.
@@ -66,6 +84,10 @@ def getListOfDifferentGlasses():
     """
 
     glasses = []
+    access_token = request.json["access_token"]
+
+    if isRightToken(access_token) == 0:
+        return jsonify({"success": 404, "message": "Error occurred with your access token."})
 
     # api-endpoint
     url = "https://www.thecocktaildb.com/api/json/v1/1/list.php?g=list"
@@ -87,7 +109,7 @@ def getListOfDifferentGlasses():
     return jsonify(glasses)
 
 
-@cocktailPage.route('/services/cocktail/cocktailGlasses', methods=['GET'])
+@cocktailPage.route('/services/cocktail/cocktailGlasses', methods=['POST'])
 def getAllCocktailsWithGlasses():
     """
          getAllCocktailsWithGlasses -> This function will send you all the cocktails that the glasses given in argument could be done with it.
@@ -103,12 +125,15 @@ def getAllCocktailsWithGlasses():
          :return: list of dict.
     """
 
-
     cocktails = []
 
     # api-endpoint
     url = "https://www.thecocktaildb.com/api/json/v1/1/filter.php"
-    glasses = request.args.get("glasses")
+    glasses = request.json["glasses"]
+    access_token = request.json["access_token"]
+
+    if isRightToken(access_token) == 0:
+        return jsonify({"success": 404, "message": "Error occurred with your access token."})
 
     PARAMS = {
         'g': glasses,

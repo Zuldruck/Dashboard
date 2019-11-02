@@ -62,7 +62,10 @@ def register():
             return jsonify({"success": 404, "message": "An account already exists with this email address"})
 
     access_token = secrets.token_hex(20)
-    loginUser = {"email": login, "password": hashed, "admin": admin, "access_token": "0"}
+    loginUser = {"email": login, "password": hashed, "admin": admin, "access_token": "0",
+                 "access_token_fb": "0",
+                 "access_token_google": "0"
+                 }
     db.child("users").push(loginUser, user['idToken'])
     return jsonify({"success": 200, "message": "User registered.", "access_token": access_token})
 
@@ -103,6 +106,74 @@ def login():
                 return jsonify({"success": 404, "message": "Wrong password or username"})
 
     return jsonify({"success": 404, "message": "Wrong password or username"})
+
+
+@loginManagement.route('/loginWithFacebook', methods=['POST'])
+def loginWithFacebook():
+    """
+    loginWithFacebook will login the user and give an access token from our API if the user log correspond in the database.
+    if the loggin information was right, we will add the access token in his database cell as well.\n
+
+    """
+    from index import db, user
+
+    login = request.json["email"]
+    access_token_fb = request.json["accessToken"]
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]['email'] == login:
+            access_token = secrets.token_hex(20)
+            db.child("users").child(x).update({"access_token": access_token, "access_token_fb": access_token_fb},
+                                              user['idToken'])
+            return jsonify({"success": 200, "message": "Fb User Login.", "access_token": access_token,
+                            "access_token_fb": access_token_fb, "admin": True if all_users[x]["admin"] == 1 else False})
+
+    access_token = secrets.token_hex(20)
+    hashed = makePasswordHash(secrets.token_hex(20))
+
+    loginUser = {"email": login, "password": hashed, "admin": 0, "access_token": access_token,
+                 "access_token_fb": access_token_fb,
+                 "access_token_google": "0"
+                 }
+    db.child("users").push(loginUser, user['idToken'])
+    return jsonify({"success": 200, "message": "Fb User registered.", "access_token": access_token,
+                    "access_token_fb": access_token_fb, "admin": False})
+
+
+@loginManagement.route('/loginWithGoogle', methods=['POST'])
+def loginWithGoogle():
+    """
+    loginWithGoogle will login the user and give an access token from our API if the user log correspond in the database.
+    if the loggin information was right, we will add the access token in his database cell as well.\n
+
+    """
+    from index import db, user
+
+    login = request.json["email"]
+    access_token_google = request.json["accessToken"]
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]['email'] == login:
+            access_token = secrets.token_hex(20)
+            db.child("users").child(x).update(
+                {"access_token": access_token, "access_token_google": access_token_google}, user['idToken'])
+            return jsonify({"success": 200, "message": "Google User Login.", "access_token": access_token,
+                            "access_token_google": access_token_google, "admin": True if all_users[x]["admin"] == 1 else False})
+
+    access_token = secrets.token_hex(20)
+    hashed = makePasswordHash(secrets.token_hex(20))
+
+    loginUser = {"email": login, "password": hashed, "admin": 0, "access_token": access_token,
+                 "access_token_fb": "0",
+                 "access_token_google": access_token_google
+                 }
+    db.child("users").push(loginUser, user['idToken'])
+    return jsonify({"success": 200, "message": "Google User registered.", "access_token": access_token,
+                    "access_token_google": access_token_google, "admin": False})
 
 
 @loginManagement.route('/delete', methods=['POST'])
@@ -158,7 +229,7 @@ def modifyPermission():
     @admin = new permission that you need to change.\n
 
      example of request :
-            http://127.0.0.1:5000/modifypermission\n
+            http://127.0.0.1:5000/modifyPermission\n
             login=simon1.provost@epitech.eu\n
             access_token=$2b$12$mmML0e8FfPoKsLKyrTidje7lf9erfSu2OkV4NOUV.NuK7IF4z6CoW\n
             admin=1\n
