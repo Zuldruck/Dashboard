@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux';
 
 const { Sider } = Layout;
 
-export class Sidebar extends Component {
+class Sidebar extends Component {
     
     render() {
         return (
@@ -31,10 +32,22 @@ export class Sidebar extends Component {
                             <span>Widgets</span>
                         </Link>
                     </Menu.Item>
+                    {this.props.isAdmin ?
+                        <Menu.Item key="4">
+                            <Link to="/users">
+                                <Icon type="user" />
+                                <span>Users</span>
+                            </Link>
+                        </Menu.Item>
+                    : ''}
                 </Menu>
             </Sider>
         )
     }
 }
 
-export default Sidebar;
+export default connect((state) => {
+    return {
+        isAdmin: state.isAdmin
+    }
+}, {})(Sidebar);

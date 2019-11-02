@@ -134,7 +134,7 @@ def delete():
     all_users = db.child("users").get(user['idToken']).val()
 
     for x in all_users:
-        if all_users[x]["access_token"] == access_token and all_users[x]["admin"] == "1":
+        if all_users[x]["access_token"] == access_token and all_users[x]["admin"] == 1:
             right_access = 1
             break
     if right_access == 1:
@@ -144,10 +144,10 @@ def delete():
                 return jsonify({"success": 200, "message": "user deleted."})
 
     return jsonify({"success": 404, "message": "Either the access_token doesn't have the right access or your user "
-                                                  "didn't exist in our database."})
+                                                  "doesn't exist in our database."})
 
 
-@loginManagement.route('/permission', methods=['POST'])
+@loginManagement.route('/modifyPermission', methods=['POST'])
 def modifyPermission():
     """
     modifyPermission will change the permission admin of a specific user given in body args.
@@ -158,13 +158,13 @@ def modifyPermission():
     @admin = new permission that you need to change.\n
 
      example of request :
-            http://127.0.0.1:5000/register\n
+            http://127.0.0.1:5000/modifypermission\n
             login=simon1.provost@epitech.eu\n
             access_token=$2b$12$mmML0e8FfPoKsLKyrTidje7lf9erfSu2OkV4NOUV.NuK7IF4z6CoW\n
             admin=1\n
 
     :return: json string will be return.
-        Error: {"error": "404", "message": "Either the access_token doesn't have the right access or your user didn't exist in our database."}
+        Error: {"error": "404", "message": "Either the access_token doesn't have the right access or your user doesn't exist in our database."}
         Success: {"success": "200", "message": "Account updated"}
     """
     from index import db, user
@@ -178,7 +178,7 @@ def modifyPermission():
     all_users = db.child("users").get(user['idToken']).val()
 
     for x in all_users:
-        if all_users[x]["access_token"] == access_token and all_users[x]["admin"] == "1":
+        if all_users[x]["access_token"] == access_token and all_users[x]["admin"] == 1:
             right_access = 1
             break
     if right_access == 1:
@@ -188,4 +188,66 @@ def modifyPermission():
                 return jsonify({"success": 200, "message": "Account updated"})
 
     return jsonify({"success": 404, "message": "Either the access_token doesn't have the right access or your user "
-                                                  "didn't exist in our database."})
+                                                  "doesn't exist in our database."})
+
+@loginManagement.route('/getPermission', methods=['POST'])
+def getPermission():
+    """
+    permission will give you the permissions of a specific user.
+    Obviously you need to give an access token which have the right access to modify the permission of any user.\n
+
+    @login = login of the user(email).\n
+    @access_token = Token of the user doing the request.\n
+
+     example of request :
+            http://127.0.0.1:5000/getPermission\n
+            access_token=$2b$12$mmML0e8FfPoKsLKyrTidje7lf9erfSu2OkV4NOUV.NuK7IF4z6CoW\n
+
+    :return: json string will be return.
+        Error: {"error": "404", "message": "Either the access_token doesn't have the right access or your user doesn't exist in our database."}
+        Success: {"success": "200", "message": "Account updated"}
+    """
+    from index import db, user
+
+    access_token = request.json["access_token"]
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]["access_token"] == access_token:
+            return jsonify({"success": 200, "message": "", "isAdmin": True if all_users[x]["admin"] == 1 else False})
+    return jsonify({"success": 404, "message": "Either the access_token doesn't have the right access or your user "
+                                                  "doesn't exist in our database."})
+
+@loginManagement.route('/getUsers', methods=['POST'])
+def getUsers():
+    """
+    permission will give you the permissions of a specific user.
+    Obviously you need to give an access token which have the right access to modify the permission of any user.\n
+
+    @login = login of the user(email).\n
+    @access_token = Token of the user doing the request.\n
+
+     example of request :
+            http://127.0.0.1:5000/getUsers\n
+            access_token=$2b$12$mmML0e8FfPoKsLKyrTidje7lf9erfSu2OkV4NOUV.NuK7IF4z6CoW\n
+
+    :return: json string will be return.
+        Error: {"error": "404", "message": "The access token is wrong or the user doesn't have the right access"}
+        Success: {"success": "200", "message": "Account updated"}
+    """
+    from index import db, user
+
+    access_token = request.json["access_token"]
+    right_access = 0
+    # check user who own access_token got admin right
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]["access_token"] == access_token and all_users[x]["admin"] == 1:
+            right_access = 1
+            break
+    if right_access == 1:
+        return jsonify({"success": 200, "message": "", "users": all_users})
+    return jsonify({"success": 404, "message": "The access token is wrong or the user doesn't have the right access"})

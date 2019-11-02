@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom';
 import { Card } from 'antd';
 import { Dragact } from 'dragact';
 
-
 export class Home extends Component {
 
     constructor(props) {
@@ -25,14 +24,16 @@ export class Home extends Component {
             this.state.widgets = widgets;
         this.elem = React.createRef()
     }
-
+    
     getblockStyle = (isDragging) => {
         return {
             background: isDragging ? 'lightgrey' : 'white',
         }
     };
-
+    
     componentDidMount = () => {
+        if (!this.state.loggedIn)
+            return;
         setTimeout(() => {
             this.setState({
                 width: this.elem.current.offsetWidth

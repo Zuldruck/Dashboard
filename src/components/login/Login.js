@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import './login.css';
 import axios from 'axios';
 import { Row, Col, message } from 'antd';
+import { Redirect } from 'react-router';
+import { connect } from 'react-redux';
+import { adminAction } from '../../actions';
 
-export class Login extends Component {
+class Login extends Component {
     
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             loginEmail: '',
             loginPassword: '',
@@ -15,7 +18,10 @@ export class Login extends Component {
             registerRepeatedPassword: '',
             sliderClass: '',
             isLoading: false,
+            loggedIn: false,
         }
+        if (localStorage.getItem("access_token") !== null)
+            this.state.loggedIn = true
     }
     
     handleSubmit = (event) => {
@@ -36,8 +42,12 @@ export class Login extends Component {
                 }
                 localStorage.setItem('access_token', response.data.access_token);
                 localStorage.setItem('email', this.state.loginEmail);
-                localStorage.setItem('isAdmin', response.data.is_admin);
-                window.location.replace('http://localhost:3000/')
+                localStorage.setItem('widgets', null);
+                this.props.setAdmin(response.data.is_admin);
+                this.props.history.push('/');
+            }).catch(error => {
+                this.setState({isLoading: false});
+                message.error('An error occured, please retry');
             })
         } else {
             if (this.state.registerPassword !== this.state.registerRepeatedPassword) {
@@ -56,8 +66,12 @@ export class Login extends Component {
                 }
                 localStorage.setItem('access_token', response.data.access_token);
                 localStorage.setItem('email', this.state.registerEmail);
-                localStorage.setItem('isAdmin', false);
-                window.location.replace('http://localhost:3000/')
+                localStorage.setItem('widgets', null);
+                this.props.setAdmin(false);
+                this.props.history.push('/');
+            }).catch(error => {
+                this.setState({isLoading: false});
+                message.error('An error occured, please retry');
             })
         }
     }
@@ -69,6 +83,10 @@ export class Login extends Component {
     }
 
     render() {
+        if (this.state.loggedIn)
+            return (
+                <Redirect to="/" />
+            )
         return (
             <div>
                 <section className="user">
@@ -164,4 +182,12 @@ export class Login extends Component {
     }
 }
 
-export default Login;
+export default connect((state) => {
+    return {
+        isAdmin: state.isAdmin,
+    }
+}, (dispatch) => {
+    return {
+        setAdmin: (isAdmin) => dispatch(adminAction(isAdmin))
+    }
+})(Login);
