@@ -2,6 +2,7 @@ from flask import Flask
 from footballAPI import footballpage
 from loginManagement import loginManagement
 from cocktailAPI import cocktailPage
+from openDataMontpellierAPI import openDataMontpellier
 
 from flask import jsonify
 import pyrebase
@@ -18,6 +19,7 @@ app = Flask(__name__)
 app.register_blueprint(footballpage)
 app.register_blueprint(loginManagement)
 app.register_blueprint(cocktailPage)
+app.register_blueprint(openDataMontpellier)
 
 CORS(app)
 

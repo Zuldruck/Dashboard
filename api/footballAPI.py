@@ -272,3 +272,23 @@ def liveScore():
                 }
                 teams.append(tmpDict)
     return jsonify(teams)
+
+
+@footballpage.route('/services/football/listLeaguesDashboard', methods=['POST'])
+def getListLeaguesDashboard():
+    access_token = request.json["access_token"]
+
+    if isRightToken(str(access_token)) == 0:
+        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+
+    list = []
+
+    tmpDict = {
+        "France": "Ligue 1",
+        "Italy": "Serie A",
+        "England": "Premier League",
+        "Spain": "LaLiga",
+        "Germany": "Bundesliga",
+    }
+    list.append(tmpDict)
+    return json.dumps(list)
