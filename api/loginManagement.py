@@ -61,10 +61,19 @@ def register():
         if all_users[x]['email'] == login:
             return jsonify({"success": 404, "message": "An account already exists with this email address"})
 
+
+
     access_token = secrets.token_hex(20)
     loginUser = {"email": login, "password": hashed, "admin": admin, "access_token": "0",
-                 "access_token_fb": "0",
-                 "access_token_google": "0"
+                 "access_token_fb": 0,
+                 "access_token_google": 0,
+                 "football": 1,
+                 "outlook": 0,
+                 "epitech": 0,
+                 "spotify": 0,
+                 "twitter": 0,
+                 "cocktail": 1,
+                 "open_data": 1
                  }
     db.child("users").push(loginUser, user['idToken'])
     return jsonify({"success": 200, "message": "User registered.", "access_token": access_token})
@@ -101,7 +110,8 @@ def login():
                 access_token = secrets.token_hex(20)
                 db.child("users").child(x).update({"access_token": access_token}, user['idToken'])
                 admin = all_users[x]["admin"]
-                return jsonify({"success": 200, "access_token": access_token, "is_admin": True if admin == 1 else False})
+                return jsonify(
+                    {"success": 200, "access_token": access_token, "is_admin": True if admin == 1 else False})
             else:
                 return jsonify({"success": 404, "message": "Wrong password or username"})
 
@@ -162,7 +172,8 @@ def loginWithGoogle():
             db.child("users").child(x).update(
                 {"access_token": access_token, "access_token_google": access_token_google}, user['idToken'])
             return jsonify({"success": 200, "message": "Google User Login.", "access_token": access_token,
-                            "access_token_google": access_token_google, "admin": True if all_users[x]["admin"] == 1 else False})
+                            "access_token_google": access_token_google,
+                            "admin": True if all_users[x]["admin"] == 1 else False})
 
     access_token = secrets.token_hex(20)
     hashed = makePasswordHash(secrets.token_hex(20))
@@ -215,7 +226,7 @@ def delete():
                 return jsonify({"success": 200, "message": "user deleted."})
 
     return jsonify({"success": 404, "message": "Either the access_token doesn't have the right access or your user "
-                                                  "doesn't exist in our database."})
+                                               "doesn't exist in our database."})
 
 
 @loginManagement.route('/modifyPermission', methods=['POST'])
@@ -259,7 +270,8 @@ def modifyPermission():
                 return jsonify({"success": 200, "message": "Account updated"})
 
     return jsonify({"success": 404, "message": "Either the access_token doesn't have the right access or your user "
-                                                  "doesn't exist in our database."})
+                                               "doesn't exist in our database."})
+
 
 @loginManagement.route('/getPermission', methods=['POST'])
 def getPermission():
@@ -288,7 +300,8 @@ def getPermission():
         if all_users[x]["access_token"] == access_token:
             return jsonify({"success": 200, "message": "", "isAdmin": True if all_users[x]["admin"] == 1 else False})
     return jsonify({"success": 404, "message": "Either the access_token doesn't have the right access or your user "
-                                                  "doesn't exist in our database."})
+                                               "doesn't exist in our database."})
+
 
 @loginManagement.route('/getUsers', methods=['POST'])
 def getUsers():
@@ -322,3 +335,62 @@ def getUsers():
     if right_access == 1:
         return jsonify({"success": 200, "message": "", "users": all_users})
     return jsonify({"success": 404, "message": "The access token is wrong or the user doesn't have the right access"})
+
+
+@loginManagement.route('/addSubscribedService', methods=['POST'])
+def addSubscribedService():
+    from index import db, user
+
+    service = request.json["service"]
+    access_token = request.json["access_token"]
+    right_access = 0
+    # check user who own access_token got admin right
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]["access_token"] == access_token:
+            db.child("users").child(x).update({service: 1}, user['idToken'])
+            return jsonify({"success": 200, "message": "service user updated."})
+    return jsonify({"success": 404, "message": "user not found"})
+
+
+@loginManagement.route('/getSusbscribedServices', methods=['POST'])
+def getSusbscribedServices():
+    from index import db, user
+
+    access_token = request.json["access_token"]
+    # check user who own access_token got admin right
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]["access_token"] == access_token:
+            return jsonify({"success": 200,
+                            "football": 1 if all_users[x]['football'] == 1 else 0,
+                            "outlook": 1 if all_users[x]['outlook'] == 1 else 0,
+                            "epitech": 1 if all_users[x]['epitech'] == 1 else 0,
+                            "spotify": 1 if all_users[x]['spotify'] == 1 else 0,
+                            "twitter": 1 if all_users[x]['twitter'] == 1 else 0,
+                            "cocktail": 1 if all_users[x]['cocktail'] == 1 else 0,
+                            "open_data": 1 if all_users[x]['open_data'] == 1 else 0
+                            })
+    return jsonify({"success": 404, "message": "user not found"})
+
+
+@loginManagement.route('/removeSubscribedService', methods=['POST'])
+def removeSubscribedService():
+    from index import db, user
+
+    service = request.json["service"]
+    access_token = request.json["access_token"]
+    right_access = 0
+    # check user who own access_token got admin right
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]["access_token"] == access_token:
+            db.child("users").child(x).update({service: 0}, user['idToken'])
+            return jsonify({"success": 200, "message": "Service removed."})
+    return jsonify({"success": 404, "message": "user not found"})
