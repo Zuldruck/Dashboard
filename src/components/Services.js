@@ -17,10 +17,11 @@ export class Services extends Component {
         }
         const access_token = localStorage.getItem("access_token");
 
-        if (access_token !== null) {
-            this.state.loggedIn = true;
-            this.state.access_token = access_token;
-        }
+        if (access_token === null)
+            return;
+        
+        this.state.loggedIn = true;
+        this.state.access_token = access_token;
     }
 
     setSubscribedCards = () => {
@@ -106,7 +107,7 @@ export class Services extends Component {
                                         <div style={{
                                             margin: '2%',
                                         }}>
-                                            <ServiceCard subscribed={true} type={value} onClick={() => {this.removeSubscribedService(value)}} />
+                                            <ServiceCard access_token={this.state.access_token} subscribed={true} type={value} onClick={() => {this.removeSubscribedService(value)}} />
                                         </div>
                         
                                     </Col>
@@ -119,12 +120,11 @@ export class Services extends Component {
                 }}>
                     {
                         this.state.nonSubscribedCards.map((value, index) => {
-                            console.log(value)
                             return <Col key={index} xs={24} sm={24} md={12} lg={8} xl={8}>
                                         <div style={{
                                             margin: '2%',
                                         }}>
-                                            <ServiceCard subscribed={false} type={value} onClick={() => {this.addSubscribedService(value)}} />
+                                            <ServiceCard access_token={this.state.access_token} subscribed={false} type={value} onClick={() => {this.addSubscribedService(value)}} />
                                         </div>
                         
                                     </Col>

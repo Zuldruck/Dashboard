@@ -71,9 +71,10 @@ def register():
                  "outlook": 0,
                  "epitech": 0,
                  "spotify": 0,
-                 "twitter": 0,
+                 "github": 0,
                  "cocktail": 1,
-                 "open_data": 1
+                 "open_data": 1,
+                 "intra_autologin": "0",
                  }
     db.child("users").push(loginUser, user['idToken'])
     return jsonify({"success": 200, "message": "User registered.", "access_token": access_token})
@@ -150,7 +151,7 @@ def loginWithFacebook():
                  "outlook": 0,
                  "epitech": 0,
                  "spotify": 0,
-                 "twitter": 0,
+                 "github": 0,
                  "cocktail": 1,
                  "open_data": 1
                  }
@@ -192,7 +193,7 @@ def loginWithGoogle():
                  "outlook": 0,
                  "epitech": 0,
                  "spotify": 0,
-                 "twitter": 0,
+                 "github": 0,
                  "cocktail": 1,
                  "open_data": 1
                  }
@@ -385,7 +386,7 @@ def getSusbscribedServices():
                             "outlook": 1 if all_users[x]['outlook'] == 1 else 0,
                             "epitech": 1 if all_users[x]['epitech'] == 1 else 0,
                             "spotify": 1 if all_users[x]['spotify'] == 1 else 0,
-                            "twitter": 1 if all_users[x]['twitter'] == 1 else 0,
+                            "github": 1 if all_users[x]['github'] == 1 else 0,
                             "cocktail": 1 if all_users[x]['cocktail'] == 1 else 0,
                             "open_data": 1 if all_users[x]['open_data'] == 1 else 0
                             })
@@ -408,3 +409,34 @@ def removeSubscribedService():
             db.child("users").child(x).update({service: 0}, user['idToken'])
             return jsonify({"success": 200, "message": "Service removed."})
     return jsonify({"success": 404, "message": "user not found"})
+
+
+@loginManagement.route('/getEpitechAutologin', methods=['POST'])
+def getAutologin():
+    from index import db, user
+
+    access_token = request.json["access_token"]
+    # check user who own access_token got admin right
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]["access_token"] == access_token:
+            return jsonify({"success": 200, "autologin": all_users[x]["intra_autologin"]})
+    return jsonify({"success": 404, "message": "User not found"})
+
+
+@loginManagement.route('/setEpitechAutologin', methods=['POST'])
+def setAutologin():
+    from index import db, user
+
+    autologin = request.json["autologin"]
+    access_token = request.json["access_token"]
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]["access_token"] == access_token:
+            db.child("users").child(x).update({"intra_autologin": autologin}, user['idToken'])
+            return jsonify({"success": 200, "message": "Autologin added."})
+    return jsonify({"success": 404, "message": "User not found"})

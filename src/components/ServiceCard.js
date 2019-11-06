@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import { Modal, Input, message } from 'antd';
 import ReactSVG from 'react-svg';
-import TwitterLogin from 'react-twitter-auth';
+import GitHubLogin from 'react-github-login';
 import SpotifyLogin from 'react-spotify-login';
+import axios from 'axios';
+import { msalInstance } from '../msal';
+import * as qs from 'querystring';
 
 class ServiceCard extends Component {
 
@@ -11,6 +15,9 @@ class ServiceCard extends Component {
             color: '',
             icon: '',
             title: '',
+            autologinEpitech: '',
+            modalEpitechVisible: false,
+            access_token: this.props.access_token,
         }
 
         const types = [{
@@ -34,10 +41,10 @@ class ServiceCard extends Component {
             title: 'Montpellier Open Data',
             icon: 'montpellier.svg'
         }, {
-            type: 'twitter',
-            color: '#1DA1F2',
-            title: 'Twitter',
-            icon: 'twitter.svg'
+            type: 'github',
+            color: '#24292E',
+            title: 'Github',
+            icon: 'github.svg'
         }, {
             type: 'outlook',
             color: '#0378D4',
@@ -57,6 +64,50 @@ class ServiceCard extends Component {
         this.state.color = type.color;
         this.state.title = type.title;
         this.state.icon = type.icon;
+    }
+
+    handleEpitechModalOk = () => {
+        axios.post("https://0.0.0.0:5000/setEpitechAutologin", {
+            autologin: this.state.autologinEpitech,
+            access_token: this.state.access_token,
+        }).then(response => {
+            if (response.status !== 200) {
+                message.error(response.data.message);
+                return;
+            }
+            this.props.onClick();
+        }).catch(error => {
+            message.error("An error occured, please retry.")
+        });
+        this.setState({
+            modalEpitechVisible: false,
+        });
+    }
+
+    requestMicrosoftAccesToken = () => {
+        msalInstance.acquireTokenSilent({scopes: ["user.read"]}).then(response => {
+            console.log(response.accessToken)
+            //call backend to store the access_token
+            this.props.onClick();
+        })
+    }
+
+    onSuccessGithub = (response) => {
+        axios.post("https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token", {
+            client_id: "Iv1.3cb565ed2a57480d",
+            client_secret: "3d0710233c8a5d88aac5e848b86e4a3ccd2070d5",
+            code: response.code,
+        }).then(response => {
+            if (response.status !== 200) {
+                message.error("An error occured, please retry.");
+                return;
+            }
+            console.log(qs.parse(response.data).access_token)
+            //call backend to store the access_token
+            this.props.onClick();
+        }).catch(response => {
+            message.error("An error occured, please retry.");
+        })
     }
 
     render() {
@@ -97,24 +148,43 @@ class ServiceCard extends Component {
                                 clientId="50cbf128edfa408db0ecff0298802b5f"
                                 redirectUri="https://localhost:3000"
                                 onSuccess={response => {
-                                    console.log(response)
+                                    console.log(response.access_token)
+                                     //call backend to store the access_token
+                                     this.props.onClick();
                                 }}
-                                onFailure={response => {
-                                    console.log(response)
+                                onFailure={() => {
+                                    message.error("An error occured, please retry.");
                                 }}><ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"}/></SpotifyLogin> :
-                            this.props.type === 'twitter' && !this.props.subscribed ?
-                            <TwitterLogin
-                                loginUrl="http://localhost:4000/api/v1/auth/twitter"
-                                onFailure={response => {
-                                    console.log(response)
-                                }}
-                                onSuccess={response => {
-                                    console.log(response)
-                                }}
-                                requestTokenUrl="http://localhost:4000/api/v1/auth/twitter/reverse"
-                            >
-                                <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"}/>
-                            </TwitterLogin> : <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={this.props.onClick}/>
+                            this.props.type === 'github' && !this.props.subscribed ?
+                            <GitHubLogin clientId="Iv1.3cb565ed2a57480d"
+                                redirectUri="https://localhost:3000"
+                                onSuccess={this.onSuccessGithub}
+                                onFailure={() => {message.error("An error occured, please retry.")}}
+                            ><ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"}/></GitHubLogin> : 
+                            this.props.type === 'epitech' && !this.props.subscribed ?
+                            <div>
+                                <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={() => this.setState({modalEpitechVisible: true})}/>
+                                <Modal
+                                    title="Basic Modal"
+                                    visible={this.state.modalEpitechVisible}
+                                    onOk={this.handleEpitechModalOk}
+                                    onCancel={() => this.setState({modalEpitechVisible: false})}
+                                >
+                                    <h4>Enter your Epitech Intranet autologin :</h4>
+                                    <br/>
+                                    <Input placeholder="Autologin" value={this.state.autologinEpitech} onChange={(event) => this.setState({autologinEpitech: event.target.value})}/>
+                                </Modal>
+                            </div> :
+                            this.props.type === 'outlook' && !this.props.subscribed ?
+                            <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={() => msalInstance.loginPopup({scopes: ["user.read"]})
+                                .then(response => {
+                                    this.requestMicrosoftAccesToken()
+                                    this.props.onClick();
+                                })
+                                .catch(err => {
+                                    message.error("An error occured, please retry.");                                    
+                                })}/> :
+                            <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={this.props.onClick}/>
                         }
                     </div>
                 </div>

@@ -36,7 +36,7 @@ export class Users extends Component {
                 users: newStateUser
             })
         }).catch(error => {
-            message.error('Something went wrong, please retry.');
+            message.error("An error occured, please retry.");
         });
     }
 
@@ -54,7 +54,7 @@ export class Users extends Component {
         }).then(response => {
             this.updateUsers();
         }).catch(error => {
-            message.error('Something went wrong, please retry.');
+            message.error("An error occured, please retry.");
         });
     }
 
@@ -65,7 +65,7 @@ export class Users extends Component {
         }).then(response => {
             this.updateUsers();
         }).catch(error => {
-            message.error('Something went wrong, please retry.');
+            message.error("An error occured, please retry.");
         });
     }
 

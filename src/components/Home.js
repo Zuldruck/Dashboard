@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import { Card } from 'antd';
 import { Dragact } from 'dragact';
 
@@ -95,4 +95,4 @@ export class Home extends Component {
     }
 }
 
-export default Home;
+export default withRouter(Home);
