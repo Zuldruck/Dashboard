@@ -76,7 +76,6 @@ def register():
                  "github": 0,
                  "cocktail": 1,
                  "open_data": 1,
-                 "intra_autologin": "0",
                  }
     db.child("users").push(loginUser, user['idToken'])
     return jsonify({"success": 200, "message": "User registered.", "access_token": access_token})
@@ -416,7 +415,10 @@ def removeSubscribedService():
 
     for x in all_users:
         if all_users[x]["access_token"] == access_token:
-            db.child("users").child(x).update({service: 0}, user['idToken'])
+            if service == "github" or service == "outlook" or service == "spotify":
+                db.child("users").child(x).update({"access_token_" + service: 0, service : 0}, user['idToken'])
+            else:
+                db.child("users").child(x).update({service: 0}, user['idToken'])
             return jsonify({"success": 200, "message": "Service removed."})
     return jsonify({"success": 404, "message": "user not found"})
 
@@ -465,7 +467,7 @@ def loginWithSpotify():
 def loginWithGithub():
     from index import db, user
 
-    access_token_github = request.json["access_token_github"]
+    access_token_github = request.json["accessTokenGithub"]
     access_token = request.json["access_token"]
 
     all_users = db.child("users").get(user['idToken']).val()
