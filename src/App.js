@@ -25,13 +25,14 @@ class App extends Component {
 
         const access_token = localStorage.getItem('access_token')
         if (access_token !== null)
-            axios.post('https://0.0.0.0:5000/getPermission', {
+            axios.post('https://0.0.0.0:5000/getUserInformations', {
                 'access_token': access_token
             }).then(response => {
-                if (response.status === 200 && response.data.isAdmin === true)
+                console.log(response)
+                if (response.status === 200 && response.data.user.admin)
                     this.props.setAdmin(true);
             }).catch(error => {
-
+                console.log(error)
             });
     }
     

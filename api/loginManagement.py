@@ -154,7 +154,7 @@ def loginWithFacebook():
                  "spotify": 0,
                  "github": 0,
                  "cocktail": 1,
-                 "open_data": 1
+                 "open_data": 1,
                  "access_token_google": 0,
                  "access_token_outlook": 0,
                  "access_token_spotify": 0,
@@ -199,7 +199,7 @@ def loginWithGoogle():
                  "spotify": 0,
                  "github": 0,
                  "cocktail": 1,
-                 "open_data": 1
+                 "open_data": 1,
                  "access_token_fb": 0,
                  "access_token_google": access_token_google,
                  "access_token_outlook": 0,
@@ -298,17 +298,17 @@ def modifyPermission():
                                                "doesn't exist in our database."})
 
 
-@loginManagement.route('/getPermission', methods=['POST'])
-def getPermission():
+@loginManagement.route('/getUserInformations', methods=['POST'])
+def getUserInformations():
     """
-    permission will give you the permissions of a specific user.
+    permission will give you the informations of a specific user.
     Obviously you need to give an access token which have the right access to modify the permission of any user.\n
 
     @login = login of the user(email).\n
     @access_token = Token of the user doing the request.\n
 
      example of request :
-            http://127.0.0.1:5000/getPermission\n
+            http://127.0.0.1:5000/getUserInformations\n
             access_token=$2b$12$mmML0e8FfPoKsLKyrTidje7lf9erfSu2OkV4NOUV.NuK7IF4z6CoW\n
 
     :return: json string will be return.
@@ -323,7 +323,7 @@ def getPermission():
 
     for x in all_users:
         if all_users[x]["access_token"] == access_token:
-            return jsonify({"success": 200, "message": "", "isAdmin": True if all_users[x]["admin"] == 1 else False})
+            return jsonify({"success": 200, "user": all_users[x]})
     return jsonify({"success": 404, "message": "Either the access_token doesn't have the right access or your user "
                                                "doesn't exist in our database."})
 
