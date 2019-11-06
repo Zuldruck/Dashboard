@@ -61,17 +61,19 @@ def register():
         if all_users[x]['email'] == login:
             return jsonify({"success": 404, "message": "An account already exists with this email address"})
 
-
-
     access_token = secrets.token_hex(20)
     loginUser = {"email": login, "password": hashed, "admin": admin, "access_token": "0",
                  "access_token_fb": 0,
                  "access_token_google": 0,
+                 "access_token_outlook": 0,
+                 "access_token_spotify": 0,
+                 "access_token_github": 0,
+                 "intra_autologin": "0",
                  "football": 1,
                  "outlook": 0,
                  "epitech": 0,
                  "spotify": 0,
-                 "twitter": 0,
+                 "github": 0,
                  "cocktail": 1,
                  "open_data": 1
                  }
@@ -145,7 +147,11 @@ def loginWithFacebook():
 
     loginUser = {"email": login, "password": hashed, "admin": 0, "access_token": access_token,
                  "access_token_fb": access_token_fb,
-                 "access_token_google": "0"
+                 "access_token_google": 0,
+                 "access_token_outlook": 0,
+                 "access_token_spotify": 0,
+                 "access_token_github": 0,
+                 "intra_autologin": "0"
                  }
     db.child("users").push(loginUser, user['idToken'])
     return jsonify({"success": 200, "message": "Fb User registered.", "access_token": access_token,
@@ -179,8 +185,12 @@ def loginWithGoogle():
     hashed = makePasswordHash(secrets.token_hex(20))
 
     loginUser = {"email": login, "password": hashed, "admin": 0, "access_token": access_token,
-                 "access_token_fb": "0",
-                 "access_token_google": access_token_google
+                 "access_token_fb": 0,
+                 "access_token_google": access_token_google,
+                 "access_token_outlook": 0,
+                 "access_token_spotify": 0,
+                 "access_token_github": 0,
+                 "intra_autologin": "0"
                  }
     db.child("users").push(loginUser, user['idToken'])
     return jsonify({"success": 200, "message": "Google User registered.", "access_token": access_token,
@@ -371,7 +381,7 @@ def getSusbscribedServices():
                             "outlook": 1 if all_users[x]['outlook'] == 1 else 0,
                             "epitech": 1 if all_users[x]['epitech'] == 1 else 0,
                             "spotify": 1 if all_users[x]['spotify'] == 1 else 0,
-                            "twitter": 1 if all_users[x]['twitter'] == 1 else 0,
+                            "github": 1 if all_users[x]['github'] == 1 else 0,
                             "cocktail": 1 if all_users[x]['cocktail'] == 1 else 0,
                             "open_data": 1 if all_users[x]['open_data'] == 1 else 0
                             })
@@ -394,3 +404,64 @@ def removeSubscribedService():
             db.child("users").child(x).update({service: 0}, user['idToken'])
             return jsonify({"success": 200, "message": "Service removed."})
     return jsonify({"success": 404, "message": "user not found"})
+
+
+@loginManagement.route('/loginWithOutlook', methods=['POST'])
+def loginWithOutlook():
+    from index import db, user
+
+    access_token_outlook = request.json["access_token_outlook"]
+    access_token = request.json["access_token"]
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]['access_token'] == access_token:
+            db.child("users").child(x).update(
+                {"access_token_outlook": access_token_outlook},
+                user['idToken'])
+            return jsonify({"success": 200, "message": "Outlook User Login.",
+                            "access_token_outlook": access_token_outlook,
+                            "admin": True if all_users[x]["admin"] == 1 else False})
+    return jsonify({"success": 404, "message": "Outlook problem occured.", "access_token": access_token})
+
+
+@loginManagement.route('/loginWithSpotify', methods=['POST'])
+def loginWithSpotify():
+    from index import db, user
+
+    access_token_spotify = request.json["access_token_spotify"]
+    access_token = request.json["access_token"]
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]['access_token'] == access_token:
+            db.child("users").child(x).update(
+                {"access_token_spotify": access_token_spotify},
+                user['idToken'])
+            return jsonify({"success": 200, "message": "Spotify User Login.",
+                            "access_token_spotify": access_token_spotify,
+                            "admin": True if all_users[x]["admin"] == 1 else False})
+    return jsonify({"success": 404, "message": "Spotify problem occured.", "access_token": access_token})
+
+
+@loginManagement.route('/loginWithGithub', methods=['POST'])
+def loginWithGithub():
+    from index import db, user
+
+    access_token_github = request.json["access_token_github"]
+    access_token = request.json["access_token"]
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]['access_token'] == access_token:
+            db.child("users").child(x).update(
+                {"access_token_github": access_token_github},
+                user['idToken'])
+            return jsonify({"success": 200, "message": "Github User Login.",
+                            "access_token_github": access_token_github,
+                            "admin": True if all_users[x]["admin"] == 1 else False})
+    return jsonify({"success": 404, "message": "Github problem occured.", "access_token": access_token})
+
