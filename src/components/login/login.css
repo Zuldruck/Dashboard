@@ -359,4 +359,11 @@ input::placeholder {
     padding: 50px 45px;
   }
 }
-  
+
+.loginNetworkButtons {
+    cursor: pointer;
+}
+
+.loginNetworkButtons:hover {
+    opacity: 0.8;
+}

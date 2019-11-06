@@ -12,14 +12,18 @@
     "react": "^16.11.0",
     "react-app-rewired": "^2.1.4",
     "react-dom": "^16.11.0",
+    "react-facebook-login": "^4.1.1",
+    "react-google-login": "^5.0.7",
     "react-grid-layout": "^0.17.1",
+    "react-microsoft-login": "^1.6.2",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
-    "redux": "^4.0.4",
-    "react-facebook-login": "^4.1.1",
-    "react-google-login": "^5.0.7",
-    "react-twitter-auth": "^0.0.13"
+    "react-spotify-login": "^0.9.1",
+    "react-spotify-player": "^1.0.4",
+    "react-svg": "^10.0.23",
+    "react-twitter-auth": "^0.0.13",
+    "redux": "^4.0.4"
   },
   "scripts": {
     "start": "HTTPS=true react-app-rewired start",
@@ -41,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "resolutions": {
+    "babel-jest": "24.7.1"
   }
 }

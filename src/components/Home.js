@@ -75,10 +75,11 @@ export class Home extends Component {
                                 style={{...provided.props.style}}
                             >
                                 <Card
+                                    hoverable
                                     type="inner"
                                     title={item.title}
                                     style={{
-                                        borderRadius: '3%',
+                                        borderRadius: '10px',
                                         height: provided.props.style.height,
                                         ...this.getblockStyle(provided.isDragging)
                                     }}

@@ -3,7 +3,6 @@ import './App.css';
 import Dashboard from './components/Dashboard';
 import Home from './components/Home';
 import Services from './components/Services';
-import Widgets from './components/Widgets';
 import Users from './components/Users';
 import {
     BrowserRouter as Router,
@@ -31,7 +30,9 @@ class App extends Component {
             }).then(response => {
                 if (response.status === 200 && response.data.isAdmin === true)
                     this.props.setAdmin(true);
-            })
+            }).catch(error => {
+
+            });
     }
     
     render() {
@@ -42,7 +43,6 @@ class App extends Component {
                     <Dashboard>
                         <Route exact component={Home} path="/" />
                         <Route exact component={Services} path="/services" />
-                        <Route exact component={Widgets} path="/widgets" />
                         <Route exact component={Users} path="/users" />
                     </Dashboard>
                 </Switch>

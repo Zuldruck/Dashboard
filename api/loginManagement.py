@@ -145,7 +145,14 @@ def loginWithFacebook():
 
     loginUser = {"email": login, "password": hashed, "admin": 0, "access_token": access_token,
                  "access_token_fb": access_token_fb,
-                 "access_token_google": "0"
+                 "access_token_google": "0",
+                 "football": 1,
+                 "outlook": 0,
+                 "epitech": 0,
+                 "spotify": 0,
+                 "twitter": 0,
+                 "cocktail": 1,
+                 "open_data": 1
                  }
     db.child("users").push(loginUser, user['idToken'])
     return jsonify({"success": 200, "message": "Fb User registered.", "access_token": access_token,
@@ -180,7 +187,14 @@ def loginWithGoogle():
 
     loginUser = {"email": login, "password": hashed, "admin": 0, "access_token": access_token,
                  "access_token_fb": "0",
-                 "access_token_google": access_token_google
+                 "access_token_google": access_token_google,
+                 "football": 1,
+                 "outlook": 0,
+                 "epitech": 0,
+                 "spotify": 0,
+                 "twitter": 0,
+                 "cocktail": 1,
+                 "open_data": 1
                  }
     db.child("users").push(loginUser, user['idToken'])
     return jsonify({"success": 200, "message": "Google User registered.", "access_token": access_token,
