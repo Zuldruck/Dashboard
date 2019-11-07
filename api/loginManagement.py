@@ -416,7 +416,7 @@ def removeSubscribedService():
     for x in all_users:
         if all_users[x]["access_token"] == access_token:
             if service == "github" or service == "outlook" or service == "spotify":
-                db.child("users").child(x).update({"access_token_" + service: 0, service : 0}, user['idToken'])
+                db.child("users").child(x).update({"access_token_" + service: 0, service: 0}, user['idToken'])
             else:
                 db.child("users").child(x).update({service: 0}, user['idToken'])
             return jsonify({"success": 200, "message": "Service removed."})
@@ -481,6 +481,7 @@ def loginWithGithub():
                             "access_token_github": access_token_github,
                             "admin": True if all_users[x]["admin"] == 1 else False})
     return jsonify({"success": 404, "message": "Github problem occured.", "access_token": access_token})
+
 
 @loginManagement.route('/setEpitechAutologin', methods=['POST'])
 def setAutologin():
