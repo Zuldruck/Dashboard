@@ -7,10 +7,10 @@ export class CocktailsByIngredientSettings extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            ingredient: '',
+            ingredient: props.ingredient || '',
             ingredients: [],
             autoCompleteList: [],
-            timer: 1,
+            timer: props.timer || 1,
         }
     }
 
@@ -42,8 +42,8 @@ export class CocktailsByIngredientSettings extends Component {
 
     onTimerChange = (value) => {
         this.props.onValueChange({
-            ingredient: value,
-            timer: this.state.timer
+            ingredient: this.state.ingredient,
+            timer: value
         });
     }
 
@@ -77,8 +77,8 @@ export class CocktailsByIngredientSettings extends Component {
                     }}
                     placeholder="Search for an ingredient"
                 />
-                <h4>Timer</h4>
-                <InputNumber min={1} max={60} defaultValue={1} onChange={this.onTimerChange}/>
+                <h4>Timer (in minutes)</h4>
+                <InputNumber min={1} max={60} defaultValue={this.state.timer} onChange={this.onTimerChange}/>
             </div>
         )
     }

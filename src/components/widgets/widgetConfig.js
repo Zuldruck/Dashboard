@@ -8,7 +8,7 @@ const config = [
     {
         name: "Cocktails List By Ingredient",
         service: 'cocktail',
-        heightGridSize: 6,
+        heightGridSize: 8,
         color: '#FF8C00',
         component: <CocktailsByIngredient/>,
         settings: <CocktailsByIngredientSettings/>,
@@ -16,7 +16,7 @@ const config = [
     {
         name: "Cocktails List By Glass",
         service: 'cocktail',
-        heightGridSize: 6,
+        heightGridSize: 8,
         color: '#FF8C00',
         component: <CocktailsByGlass/>,
         settings: <CocktailsByGlassSettings/>,

@@ -149,7 +149,7 @@ def getAllCocktailsWithGlasses():
 
          Example :\n
          url : "http://127.0.0.1:5000/services/cocktail/cocktailGlasses"\n
-         param : "glasses=Cocktail_glass"
+         param : "glass=Cocktail_glass"
 
          output :
          {"name": "9 1/2 Weeks", "pic": "https://www.thecocktaildb.com/images/media/drink/xvwusr1472669302.jpg", "id": "16108"},
@@ -162,14 +162,14 @@ def getAllCocktailsWithGlasses():
 
     # api-endpoint
     url = "https://www.thecocktaildb.com/api/json/v1/1/filter.php"
-    glasses = request.json["glasses"]
+    glass = request.json["glass"]
     access_token = request.json["access_token"]
 
     if isRightToken(access_token) == 0:
         return jsonify({"success": 404, "message": "Error occurred with your access token."})
 
     PARAMS = {
-        'g': glasses,
+        'g': glass,
     }
 
     try:

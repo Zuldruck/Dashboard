@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from "axios";
-import { List, Avatar, Tag, Button, message } from "antd";
+import { List, Avatar, Tag, Button, message, Popconfirm } from "antd";
 
 export class Users extends Component {
     
@@ -74,7 +74,7 @@ export class Users extends Component {
             return (<Redirect to="/login" />)
         else if (!this.state.isAdmin)
             return (<Redirect to="/" />)
-        console.log(this.state.users)
+        // console.log(this.state.users)
         return (
             <List
                 itemLayout="horizontal"
@@ -90,8 +90,13 @@ export class Users extends Component {
                                 </div>
                             }
                         />
-                        {item.admin === 0 ? <Button type="default" style={{marginRight:'1%'}} onClick={() => this.handleSetAdmin(item.email)}>Set Admin</Button> : ''}
-                        {item.admin === 0 ? <Button type="danger" onClick={() => this.handleDelete(item.email)}>Delete</Button> : ''}
+                        {item.admin === 0 ? <Button type="default" style={{marginRight: '1%'}} onClick={() => this.handleSetAdmin(item.email)}>Set Admin</Button> : ''}
+                        {item.admin === 0 ? <Popconfirm
+                                                title="Are you sure delete this task?"
+                                                onConfirm={() => this.handleDelete(item.email)}
+                                                okText="Yes"
+                                                cancelText="No"
+                                            ><Button type="danger">Delete</Button></Popconfirm> : ''}
                     </List.Item>
                 )}
             />

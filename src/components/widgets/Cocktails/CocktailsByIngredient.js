@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import { List, message } from 'antd';
+import { List, Avatar } from 'antd';
 import axios from 'axios';
 
 export class CocktailsByIngredient extends Component {
@@ -12,29 +12,60 @@ export class CocktailsByIngredient extends Component {
         }
     }
 
-    componentDidMount = () => {
+    updateList = (nextIngredient) => {
+        console.log('update list')
         axios.post("https://0.0.0.0:5000/services/cocktail/ingredients", {
-            ingredient: this.state.ingredient,
+            ingredient: nextIngredient || this.state.ingredient,
             access_token: localStorage.getItem("access_token"),
         }).then(response => {
             if (response.status !== 200)
                 return;
-            for (let x in response.data) {
-                const list = this.state.list;
+            let list = [];
 
-                list.append({
-                    name: x.name,
-                    picture: x.picCocktail,
+            for (let x in response.data) {
+                list.push({
+                    name: response.data[x].name,
+                    picture: response.data[x].picCocktail,
                 })
-                this.setState({list})
             }
+            this.setState({list})
         });
+    }
+
+    componentDidMount = () => {
+        this.updateList()
+    }
+
+    componentWillUpdate = (nextProps) => {
+        if (nextProps !== this.props) {
+            this.updateList(nextProps.ingredient)
+        }
     }
 
     render() {
         return (
             <div>
-                
+                <h2 className="widgetTitle">
+                    {"List of Cocktails with " + this.props.ingredient}
+                </h2>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={this.state.list}
+                    renderItem={(item) => {
+                        return(
+                        <List.Item>
+                            <List.Item.Meta
+                                avatar={<Avatar size="large" src={item.picture} />}
+                                title={
+                                    <p style={{...this.props.style, fontSize: 16}}>
+                                        {item.name}
+                                    </p>
+                                }
+                            />
+                        </List.Item>
+                        )
+                    }}
+                />
             </div>
         )
     }

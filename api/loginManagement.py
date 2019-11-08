@@ -428,7 +428,7 @@ def removeSubscribedService():
         if all_users[x]["access_token"] == access_token:
             if service == "github" or service == "outlook" or service == "spotify":
                 db.child("users").child(x).update({"access_token_" + service: 0}, user['idToken'])
-                db.child("users").child(x).child("services").update({service: 0})
+                db.child("users").child(x).child("services").update({service: 0}, user['idToken'])
             else:
                 db.child("users").child(x).child("services").update({service: 0}, user['idToken'])
             return jsonify({"success": 200, "message": "Service removed."})
@@ -520,8 +520,67 @@ def addWidget():
 
     all_users = db.child("users").get(user['idToken']).val()
 
+    widget["id"] = secrets.token_hex(6)
+
     for x in all_users:
         if all_users[x]["access_token"] == access_token:
-            db.child("users").child(x)
-            return jsonify({"success": 200, "message": "Autologin added."})
+            db.child("users").child(x).child("widgets").push(widget, user['idToken'])
+            return jsonify({"success": 200, "message": "Widget added.", "id": widget["id"]})
+    return jsonify({"success": 404, "message": "User not found"})
+
+
+@loginManagement.route('/updateWidget', methods=['POST'])
+def updateWidget():
+    from index import db, user
+
+    access_token = request.json["access_token"]
+    widgetId = request.json["id"]
+    settings = request.json["settings"]
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]["access_token"] == access_token:
+            widgets = db.child("users").child(x).child("widgets").get(user['idToken']).val()
+            for y in widgets:
+                if y == "0":
+                    continue
+                if widgets[y]["id"] == widgetId:
+                    db.child("users").child(x).child("widgets").child(y).update({"settings": settings}, user['idToken'])
+                    return jsonify({"success": 200, "message": "Widget updated."})
+    return jsonify({"success": 404, "message": "User or widget not found"})
+
+
+@loginManagement.route('/removeWidget', methods=['POST'])
+def removeWidget():
+    from index import db, user
+
+    access_token = request.json["access_token"]
+    widgetId = request.json["id"]
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]["access_token"] == access_token:
+            widgets = db.child("users").child(x).child("widgets").get(user['idToken']).val()
+            for y in widgets:
+                if y == "0":
+                    continue
+                if widgets[y]["id"] == widgetId:
+                    db.child("users").child(x).child("widgets").child(y).remove(user['idToken'])
+                    return jsonify({"success": 200, "message": "Widget removed."})
+    return jsonify({"success": 404, "message": "User or widget not found"})
+
+
+@loginManagement.route('/getWidgets', methods=['POST'])
+def getWidgets():
+    from index import db, user
+
+    access_token = request.json["access_token"]
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]["access_token"] == access_token:
+            return jsonify({"success": 200, "widgets" : all_users[x]["widgets"]})
     return jsonify({"success": 404, "message": "User not found"})

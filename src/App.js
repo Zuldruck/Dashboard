@@ -28,7 +28,6 @@ class App extends Component {
             axios.post('https://0.0.0.0:5000/getUserInformations', {
                 'access_token': access_token
             }).then(response => {
-                console.log(response)
                 if (response.status === 200 && response.data.user.admin)
                     this.props.setAdmin(true);
             }).catch(error => {
