@@ -32,7 +32,7 @@ export class Services extends Component {
             let nonSub = [];
 
             console.log(response)
-        
+
             if (response.status !== 200) {
                 message.error(response.data.message);
                 return;
@@ -105,13 +105,13 @@ export class Services extends Component {
                     {
                         this.state.subscribedCards.map((value, index) => {
                             return <Col key={index} xs={24} sm={24} md={12} lg={8} xl={8}>
-                                        <div style={{
-                                            margin: '2%',
-                                        }}>
-                                            <ServiceCard addButton access_token={this.state.access_token} subscribed={true} type={value} onClick={() => {this.removeSubscribedService(value)}} />
-                                        </div>
-                        
-                                    </Col>
+                                <div style={{
+                                    margin: '2%',
+                                }}>
+                                    <ServiceCard addButton access_token={this.state.access_token} subscribed={true} type={value} onClick={() => {this.removeSubscribedService(value)}} />
+                                </div>
+
+                            </Col>
                         })
                     }
                 </Row>
@@ -122,13 +122,17 @@ export class Services extends Component {
                     {
                         this.state.nonSubscribedCards.map((value, index) => {
                             return <Col key={index} xs={24} sm={24} md={12} lg={8} xl={8}>
-                                        <div style={{
-                                            margin: '2%',
-                                        }}>
-                                            <ServiceCard addButton access_token={this.state.access_token} subscribed={false} type={value} onClick={() => {this.addSubscribedService(value)}} />
-                                        </div>
-                        
-                                    </Col>
+                                <div style={{
+                                    margin: '2%',
+                                }}>
+{/*
+                                    <iframe src="https://open.spotify.com/embed/album/1DFixLWuPkv3KT3TnV35m3"
+                                            width="300" height="380" frameBorder="0" allowTransparency="true"
+                                            allow="encrypted-media"/>*/}
+                                   <ServiceCard addButton access_token={this.state.access_token} subscribed={false} type={value} onClick={() => {this.addSubscribedService(value)}} />
+                                </div>
+
+                            </Col>
                         })
                     }
 

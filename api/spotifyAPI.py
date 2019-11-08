@@ -18,7 +18,7 @@ def getUserInfo():
     for x in all_users:
         if all_users[x]['access_token'] == access_token:
 
-            url = "https://api.github.com/user"
+            url = "https://api.spotify.com/v1/me"
             PARAMS = {
                 'Authorization': "Bearer " + access_token_spotify,
             }
