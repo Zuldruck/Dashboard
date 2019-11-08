@@ -125,11 +125,7 @@ export class Services extends Component {
                                 <div style={{
                                     margin: '2%',
                                 }}>
-{/*
-                                    <iframe src="https://open.spotify.com/embed/album/1DFixLWuPkv3KT3TnV35m3"
-                                            width="300" height="380" frameBorder="0" allowTransparency="true"
-                                            allow="encrypted-media"/>*/}
-                                   <ServiceCard addButton access_token={this.state.access_token} subscribed={false} type={value} onClick={() => {this.addSubscribedService(value)}} />
+                                    <ServiceCard addButton access_token={this.state.access_token} subscribed={false} type={value} onClick={() => {this.addSubscribedService(value)}} />
                                 </div>
 
                             </Col>
