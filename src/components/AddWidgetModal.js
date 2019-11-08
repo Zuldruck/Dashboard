@@ -14,9 +14,9 @@ export class AddWidgetModal extends Component {
             showWidgets: false,
             showServices: true,
             showSettings: false,
-            settingsComponent: <div></div>,
             widgetList: [],
             settingsValue: {},
+            chosenWidget: {},
         }
     }
 
@@ -42,7 +42,19 @@ export class AddWidgetModal extends Component {
     }
 
     handleOk = () => {
+        Axios.post("https://0.0.0.0:5000/addWidget", {
+            access_token: localStorage.getItem('access_token'),
+            widget: {
+                ...this.state.chosenWidget,
+                ...this.state.settingsValue,
+            }
+        }).then(response => {
+            if (response.status !== 200) {
+                message.error("An error occured, please retry.")
+                return
+            }
 
+        })
     }
 
     handleCancel = () => {
@@ -78,7 +90,7 @@ export class AddWidgetModal extends Component {
             showWidgets: false,
             showSettings: true,
             disabledOk: false,
-            settingsComponent: widget.settings,
+            chosenWidget: widget,
         })
     }
 
@@ -126,7 +138,7 @@ export class AddWidgetModal extends Component {
                 )
             }
             {
-                this.state.showSettings ? React.cloneElement(this.state.settingsComponent, {onValueChange: this.onValueChange}) : ''
+                this.state.showSettings ? React.cloneElement(this.state.chosenWidget.settingsComponent, {onValueChange: this.onValueChange}) : ''
             }
             </Modal>
         )
