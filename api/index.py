@@ -3,6 +3,7 @@ from footballAPI import footballpage
 from loginManagement import loginManagement
 from cocktailAPI import cocktailPage
 from openDataMontpellierAPI import openDataMontpellier
+from githubAPI import github
 
 from flask import jsonify
 import pyrebase
@@ -20,6 +21,8 @@ app.register_blueprint(footballpage)
 app.register_blueprint(loginManagement)
 app.register_blueprint(cocktailPage)
 app.register_blueprint(openDataMontpellier)
+app.register_blueprint(github)
+
 
 CORS(app)
 
