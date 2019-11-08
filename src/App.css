@@ -61,7 +61,7 @@ body {
     position: absolute;
     top: 50%;
     right: 5%;
-    transform: translateY(-30%);
+    transform: translateY(-50%);
     visibility: hidden;
 }
 
@@ -71,4 +71,20 @@ body {
 
 .serviceCard:hover .serviceCardAddButton {
     visibility: visible;
+}
+
+.addWidgetButton {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    bottom: 50px;
+    right: 50px;
+    border-radius: 100%;
+    z-index: 2;
+    background-color: #011529;
+    cursor: pointer;
+}
+
+.addWidgetButton:hover {
+    box-shadow: 0px 0px 10px grey;
 }

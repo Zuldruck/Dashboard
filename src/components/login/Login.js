@@ -83,8 +83,6 @@ class Login extends Component {
         });
     }
 
-
-
     render() {
         if (this.state.loggedIn)
             return (

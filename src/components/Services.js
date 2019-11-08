@@ -25,23 +25,23 @@ export class Services extends Component {
     }
 
     setSubscribedCards = () => {
-        axios.post("https://0.0.0.0:5000/getSusbscribedServices", {
+        axios.post("https://0.0.0.0:5000/getSubscribedServices", {
             access_token: this.state.access_token,
         }).then(response => {
             let sub = [];
             let nonSub = [];
 
+            console.log(response)
+        
             if (response.status !== 200) {
                 message.error(response.data.message);
                 return;
             }
-            for (let x in response.data) {
-                if (x !== 'success') {
-                    if (response.data[x])
-                        sub.push(x);
-                    else
-                        nonSub.push(x);
-                }
+            for (let x in response.data.services) {
+                if (response.data.services[x])
+                    sub.push(x);
+                else
+                    nonSub.push(x);
             }
             this.setState({
                 subscribedCards: [],
@@ -105,13 +105,13 @@ export class Services extends Component {
                     {
                         this.state.subscribedCards.map((value, index) => {
                             return <Col key={index} xs={24} sm={24} md={12} lg={8} xl={8}>
-                                <div style={{
-                                    margin: '2%',
-                                }}>
-                                    <ServiceCard access_token={this.state.access_token} subscribed={true} type={value} onClick={() => {this.removeSubscribedService(value)}} />
-                                </div>
-
-                            </Col>
+                                        <div style={{
+                                            margin: '2%',
+                                        }}>
+                                            <ServiceCard addButton access_token={this.state.access_token} subscribed={true} type={value} onClick={() => {this.removeSubscribedService(value)}} />
+                                        </div>
+                        
+                                    </Col>
                         })
                     }
                 </Row>
@@ -122,13 +122,13 @@ export class Services extends Component {
                     {
                         this.state.nonSubscribedCards.map((value, index) => {
                             return <Col key={index} xs={24} sm={24} md={12} lg={8} xl={8}>
-                                <div style={{
-                                    margin: '2%',
-                                }}>
-                                    <ServiceCard access_token={this.state.access_token} subscribed={false} type={value} onClick={() => {this.addSubscribedService(value)}} />
-                                </div>
-
-                            </Col>
+                                        <div style={{
+                                            margin: '2%',
+                                        }}>
+                                            <ServiceCard addButton access_token={this.state.access_token} subscribed={false} type={value} onClick={() => {this.addSubscribedService(value)}} />
+                                        </div>
+                        
+                                    </Col>
                         })
                     }
 

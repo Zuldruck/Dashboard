@@ -87,7 +87,6 @@ class ServiceCard extends Component {
     requestMicrosoftAccesToken = () => {
         msalInstance.acquireTokenSilent({scopes: ["user.read"]}).then(response => {
             console.log(response.accessToken)
-            //call backend to store the access_token
             axios.post("https://0.0.0.0:5000/loginWithOutlook", {
                 access_token_outlook: response.accessToken,
                 access_token: this.state.access_token,
@@ -115,7 +114,6 @@ class ServiceCard extends Component {
                 return;
             }
             console.log(qs.parse(response.data).access_token)
-            //call backend to store the access_token
             axios.post("https://0.0.0.0:5000/loginWithGithub", {
                 accessTokenGithub: qs.parse(response.data).access_token,
                 access_token: this.state.access_token,
@@ -128,10 +126,26 @@ class ServiceCard extends Component {
             }).catch(error => {
                 message.error("An error occured, please retry.")
             })
+            message.success("Spotify services Added.")
             this.props.onClick();
         }).catch(response => {
             message.error("An error occured, please retry.");
         })
+    }
+
+    onSuccessSpotify = (response) => {
+        axios.post("https://0.0.0.0:5000/loginWithSpotify", {
+            access_token_spotify: response.access_token,
+            access_token: this.state.access_token,
+        }).then((response) => {
+            if (response.data.success !== 200) {
+                message.error(response.data.message)
+                return;
+            }
+        }).catch(error => {
+            message.error("An error occured, please retry.")
+        })
+        this.props.onClick();
     }
 
     render() {
@@ -140,11 +154,13 @@ class ServiceCard extends Component {
                 className="serviceCard"
                 style={{
                     backgroundColor: this.state.color,
+                    ...this.props.style
                 }}
+                onClick={!this.props.addButton ? this.props.onClick : _ => {}}
             >
                 <div style={{
                     display: 'flex',
-                    position: 'relative',
+                    height: '100%',
                 }}>
                     <ReactSVG src={this.state.icon} style={{
                         paddingLeft: '30px',
@@ -152,43 +168,29 @@ class ServiceCard extends Component {
                     }}/>
                     <div style={{
                         position: 'relative',
-                        paddingLeft: '10%',
+                        marginLeft: '5%',
+                        marginRight: '5%',
+                        width: '100%',
                     }}>
                         <span style={{
-                            position: 'absolute',
-                            top: '50%',
-                            transform: 'translateY(-40%)',
                             fontWeight: 'bold',
                             fontSize: '24px',
-                            lineHeight: 1,
+                            lineHeight: '100%',
+                            position: 'absolute',
+                            top: '50%',
+                            transform: 'translateY(-50%)'
                         }}>
-                            {this.state.title}
+                            {!this.props.widgetTitle ? this.state.title : this.props.widgetTitle}
                         </span>
                     </div>
+                    { this.props.addButton ?
                     <div className="serviceCardAddButton">
                         {
                             this.props.type === 'spotify' && !this.props.subscribed ?
                                 <SpotifyLogin
                                     clientId="50cbf128edfa408db0ecff0298802b5f"
                                     redirectUri="https://localhost:3000"
-                                    onSuccess={response => {
-                                        console.log(response.access_token)
-                                        //call backend to store the access_token
-                                        axios.post("https://0.0.0.0:5000/loginWithSpotify", {
-                                            access_token_spotify: response.access_token,
-                                            access_token: this.state.access_token,
-                                        }).then((response) => {
-                                            if (response.data.success !== 200) {
-                                                message.error(response.data.message)
-                                                return;
-                                            }
-                                            message.success("Spotify services Added.")
-                                        }).catch(error => {
-                                            message.error("An error occured, please retry.")
-                                        })
-
-                                        this.props.onClick();
-                                    }}
+                                    onSuccess={response => {this.onSuccessSpotify(response)}}
                                     onFailure={() => {
                                         message.error("An error occured, please retry.");
                                     }}><ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"}/></SpotifyLogin> :
@@ -224,6 +226,7 @@ class ServiceCard extends Component {
                                             <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={this.props.onClick}/>
                         }
                     </div>
+                    : ''}
                 </div>
             </div>
         )

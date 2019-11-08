@@ -13,11 +13,46 @@ def isRightToken(token):
     all_users = db.child("users").get(user['idToken']).val()
 
     for x in all_users:
-        print("FIREBASE : " + all_users[x]["access_token"])
-        print("token : " + str(token))
         if all_users[x]["access_token"] == token:
             return 1
     return 0
+
+
+@cocktailPage.route('/services/cocktail/listIngredients', methods=['POST'])
+def getingredientList():
+    """
+    getingredientList -> This function will send you all the ingredients available.
+    @access_token\n
+
+    Example :\n
+    url : "http://127.0.0.1:5000/services/cocktail/listIngredients"\n
+    param : "access_token"\n
+
+    output : {"name": "'57 Chevy with a White License Plate", "picCocktail": "https://www.thecocktaildb.com/images/media/drink/qyyvtu1468878544.jpg", "id": "14029"}\n
+
+    :return: list of dict.
+    """
+
+    url = "https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list"
+    ingredients = []
+    access_token = request.json["access_token"]
+
+    if isRightToken(access_token) == 0:
+        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+
+    try:
+        response = requests.get(url=url)
+        response.raise_for_status()
+    except HTTPError as http_err:
+        print(f'HTTP error occurred: {http_err}')  # Python 3.6
+    except Exception as err:
+        print(f'Other error occurred: {err}')  # Python 3.6
+    else:
+        if len(response.text) > 0:
+            for x in response.json()['drinks']:
+                ingredients.append(x['strIngredient1'])
+    return jsonify(ingredients)
+
 
 
 @cocktailPage.route('/services/cocktail/ingredients', methods=['POST'])
@@ -102,10 +137,8 @@ def getListOfDifferentGlasses():
     else:
         if len(response.text) > 0:
             for x in response.json()['drinks']:
-                tmpDict = {
-                    "name": x['strGlass'],
-                }
-                glasses.append(tmpDict)
+                if x['strGlass'] != '':
+                    glasses.append(x['strGlass'])
     return jsonify(glasses)
 
 
