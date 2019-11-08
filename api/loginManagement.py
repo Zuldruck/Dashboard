@@ -69,13 +69,18 @@ def register():
                  "access_token_spotify": 0,
                  "access_token_github": 0,
                  "intra_autologin": "0",
-                 "football": 1,
-                 "outlook": 0,
-                 "epitech": 0,
-                 "spotify": 0,
-                 "github": 0,
-                 "cocktail": 1,
-                 "open_data": 1,
+                 "services" : {
+                     "football": 1,
+                    "outlook": 0,
+                    "epitech": 0,
+                    "spotify": 0,
+                    "github": 0,
+                    "cocktail": 1,
+                    "open_data": 1,
+                 },
+                 "widgets": {
+                     "0": "0"
+                 }
                  }
     db.child("users").push(loginUser, user['idToken'])
     return jsonify({"success": 200, "message": "User registered.", "access_token": access_token})
@@ -147,13 +152,18 @@ def loginWithFacebook():
 
     loginUser = {"email": login, "password": hashed, "admin": 0, "access_token": access_token,
                  "access_token_fb": access_token_fb,
-                 "football": 1,
-                 "outlook": 0,
-                 "epitech": 0,
-                 "spotify": 0,
-                 "github": 0,
-                 "cocktail": 1,
-                 "open_data": 1,
+                 "services" : {
+                     "football": 1,
+                    "outlook": 0,
+                    "epitech": 0,
+                    "spotify": 0,
+                    "github": 0,
+                    "cocktail": 1,
+                    "open_data": 1,
+                 },
+                 "widgets": {
+                     "0": "0"
+                 },
                  "access_token_google": 0,
                  "access_token_outlook": 0,
                  "access_token_spotify": 0,
@@ -192,13 +202,18 @@ def loginWithGoogle():
     hashed = makePasswordHash(secrets.token_hex(20))
 
     loginUser = {"email": login, "password": hashed, "admin": 0, "access_token": access_token,
-                 "football": 1,
-                 "outlook": 0,
-                 "epitech": 0,
-                 "spotify": 0,
-                 "github": 0,
-                 "cocktail": 1,
-                 "open_data": 1,
+                 "services" : {
+                     "football": 1,
+                    "outlook": 0,
+                    "epitech": 0,
+                    "spotify": 0,
+                    "github": 0,
+                    "cocktail": 1,
+                    "open_data": 1,
+                 },
+                 "widgets": {
+                     "0": "0"
+                 },
                  "access_token_fb": 0,
                  "access_token_google": access_token_google,
                  "access_token_outlook": 0,
@@ -379,7 +394,7 @@ def addSubscribedService():
     return jsonify({"success": 404, "message": "user not found"})
 
 
-@loginManagement.route('/getSusbscribedServices', methods=['POST'])
+@loginManagement.route('/getSubscribedServices', methods=['POST'])
 def getSusbscribedServices():
     from index import db, user
 
@@ -391,13 +406,14 @@ def getSusbscribedServices():
     for x in all_users:
         if all_users[x]["access_token"] == access_token:
             return jsonify({"success": 200,
-                            "football": 1 if all_users[x]['football'] == 1 else 0,
-                            "outlook": 1 if all_users[x]['outlook'] == 1 else 0,
-                            "epitech": 1 if all_users[x]['epitech'] == 1 else 0,
-                            "spotify": 1 if all_users[x]['spotify'] == 1 else 0,
-                            "github": 1 if all_users[x]['github'] == 1 else 0,
-                            "cocktail": 1 if all_users[x]['cocktail'] == 1 else 0,
-                            "open_data": 1 if all_users[x]['open_data'] == 1 else 0
+                            "services" : {
+                                "football": all_users[x]["services"]['football'],
+                                "outlook": all_users[x]["services"]['outlook'],
+                                "epitech": all_users[x]["services"]['epitech'],
+                                "spotify": all_users[x]["services"]['spotify'],
+                                "github": all_users[x]["services"]['github'],
+                                "cocktail": all_users[x]["services"]['cocktail'],
+                                "open_data": all_users[x]["services"]['open_data']}
                             })
     return jsonify({"success": 404, "message": "user not found"})
 
@@ -408,7 +424,6 @@ def removeSubscribedService():
 
     service = request.json["service"]
     access_token = request.json["access_token"]
-    right_access = 0
     # check user who own access_token got admin right
 
     all_users = db.child("users").get(user['idToken']).val()
@@ -482,6 +497,7 @@ def loginWithGithub():
                             "admin": True if all_users[x]["admin"] == 1 else False})
     return jsonify({"success": 404, "message": "Github problem occured.", "access_token": access_token})
 
+
 @loginManagement.route('/setEpitechAutologin', methods=['POST'])
 def setAutologin():
     from index import db, user
@@ -496,3 +512,19 @@ def setAutologin():
             db.child("users").child(x).update({"intra_autologin": autologin}, user['idToken'])
             return jsonify({"success": 200, "message": "Autologin added."})
     return jsonify({"success": 404, "message": "User not found"})
+
+
+# @loginManagement.route('/addWidget', methods=['POST'])
+# def addWidget():
+#     from index import db, user
+
+#     access_token = request.json["access_token"]
+#     widget = request.json["widget"]
+
+#     all_users = db.child("users").get(user['idToken']).val()
+
+#     for x in all_users:
+#         if all_users[x]["access_token"] == access_token:
+#             db.child("users").child(x).update({"intra_autologin": autologin}, user['idToken'])
+#             return jsonify({"success": 200, "message": "Autologin added."})
+#     return jsonify({"success": 404, "message": "User not found"})

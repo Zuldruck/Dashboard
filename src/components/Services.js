@@ -25,23 +25,23 @@ export class Services extends Component {
     }
 
     setSubscribedCards = () => {
-        axios.post("https://0.0.0.0:5000/getSusbscribedServices", {
+        axios.post("https://0.0.0.0:5000/getSubscribedServices", {
             access_token: this.state.access_token,
         }).then(response => {
             let sub = [];
             let nonSub = [];
+
+            console.log(response)
         
             if (response.status !== 200) {
                 message.error(response.data.message);
                 return;
             }
-            for (let x in response.data) {
-                if (x !== 'success') {
-                    if (response.data[x])
-                        sub.push(x);
-                    else
-                        nonSub.push(x);
-                }
+            for (let x in response.data.services) {
+                if (response.data.services[x])
+                    sub.push(x);
+                else
+                    nonSub.push(x);
             }
             this.setState({
                 subscribedCards: [],
@@ -107,7 +107,7 @@ export class Services extends Component {
                                         <div style={{
                                             margin: '2%',
                                         }}>
-                                            <ServiceCard access_token={this.state.access_token} subscribed={true} type={value} onClick={() => {this.removeSubscribedService(value)}} />
+                                            <ServiceCard addButton access_token={this.state.access_token} subscribed={true} type={value} onClick={() => {this.removeSubscribedService(value)}} />
                                         </div>
                         
                                     </Col>
@@ -124,7 +124,7 @@ export class Services extends Component {
                                         <div style={{
                                             margin: '2%',
                                         }}>
-                                            <ServiceCard access_token={this.state.access_token} subscribed={false} type={value} onClick={() => {this.addSubscribedService(value)}} />
+                                            <ServiceCard addButton access_token={this.state.access_token} subscribed={false} type={value} onClick={() => {this.addSubscribedService(value)}} />
                                         </div>
                         
                                     </Col>

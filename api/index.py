@@ -34,6 +34,7 @@ firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 auth = firebase.auth()
 user = auth.sign_in_with_email_and_password("lucas.sanchez@epitech.eu", "dashboard1234")
+user = auth.refresh(user['refreshToken'])
 
 @app.route('/about')
 def about():

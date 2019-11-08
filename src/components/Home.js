@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import { Card } from 'antd';
 import { Dragact } from 'dragact';
+import ReactSVG from 'react-svg';
+import AddWidgetModal from './AddWidgetModal';
 
 export class Home extends Component {
 
@@ -15,6 +17,7 @@ export class Home extends Component {
                 { GridX: 0, GridY: 0, w: 4, h: 4, key: '2', title: 'Cocktails List', content: 'List' },
             ],
             width: 0,
+            modalVisible: false,
         }
         const widgets = JSON.parse(localStorage.getItem("widgets"));
 
@@ -35,10 +38,21 @@ export class Home extends Component {
         if (!this.state.loggedIn)
             return;
         setTimeout(() => {
+            if (!this.elem || !this.elem.current)
+                return
             this.setState({
-                width: this.elem.current.offsetWidth
+                width: this.elem.current.offsetWidth,
             })
-        }, 100);
+        }, 100)
+        window.addEventListener('resize', () => {
+            if (!this.elem || !this.elem.current)
+                return
+            setTimeout(() => {
+                this.setState({
+                    width: this.elem.current.offsetWidth,
+                })
+            }, 100)
+        })
     }
 
     onDragEnd = (event) => {
@@ -47,6 +61,14 @@ export class Home extends Component {
         widgets[parseInt(event.UniqueKey)].GridX = event.GridX;
         widgets[parseInt(event.UniqueKey)].GridY = event.GridY;
         localStorage.setItem("widgets", JSON.stringify(widgets));
+    }
+
+    addWidget = (widgetName) => {
+
+    }
+
+    onCancel = () => {
+        this.setState({modalVisible: false})
     }
 
     render() {
@@ -76,8 +98,6 @@ export class Home extends Component {
                             >
                                 <Card
                                     hoverable
-                                    type="inner"
-                                    title={item.title}
                                     style={{
                                         borderRadius: '10px',
                                         height: provided.props.style.height,
@@ -90,6 +110,13 @@ export class Home extends Component {
                         )
                     }}
                 </Dragact>
+                <div className="addWidgetButton" onClick={() => this.setState({modalVisible: true})}>
+                    <ReactSVG src="plus.svg" style={{
+                        marginTop: '15px',
+                        marginLeft: '15px',
+                    }} />
+                </div>
+                <AddWidgetModal visible={this.state.modalVisible} onCancel={this.onCancel} onOk={this.onOk}/>
             </div>
         )
     }
