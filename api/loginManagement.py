@@ -434,6 +434,7 @@ def loginWithOutlook():
 
     for x in all_users:
         if all_users[x]['access_token'] == access_token:
+            print("chef")
             db.child("users").child(x).update(
                 {"access_token_outlook": access_token_outlook},
                 user['idToken'])

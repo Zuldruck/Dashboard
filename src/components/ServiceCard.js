@@ -96,6 +96,7 @@ class ServiceCard extends Component {
                     message.error(response.data.message)
                     return;
                 }
+                message.success("Outlook services Added.")
             }).catch(error => {
                 message.error("An error occured, please retry.")
             })
@@ -123,6 +124,7 @@ class ServiceCard extends Component {
                     message.error(response.data.message)
                     return;
                 }
+                message.success("Github services Added.")
             }).catch(error => {
                 message.error("An error occured, please retry.")
             })
@@ -180,6 +182,7 @@ class ServiceCard extends Component {
                                                 message.error(response.data.message)
                                                 return;
                                             }
+                                            message.success("Spotify services Added.")
                                         }).catch(error => {
                                             message.error("An error occured, please retry.")
                                         })
