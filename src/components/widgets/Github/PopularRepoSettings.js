@@ -8,7 +8,7 @@ export class PopularRepoSettings extends Component {
         super(props)
         this.state = {
             language: props.language || 'Javascript',
-            languages: [{language: "C++"}, {language: "C"}, {language: "Javascript"}],
+            languages: [],
             timer: props.timer || 1,
         }
     }
@@ -31,22 +31,22 @@ export class PopularRepoSettings extends Component {
     }
 
     componentDidMount = () => {
-        // Axios.post("https://0.0.0.0:5000/service/github/????", {
-        //     access_token: localStorage.getItem("access_token"),
-        // }).then(response => {
-        //     if (response.status !== 200)
-        //         return;
-        //     let languages = []
+        Axios.post("https://0.0.0.0:5000/services/github/languagesList", {
+            access_token: localStorage.getItem("access_token"),
+        }).then(response => {
+            if (response.status !== 200)
+                return;
+            let languages = []
 
-        //     for (let x in response.data) {
-        //         languages.push({
-        //             language: response.data[x],
-        //         })
-        //     }
-        //     this.setState({
-        //         languages,
-        //     })
-        // })
+            for (let x in response.data) {
+                languages.push({
+                    language: response.data[x],
+                })
+            }
+            this.setState({
+                languages,
+            })
+        })
         this.props.onValueChange({
             language: this.state.language,
             timer: this.state.timer,

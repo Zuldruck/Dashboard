@@ -157,3 +157,7 @@ body {
     color:  white;
     font-weight: bold;
 }
+
+.ant-card-body {
+    height: 100%;
+}

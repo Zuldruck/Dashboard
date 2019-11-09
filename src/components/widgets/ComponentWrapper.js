@@ -6,11 +6,22 @@ import LiveScore from './Football/LiveScore'
 import VeloMaggAvailability from './Open Data/VeloMaggAvailability'
 import ParkingAvailability from './Open Data/ParkingAvailability'
 import PopularRepo from './Github/PopularRepo'
+import GithubProfile from './Github/GithubProfile'
+import SpotifyPlayer from './Spotify/SpotifyPlayer'
+import SpotifyProfile from './Spotify/SpotifyProfile'
 
 export class ComponentWrapper extends Component {
+
+    shouldComponentUpdate = (nextProps) => {
+        return nextProps.settings !== this.props.settings
+    }
+
     render() {
+        console.log(this.props)
         return (
-            <div>
+            <div style={{
+                height: '100%',
+            }}>
                 {
                     this.props.type === 'Cocktails List By Ingredient' ?
                     <CocktailsByIngredient style={this.props.style} {...this.props.settings}/> :
@@ -32,6 +43,15 @@ export class ComponentWrapper extends Component {
 
                     this.props.type === 'Most Popular Repositories' ?
                     <PopularRepo style={this.props.style} {...this.props.settings}/> :
+
+                    this.props.type === 'Github Profile' ?
+                    <GithubProfile style={this.props.style} {...this.props.settings}/> :
+
+                    this.props.type === 'Spotify Player' ?
+                    <SpotifyPlayer style={this.props.style} {...this.props.settings}/> :
+
+                    this.props.type === 'Spotify Profile' ?
+                    <SpotifyProfile style={this.props.style} {...this.props.settings}/> :
                     
                     ''
                 }

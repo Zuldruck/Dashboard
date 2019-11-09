@@ -100,4 +100,4 @@ def getPlaylistsUser():
                     }
                     playlists.append(tmpDict)
             return jsonify(playlists)
-    return jsonify({"success": 404, "message": "Spotify problem occured.", "access_token": access_token})
+    return jsonify({"success": 404, "message": "Spotify problem occured."})

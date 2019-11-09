@@ -13,6 +13,12 @@ import ParkingAvailability from './Open Data/ParkingAvailability'
 import ParkingAvailabilitySettings from './Open Data/ParkingAvailabilitySettings'
 import PopularRepo from './Github/PopularRepo'
 import PopularRepoSettings from './Github/PopularRepoSettings'
+import GithubProfile from './Github/GithubProfile'
+import GithubProfileSettings from './Github/GithubProfileSettings'
+import SpotifyPlayer from './Spotify/SpotifyPlayer'
+import SpotifyPlayerSettings from './Spotify/SpotifyPlayerSettings'
+import SpotifyProfile from './Spotify/SpotifyProfile'
+import SpotifyProfileSettings from './Spotify/SpotifyProfileSettings'
 
 const config = [
     {
@@ -77,6 +83,33 @@ const config = [
         color: '#24292E',
         component: <PopularRepo />,
         settings: <PopularRepoSettings />,
+    },
+    {
+        name: "Github Profile",
+        service: 'github',
+        heightGridSize: 4,
+        widthGridSize: 4,        
+        color: '#24292E',
+        component: <GithubProfile />,
+        settings: <GithubProfileSettings />,
+    },
+    {
+        name: "Spotify Player",
+        service: 'spotify',
+        heightGridSize: 3,
+        widthGridSize: 4,        
+        color: '#1DB954',
+        component: <SpotifyPlayer />,
+        settings: <SpotifyPlayerSettings />,
+    },
+    {
+        name: "Spotify Profile",
+        service: 'spotify',
+        heightGridSize: 4,
+        widthGridSize: 4,        
+        color: '#1DB954',
+        component: <SpotifyProfile />,
+        settings: <SpotifyProfileSettings />,
     }
 ]
 
