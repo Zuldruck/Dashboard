@@ -7,7 +7,7 @@ export class CocktailsByGlass extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            glass: props.glass,
+            glass: props.glass || 'Champagne Flute',
             list: [],
         }
     }

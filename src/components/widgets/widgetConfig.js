@@ -7,6 +7,10 @@ import TeamsRanking from './Football/TeamsRanking'
 import TeamsRankingSettings from './Football/TeamsRankingSettings'
 import LiveScore from './Football/LiveScore'
 import LiveScoreSettings from './Football/LiveScoreSettings'
+import VeloMaggAvailability from './Open Data/VeloMaggAvailability'
+import VeloMaggAvailabilitySettings from './Open Data/VeloMaggAvailabilitySettings'
+import ParkingAvailability from './Open Data/ParkingAvailability'
+import ParkingAvailabilitySettings from './Open Data/ParkingAvailabilitySettings'
 
 const config = [
     {
@@ -44,6 +48,24 @@ const config = [
         color: '#608038',
         component: <LiveScore />,
         settings: <LiveScoreSettings />,
+    },
+    {
+        name: "Velo Magg Parks Availability",
+        service: 'open_data',
+        heightGridSize: 3,
+        widthGridSize: 3,        
+        color: '#73468D',
+        component: <VeloMaggAvailability />,
+        settings: <VeloMaggAvailabilitySettings />,
+    },
+    {
+        name: "Parking Availability",
+        service: 'open_data',
+        heightGridSize: 3,
+        widthGridSize: 3,        
+        color: '#73468D',
+        component: <ParkingAvailability />,
+        settings: <ParkingAvailabilitySettings />,
     }
 ]
 
