@@ -59,9 +59,13 @@ export class Home extends Component {
             let newList = this.state.widgets.slice()
 
             newList.splice(index, 1)
+            newList.forEach((value, index) => {value.key = index.toString()})
             localStorage.setItem('widgets', JSON.stringify(newList))
             this.setState({
-                widgets: newList
+                widgets: [],
+            })
+            this.setState({
+                widgets: newList,
             })
         }).catch(error => {
             message.error("An error occured, please retry.")

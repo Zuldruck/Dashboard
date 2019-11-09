@@ -46,6 +46,8 @@ export class TeamsRanking extends Component {
     }
 
     updateList = (nextLeague, nextCountry) => {
+        console.log(nextLeague || this.state.league)
+        console.log(nextCountry || this.state.country)
         axios.post("https://0.0.0.0:5000/services/football/rank", {
             league: nextLeague || this.state.league,
             country: nextCountry || this.state.country,
