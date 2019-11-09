@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AutoComplete, InputNumber } from 'antd';
+import { InputNumber, Select } from 'antd';
 import Axios from 'axios';
 
 export class CocktailsByGlassSettings extends Component {
@@ -24,21 +24,21 @@ export class CocktailsByGlassSettings extends Component {
         });
     }
 
-    onSelect = (value) => {
-        this.onGlassChange(value);
-    }
+    // onSelect = (value) => {
+    //     this.onGlassChange(value);
+    // }
 
-    onSearch = (value) => {
-        let list = []
+    // onSearch = (value) => {
+    //     let list = []
 
-        this.state.glasses.forEach((glass, index) => {
-            if (glass.toLowerCase().startsWith(value.toLowerCase()))
-                list.push(glass)
-        })
-        this.setState({
-            autoCompleteList: list,
-        })
-    }
+    //     this.state.glasses.forEach((glass, index) => {
+    //         if (glass.toLowerCase().startsWith(value.toLowerCase()))
+    //             list.push(glass)
+    //     })
+    //     this.setState({
+    //         autoCompleteList: list,
+    //     })
+    // }
 
     onTimerChange = (value) => {
         this.props.onValueChange({
@@ -65,22 +65,29 @@ export class CocktailsByGlassSettings extends Component {
     }
 
     render() {
-        const { glass, autoCompleteList } = this.state;
+        const { autoCompleteList } = this.state;
         return (
             <div>
                 <h4>Glass</h4>
-                <AutoComplete
-                    value={glass}
-                    dataSource={autoCompleteList}
-                    onSelect={this.onSelect}
-                    onSearch={this.onSearch}
+                <Select
                     onChange={this.onGlassChange}
                     style={{
                         width: '100%',
                         marginBottom: '5%',
                     }}
-                    placeholder="Search for an ingredient"
-                />
+                    placeholder="Search for a glass"
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                >
+                    {
+                        autoCompleteList.map((value, index) =>
+                            <Select.Option key={index} value={value}>{value}</Select.Option>
+                        )
+                    }
+                </Select>
                 <h4>Timer (in minutes)</h4>
                 <InputNumber min={1} max={60} defaultValue={this.state.timer} onChange={this.onTimerChange}/>
             </div>

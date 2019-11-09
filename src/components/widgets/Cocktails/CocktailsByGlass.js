@@ -56,9 +56,9 @@ export class CocktailsByGlass extends Component {
                             <List.Item.Meta
                                 avatar={<Avatar size="large" src={item.picture} />}
                                 title={
-                                    <p style={{...this.props.style, fontSize: 16}}>
+                                    <span style={{...this.props.style, fontSize: 16}}>
                                         {item.name}
-                                    </p>
+                                    </span>
                                 }
                             />
                         </List.Item>

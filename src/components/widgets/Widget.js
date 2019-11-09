@@ -56,6 +56,7 @@ export class Widget extends Component {
     } 
 
     render() {
+        console.log(this.state.type)
         return (
             <Card
                 id="scrollbar"

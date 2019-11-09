@@ -11,6 +11,8 @@ import VeloMaggAvailability from './Open Data/VeloMaggAvailability'
 import VeloMaggAvailabilitySettings from './Open Data/VeloMaggAvailabilitySettings'
 import ParkingAvailability from './Open Data/ParkingAvailability'
 import ParkingAvailabilitySettings from './Open Data/ParkingAvailabilitySettings'
+import PopularRepo from './Github/PopularRepo'
+import PopularRepoSettings from './Github/PopularRepoSettings'
 
 const config = [
     {
@@ -66,6 +68,15 @@ const config = [
         color: '#73468D',
         component: <ParkingAvailability />,
         settings: <ParkingAvailabilitySettings />,
+    },
+    {
+        name: "Most Popular Repositories",
+        service: 'github',
+        heightGridSize: 8,
+        widthGridSize: 4,        
+        color: '#24292E',
+        component: <PopularRepo />,
+        settings: <PopularRepoSettings />,
     }
 ]
 

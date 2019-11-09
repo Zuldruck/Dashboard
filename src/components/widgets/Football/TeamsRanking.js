@@ -91,7 +91,8 @@ export class TeamsRanking extends Component {
                 <Table
                     bodyStyle={{
                         color: 'white',
-                        fontWeight: 'bold'
+                        fontWeight: 'bold',
+                        fontSize: 16,
                     }}
                     pagination={false}
                     size="small"

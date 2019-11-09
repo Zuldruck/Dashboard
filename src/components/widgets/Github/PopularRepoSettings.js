@@ -2,73 +2,77 @@ import React, { Component } from 'react';
 import { Select, InputNumber } from 'antd';
 import Axios from 'axios';
 
-export class CocktailsByIngredientSettings extends Component {
+export class PopularRepoSettings extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            ingredient: props.ingredient || '',
-            ingredients: [],
-            autoCompleteList: [],
+            language: props.language || 'Javascript',
+            languages: [{language: "C++"}, {language: "C"}, {language: "Javascript"}],
             timer: props.timer || 1,
         }
     }
 
-    onIngredientChange = (value) => {
+    onLanguageChange = (value) => {
         this.setState({
-            ingredient: value,
+            language: value,
         })
         this.props.onValueChange({
-            ingredient: value,
+            language: value,
             timer: this.state.timer
         });
     }
 
     onTimerChange = (value) => {
         this.props.onValueChange({
-            ingredient: this.state.ingredient,
+            language: this.state.language,
             timer: value
         });
     }
 
     componentDidMount = () => {
-        Axios.post("https://0.0.0.0:5000/services/cocktail/listIngredients", {
-            access_token: localStorage.getItem("access_token"),
-        }).then(response => {
-            if (response.status !== 200)
-                return;
-            this.setState({
-                ingredients: response.data,
-                autoCompleteList: response.data,
-            })
-        })
+        // Axios.post("https://0.0.0.0:5000/service/github/????", {
+        //     access_token: localStorage.getItem("access_token"),
+        // }).then(response => {
+        //     if (response.status !== 200)
+        //         return;
+        //     let languages = []
+
+        //     for (let x in response.data) {
+        //         languages.push({
+        //             language: response.data[x],
+        //         })
+        //     }
+        //     this.setState({
+        //         languages,
+        //     })
+        // })
         this.props.onValueChange({
-            ingredient: this.state.ingredient,
+            language: this.state.language,
             timer: this.state.timer,
         })
     }
 
     render() {
-        const { autoCompleteList } = this.state;
         return (
             <div>
-                <h4>Ingredient</h4>
+                <h4>Language</h4>
                 <Select
-                    onChange={this.onIngredientChange}
                     style={{
                         width: '100%',
                         marginBottom: '5%',
                     }}
-                    placeholder="Search for an ingredient"
+                    onChange={this.onLanguageChange}
                     showSearch
+                    placeholder="Select a language"
                     optionFilterProp="children"
                     filterOption={(input, option) =>
                         option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }
                 >
                     {
-                        autoCompleteList.map((value, index) =>
-                            <Select.Option key={index} value={value}>{value}</Select.Option>
+                        this.state.languages.map((value, index) => 
+                            <Select.Option key={index} value={value.language}>{value.language}</Select.Option>
                         )
                     }
                 </Select>
@@ -79,4 +83,4 @@ export class CocktailsByIngredientSettings extends Component {
     }
 }
 
-export default CocktailsByIngredientSettings
+export default PopularRepoSettings

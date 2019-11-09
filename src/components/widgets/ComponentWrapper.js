@@ -5,6 +5,7 @@ import TeamsRanking from './Football/TeamsRanking'
 import LiveScore from './Football/LiveScore'
 import VeloMaggAvailability from './Open Data/VeloMaggAvailability'
 import ParkingAvailability from './Open Data/ParkingAvailability'
+import PopularRepo from './Github/PopularRepo'
 
 export class ComponentWrapper extends Component {
     render() {
@@ -28,6 +29,9 @@ export class ComponentWrapper extends Component {
 
                     this.props.type === 'Parking Availability' ?
                     <ParkingAvailability style={this.props.style} {...this.props.settings}/> :
+
+                    this.props.type === 'Most Popular Repositories' ?
+                    <PopularRepo style={this.props.style} {...this.props.settings}/> :
                     
                     ''
                 }
