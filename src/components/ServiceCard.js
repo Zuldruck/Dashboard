@@ -95,6 +95,7 @@ class ServiceCard extends Component {
                     message.error(response.data.message)
                     return;
                 }
+                message.success("Outlook services Added.")
             }).catch(error => {
                 message.error("An error occured, please retry.")
             })
@@ -121,9 +122,11 @@ class ServiceCard extends Component {
                     message.error(response.data.message)
                     return;
                 }
+                message.success("Github services Added.")
             }).catch(error => {
                 message.error("An error occured, please retry.")
             })
+            message.success("Spotify services Added.")
             this.props.onClick();
         }).catch(response => {
             message.error("An error occured, please retry.");
@@ -139,6 +142,8 @@ class ServiceCard extends Component {
                 message.error(response.data.message)
                 return;
             }
+            message.success("Spotify services added.")
+
         }).catch(error => {
             message.error("An error occured, please retry.")
         })
@@ -181,49 +186,49 @@ class ServiceCard extends Component {
                         </span>
                     </div>
                     { this.props.addButton ?
-                    <div className="serviceCardAddButton">
-                        {
-                            this.props.type === 'spotify' && !this.props.subscribed ?
-                                <SpotifyLogin
-                                    clientId="50cbf128edfa408db0ecff0298802b5f"
-                                    redirectUri="https://localhost:3000"
-                                    onSuccess={response => {this.onSuccessSpotify(response)}}
-                                    onFailure={() => {
-                                        message.error("An error occured, please retry.");
-                                    }}><ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"}/></SpotifyLogin> :
-                                this.props.type === 'github' && !this.props.subscribed ?
-                                    <GitHubLogin clientId="Iv1.3cb565ed2a57480d"
-                                                 redirectUri="https://localhost:3000"
-                                                 onSuccess={this.onSuccessGithub}
-                                                 onFailure={() => {message.error("An error occured, please retry.")}}
-                                    ><ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"}/></GitHubLogin> :
-                                    this.props.type === 'epitech' && !this.props.subscribed ?
-                                        <div>
-                                            <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={() => this.setState({modalEpitechVisible: true})}/>
-                                            <Modal
-                                                title="Basic Modal"
-                                                visible={this.state.modalEpitechVisible}
-                                                onOk={this.handleEpitechModalOk}
-                                                onCancel={() => this.setState({modalEpitechVisible: false})}
-                                            >
-                                                <h4>Enter your Epitech Intranet autologin :</h4>
-                                                <br/>
-                                                <Input placeholder="Autologin" value={this.state.autologinEpitech} onChange={(event) => this.setState({autologinEpitech: event.target.value})}/>
-                                            </Modal>
-                                        </div> :
-                                        this.props.type === 'outlook' && !this.props.subscribed ?
-                                            <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={() => msalInstance.loginPopup({scopes: ["user.read"]})
-                                                .then(response => {
-                                                    this.requestMicrosoftAccesToken()
-                                                    this.props.onClick();
-                                                })
-                                                .catch(err => {
-                                                    message.error("An error occured, please retry.");
-                                                })}/> :
-                                            <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={this.props.onClick}/>
-                        }
-                    </div>
-                    : ''}
+                        <div className="serviceCardAddButton">
+                            {
+                                this.props.type === 'spotify' && !this.props.subscribed ?
+                                    <SpotifyLogin
+                                        clientId="50cbf128edfa408db0ecff0298802b5f"
+                                        redirectUri="https://localhost:3000"
+                                        onSuccess={response => {this.onSuccessSpotify(response)}}
+                                        onFailure={() => {
+                                            message.error("An error occured, please retry.");
+                                        }}><ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"}/></SpotifyLogin> :
+                                    this.props.type === 'github' && !this.props.subscribed ?
+                                        <GitHubLogin clientId="Iv1.3cb565ed2a57480d"
+                                                     redirectUri="https://localhost:3000"
+                                                     onSuccess={this.onSuccessGithub}
+                                                     onFailure={() => {message.error("An error occured, please retry.")}}
+                                        ><ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"}/></GitHubLogin> :
+                                        this.props.type === 'epitech' && !this.props.subscribed ?
+                                            <div>
+                                                <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={() => this.setState({modalEpitechVisible: true})}/>
+                                                <Modal
+                                                    title="Basic Modal"
+                                                    visible={this.state.modalEpitechVisible}
+                                                    onOk={this.handleEpitechModalOk}
+                                                    onCancel={() => this.setState({modalEpitechVisible: false})}
+                                                >
+                                                    <h4>Enter your Epitech Intranet autologin :</h4>
+                                                    <br/>
+                                                    <Input placeholder="Autologin" value={this.state.autologinEpitech} onChange={(event) => this.setState({autologinEpitech: event.target.value})}/>
+                                                </Modal>
+                                            </div> :
+                                            this.props.type === 'outlook' && !this.props.subscribed ?
+                                                <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={() => msalInstance.loginPopup({scopes: ["user.read"]})
+                                                    .then(response => {
+                                                        this.requestMicrosoftAccesToken()
+                                                        this.props.onClick();
+                                                    })
+                                                    .catch(err => {
+                                                        message.error("An error occured, please retry.");
+                                                    })}/> :
+                                                <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={this.props.onClick}/>
+                            }
+                        </div>
+                        : ''}
                 </div>
             </div>
         )

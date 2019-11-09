@@ -19,7 +19,7 @@ export class Services extends Component {
 
         if (access_token === null)
             return;
-        
+
         this.state.loggedIn = true;
         this.state.access_token = access_token;
     }
@@ -32,7 +32,7 @@ export class Services extends Component {
             let nonSub = [];
 
             console.log(response)
-        
+
             if (response.status !== 200) {
                 message.error(response.data.message);
                 return;
@@ -80,6 +80,7 @@ export class Services extends Component {
                 message.error(response.data.message);
                 return;
             }
+            message.success(service + " services Removed.")
             this.setSubscribedCards();
         }).catch(error => {
             message.error("An error occured, please retry.");
@@ -104,13 +105,13 @@ export class Services extends Component {
                     {
                         this.state.subscribedCards.map((value, index) => {
                             return <Col key={index} xs={24} sm={24} md={12} lg={8} xl={8}>
-                                        <div style={{
-                                            margin: '2%',
-                                        }}>
-                                            <ServiceCard addButton access_token={this.state.access_token} subscribed={true} type={value} onClick={() => {this.removeSubscribedService(value)}} />
-                                        </div>
-                        
-                                    </Col>
+                                <div style={{
+                                    margin: '2%',
+                                }}>
+                                    <ServiceCard addButton access_token={this.state.access_token} subscribed={true} type={value} onClick={() => {this.removeSubscribedService(value)}} />
+                                </div>
+
+                            </Col>
                         })
                     }
                 </Row>
@@ -121,16 +122,16 @@ export class Services extends Component {
                     {
                         this.state.nonSubscribedCards.map((value, index) => {
                             return <Col key={index} xs={24} sm={24} md={12} lg={8} xl={8}>
-                                        <div style={{
-                                            margin: '2%',
-                                        }}>
-                                            <ServiceCard addButton access_token={this.state.access_token} subscribed={false} type={value} onClick={() => {this.addSubscribedService(value)}} />
-                                        </div>
-                        
-                                    </Col>
+                                <div style={{
+                                    margin: '2%',
+                                }}>
+                                    <ServiceCard addButton access_token={this.state.access_token} subscribed={false} type={value} onClick={() => {this.addSubscribedService(value)}} />
+                                </div>
+
+                            </Col>
                         })
                     }
-                    
+
                 </Row>
             </div>
         )
