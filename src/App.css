@@ -115,6 +115,7 @@ body {
     right: 10px;
     border-radius: 100%;
     cursor: pointer;
+    visibility: hidden;
 }
 
 .widgetRemove:hover {
@@ -129,6 +130,7 @@ body {
     right: 45px;
     border-radius: 100%;
     cursor: pointer;
+    visibility: hidden;
 }
 
 .widgetSettings:hover {
@@ -141,4 +143,17 @@ body {
     margin-bottom: 10%;
     font-weight: bold;
     color: white;
+}
+
+#scrollbar:hover .widgetSettings {
+    visibility: visible;
+}
+
+#scrollbar:hover .widgetRemove {
+    visibility: visible;
+}
+
+.ant-table-column-title {
+    color:  white;
+    font-weight: bold;
 }

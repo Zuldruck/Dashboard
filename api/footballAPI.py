@@ -281,8 +281,6 @@ def getListLeaguesDashboard():
     if isRightToken(str(access_token)) == 0:
         return jsonify({"success": 404, "message": "Error occurred with your access token."})
 
-    list = []
-
     tmpDict = {
         "France": "Ligue 1",
         "Italy": "Serie A",
@@ -290,5 +288,4 @@ def getListLeaguesDashboard():
         "Spain": "LaLiga",
         "Germany": "Bundesliga",
     }
-    list.append(tmpDict)
-    return json.dumps(list)
+    return jsonify(tmpDict)

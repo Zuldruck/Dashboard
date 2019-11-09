@@ -33,7 +33,7 @@ export class Home extends Component {
         widgets.push({
             GridX: 0,
             GridY: 0,
-            w: 4,
+            w: widgetConfig.widthGridSize,
             h: widgetConfig.heightGridSize,
             key: widgets.length.toString(),
             name: widgetConfig.name,
