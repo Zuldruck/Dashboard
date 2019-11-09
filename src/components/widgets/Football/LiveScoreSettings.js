@@ -50,10 +50,14 @@ export class LiveScoreSettings extends Component {
                     league: response.data[x],
                 })
             }
-            console.log(leagues)
             this.setState({
                 leagues: leagues,
             })
+        })
+        this.props.onValueChange({
+            league: this.state.league,
+            country: this.state.country,
+            timer: this.state.timer,
         })
     }
 
