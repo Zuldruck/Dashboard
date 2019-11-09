@@ -85,7 +85,7 @@ class ServiceCard extends Component {
     }
 
     requestMicrosoftAccesToken = () => {
-        msalInstance.acquireTokenSilent({scopes: ["user.read"]}).then(response => {
+        msalInstance.acquireTokenPopup({scopes: ["user.read"]}).then(response => {
             console.log(response.accessToken)
             axios.post("https://0.0.0.0:5000/loginWithOutlook", {
                 access_token_outlook: response.accessToken,
