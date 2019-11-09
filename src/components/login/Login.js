@@ -89,10 +89,12 @@ class Login extends Component {
                 <Redirect to="/" />
             )
         const responseFacebook = (responseData) => {
+            this.setState({isLoading: true});
             axios.post("https://0.0.0.0:5000/loginWithFacebook", {
                 email: responseData['email'],
                 accessToken: responseData['accessToken'],
             }).then((response) => {
+                this.setState({isLoading: false});
                 if (response.data.success !== 200) {
                     message.error(response.data.message)
                     return;
@@ -112,10 +114,12 @@ class Login extends Component {
                 message.error(responseData['error'] );
                 return;
             }
+            this.setState({isLoading: true});
             axios.post("https://0.0.0.0:5000/loginWithGoogle", {
                 email: responseData['profileObj']['email'],
                 accessToken: responseData['accessToken'],
             }).then((response) => {
+                this.setState({isLoading: false});
                 if (response.data.success !== 200) {
                     message.error(response.data.message)
                     return;
