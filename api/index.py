@@ -5,6 +5,7 @@ from cocktailAPI import cocktailPage
 from openDataMontpellierAPI import openDataMontpellier
 from githubAPI import github
 from spotifyAPI import spotify
+from intraAPI import intra
 
 from flask import jsonify
 import pyrebase
@@ -24,6 +25,7 @@ app.register_blueprint(cocktailPage)
 app.register_blueprint(openDataMontpellier)
 app.register_blueprint(github)
 app.register_blueprint(spotify)
+app.register_blueprint(intra)
 
 
 
