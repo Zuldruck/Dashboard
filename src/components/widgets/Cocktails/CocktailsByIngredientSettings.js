@@ -58,6 +58,10 @@ export class CocktailsByIngredientSettings extends Component {
                 autoCompleteList: response.data,
             })
         })
+        this.props.onValueChange({
+            ingredient: this.state.ingredient,
+            timer: this.state.timer,
+        })
     }
 
     render() {

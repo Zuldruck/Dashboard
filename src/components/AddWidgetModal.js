@@ -43,6 +43,7 @@ export class AddWidgetModal extends Component {
 
     handleOk = () => {
         const { chosenWidget } = this.state
+
         Axios.post("https://0.0.0.0:5000/addWidget", {
             access_token: localStorage.getItem('access_token'),
             widget: {
@@ -59,15 +60,15 @@ export class AddWidgetModal extends Component {
                 settings: this.state.settingsValue,
                 id: response.data.id,
             })
-        })
-        this.setState({
-            disabledOk: true,
-            showWidgets: false,
-            showServices: true,
-            showSettings: false,
-            settingsComponent: <div></div>,
-            widgetList: [],
-            settingsValue: {},
+            this.setState({
+                disabledOk: true,
+                showWidgets: false,
+                showServices: true,
+                showSettings: false,
+                settingsComponent: <div></div>,
+                widgetList: [],
+                settingsValue: {},
+            })
         })
         this.props.onOk();
     }
@@ -110,6 +111,7 @@ export class AddWidgetModal extends Component {
     }
 
     onValueChange = (value) => {
+        console.log(value)
         this.setState({
             settingsValue: value,
         })

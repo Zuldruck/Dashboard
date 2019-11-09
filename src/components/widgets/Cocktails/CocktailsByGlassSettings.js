@@ -58,6 +58,10 @@ export class CocktailsByGlassSettings extends Component {
                 autoCompleteList: response.data,
             })
         })
+        this.props.onValueChange({
+            glass: this.state.glass,
+            timer: this.state.timer,
+        })
     }
 
     render() {

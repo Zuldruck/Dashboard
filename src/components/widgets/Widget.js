@@ -39,11 +39,6 @@ export class Widget extends Component {
             settings: saveSettings,
             saveSettings: {},
         })
-        this.setState({
-            settingsVisible: false,
-            settings: saveSettings,
-            saveSettings: {},
-        })
         Axios.post("https://0.0.0.0:5000/updateWidget", {
             access_token: localStorage.getItem('access_token'),
             id: this.state.id,
