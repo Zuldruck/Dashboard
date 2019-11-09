@@ -7,7 +7,7 @@ export class CocktailsByIngredient extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ingredient: props.ingredient,
+            ingredient: props.ingredient || 'Vodka',
             list: [],
         }
     }

@@ -3,6 +3,8 @@ import CocktailsByIngredient from './Cocktails/CocktailsByIngredient'
 import CocktailsByGlass from './Cocktails/CocktailsByGlass'
 import TeamsRanking from './Football/TeamsRanking'
 import LiveScore from './Football/LiveScore'
+import VeloMaggAvailability from './Open Data/VeloMaggAvailability'
+import ParkingAvailability from './Open Data/ParkingAvailability'
 
 export class ComponentWrapper extends Component {
     render() {
@@ -20,6 +22,12 @@ export class ComponentWrapper extends Component {
 
                     this.props.type === 'Live Scores By League' ?
                     <LiveScore style={this.props.style} {...this.props.settings}/> :
+
+                    this.props.type === 'Velo Magg Parks Availability' ?
+                    <VeloMaggAvailability style={this.props.style} {...this.props.settings}/> :
+
+                    this.props.type === 'Parking Availability' ?
+                    <ParkingAvailability style={this.props.style} {...this.props.settings}/> :
                     
                     ''
                 }

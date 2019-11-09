@@ -64,8 +64,7 @@ export class Widget extends Component {
                     borderRadius: '10px',
                     height: this.props.height,
                     backgroundColor: this.state.color,
-                    overflow: 'scroll',
-                    overflowX: 'hidden',
+                    overflowY: 'auto',
                     position: 'relative',
                 }}
             >
