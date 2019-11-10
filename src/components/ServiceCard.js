@@ -93,7 +93,7 @@ class ServiceCard extends Component {
                 accessTokenGithub: qs.parse(response.data).access_token,
                 access_token: this.state.access_token,
             }).then((response) => {
-                if (response.data.success !== 200) {
+                if (response.status !== 200) {
                     message.error(response.data.message)
                     return;
                 }
@@ -113,7 +113,7 @@ class ServiceCard extends Component {
             access_token_spotify: response.access_token,
             access_token: this.state.access_token,
         }).then((response) => {
-            if (response.data.success !== 200) {
+            if (response.status !== 200) {
                 message.error(response.data.message)
                 return;
             }

@@ -38,8 +38,9 @@ class Login extends Component {
                 login: this.state.loginEmail,
                 password: this.state.loginPassword,
             }).then((response) => {
+                console.log(response)
                 this.setState({isLoading: false});
-                if (response.data.success !== 200) {
+                if (response.status !== 200) {
                     message.error(response.data.message)
                     return;
                 }
@@ -62,7 +63,7 @@ class Login extends Component {
                 admin: 0,
             }).then((response) => {
                 this.setState({isLoading: false});
-                if (response.data.success !== 200) {
+                if (response.status !== 200) {
                     message.error(response.data.message)
                     return;
                 }
@@ -95,7 +96,7 @@ class Login extends Component {
                 accessToken: responseData['accessToken'],
             }).then((response) => {
                 this.setState({isLoading: false});
-                if (response.data.success !== 200) {
+                if (response.status !== 200) {
                     message.error(response.data.message)
                     return;
                 }
@@ -120,7 +121,7 @@ class Login extends Component {
                 accessToken: responseData['accessToken'],
             }).then((response) => {
                 this.setState({isLoading: false});
-                if (response.data.success !== 200) {
+                if (response.status !== 200) {
                     message.error(response.data.message)
                     return;
                 }

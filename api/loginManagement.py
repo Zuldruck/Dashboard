@@ -106,6 +106,8 @@ def login():
 
     login = request.json["login"]
     password = request.json["password"]
+    print(login)
+    print(password)
 
     all_users = db.child("users").get(user['idToken']).val()
 
