@@ -8,6 +8,7 @@ from spotifyAPI import spotify
 from intraAPI import intra
 
 from flask import jsonify
+from flask import request
 import pyrebase
 import json
 import time
@@ -43,13 +44,14 @@ db = firebase.database()
 auth = firebase.auth()
 user = auth.sign_in_with_email_and_password("lucas.sanchez@epitech.eu", "dashboard1234")
 
-@app.route('/about')
+@app.route('/about', methods=['GET'])
 def about():
     file = open("../about.json", "r")
     content = file.read()
     about_json = json.loads(content)
     about_json["server"]["current_time"] = int(time.time())
-    return jsonify(about_json)
+    about_json["customer"]["host"] = request.remote_addr
+    return jsonify(about_json), 200
 
 if __name__ == '__main__':
     context = (cer, key)

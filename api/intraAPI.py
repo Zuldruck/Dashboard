@@ -54,8 +54,8 @@ def getUserInfo():
                     infoUser.update({"gpa": response.json()["gpa"][0]["gpa"]})
                 if promoValue != "null":
                     infoUser.update({"promo": response.json()["promo"]})
-            return jsonify(infoUser)
-    return jsonify({"success": 404, "message": "Intra problem occured.", "access_token": access_token})
+            return jsonify(infoUser), 200
+    return jsonify({"message": "Intra problem occured.", "access_token": access_token}), 404
 
 
 @intra.route('/services/intra/ranking', methods=['POST'])
@@ -70,8 +70,8 @@ def getRanking():
 
     for x in all_users:
         if all_users[x]['access_token'] == access_token:
-            return jsonify(ranking(year, city, all_users[x]['intra_autologin']))
-    return jsonify({"success": 404, "message": "Intra problem occured.", "access_token": access_token})
+            return jsonify(ranking(year, city, all_users[x]['intra_autologin'])), 200
+    return jsonify({"message": "Intra problem occured.", "access_token": access_token}), 404
 
 
 @intra.route('/services/intra/listCity', methods=['POST'])
@@ -103,5 +103,5 @@ def getListCity():
                 "Berlin": "DE/BER",
                 "Barcelona": "ES/BAR"
             }
-            return jsonify(tmpDict)
-    return jsonify({"success": 404, "message": "Intra problem occured.", "access_token": access_token})
+            return jsonify(tmpDict), 200
+    return jsonify({"message": "Intra problem occured.", "access_token": access_token}), 404

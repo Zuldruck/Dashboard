@@ -38,7 +38,7 @@ def getingredientList():
     access_token = request.json["access_token"]
 
     if isRightToken(access_token) == 0:
-        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+        return jsonify({"message": "Error occurred with your access token."}), 404
 
     try:
         response = requests.get(url=url)
@@ -51,7 +51,7 @@ def getingredientList():
         if len(response.text) > 0:
             for x in response.json()['drinks']:
                 ingredients.append(x['strIngredient1'])
-    return jsonify(ingredients)
+    return jsonify(ingredients), 200
 
 
 
@@ -74,7 +74,7 @@ def getCocktailWithIngredient():
     access_token = request.json["access_token"]
 
     if isRightToken(access_token) == 0:
-        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+        return jsonify({"message": "Error occurred with your access token."}), 404
 
     cocktails = []
 
@@ -102,7 +102,7 @@ def getCocktailWithIngredient():
                     "id": x['idDrink'],
                 }
                 cocktails.append(tmpDict)
-    return jsonify(cocktails)
+    return jsonify(cocktails), 200
 
 
 @cocktailPage.route('/services/cocktail/listGlasses', methods=['POST'])
@@ -122,7 +122,7 @@ def getListOfDifferentGlasses():
     access_token = request.json["access_token"]
 
     if isRightToken(access_token) == 0:
-        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+        return jsonify({"message": "Error occurred with your access token."}), 404
 
     # api-endpoint
     url = "https://www.thecocktaildb.com/api/json/v1/1/list.php?g=list"
@@ -139,7 +139,7 @@ def getListOfDifferentGlasses():
             for x in response.json()['drinks']:
                 if x['strGlass'] != '':
                     glasses.append(x['strGlass'])
-    return jsonify(glasses)
+    return jsonify(glasses), 200
 
 
 @cocktailPage.route('/services/cocktail/cocktailGlasses', methods=['POST'])
@@ -166,7 +166,7 @@ def getAllCocktailsWithGlasses():
     access_token = request.json["access_token"]
 
     if isRightToken(access_token) == 0:
-        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+        return jsonify({"message": "Error occurred with your access token."}), 404
 
     PARAMS = {
         'g': glass,
@@ -188,4 +188,4 @@ def getAllCocktailsWithGlasses():
                     "id": x['idDrink'],
                 }
                 cocktails.append(tmpDict)
-    return jsonify(cocktails)
+    return jsonify(cocktails), 200

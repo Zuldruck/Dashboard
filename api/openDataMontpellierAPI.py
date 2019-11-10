@@ -39,7 +39,7 @@ def getParks():
     park = request.json["park"]
 
     if isRightToken(str(access_token)) == 0:
-        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+        return jsonify({"message": "Error occurred with your access token."}), 404
 
     obj = getXml("http://data.montpellier3m.fr/sites/default/files/ressources/TAM_MMM_VELOMAG.xml")
     mlist = obj['vcs']['sl']['si']
@@ -56,8 +56,8 @@ def getParks():
                 "stationName": x['@na'],
                 "totalPlaces": x['@to']
             }
-            return jsonify(dict)
-    return jsonify({"success": 404, "message": "Park not found"})
+            return jsonify(dict), 200
+    return jsonify({"message": "Park not found"}), 404
 
 
 @openDataMontpellier.route('/services/openDataMontpellier/listVeloMaggParks', methods=['POST'])
@@ -65,7 +65,7 @@ def listVeloMaggParks():
     access_token = request.json["access_token"]
 
     if isRightToken(str(access_token)) == 0:
-        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+        return jsonify({"message": "Error occurred with your access token."}), 404
 
     obj = getXml("http://data.montpellier3m.fr/sites/default/files/ressources/TAM_MMM_VELOMAG.xml")
     mlist = obj['vcs']['sl']['si']
@@ -77,7 +77,7 @@ def listVeloMaggParks():
             allparks.append(name[2:])
         else:
             allparks.append(name[3:])
-    return jsonify(allparks)
+    return jsonify(allparks), 200
 
 
 def urlOfTheParkingTargeted(parking):
@@ -132,7 +132,7 @@ def getParkingsList():
     access_token = request.json["access_token"]
 
     if isRightToken(str(access_token)) == 0:
-        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+        return jsonify({"message": "Error occurred with your access token."}), 404
 
     list = [
         "Antigone",
@@ -157,7 +157,7 @@ def getParkingsList():
         "Gaumont EST",
         "Gaumont OUEST"
     ]
-    return jsonify(list)
+    return jsonify(list), 200
 
 
 @openDataMontpellier.route('/services/openDataMontpellier/parkingVisibility', methods=['POST'])
@@ -165,16 +165,16 @@ def getParkingsVisibility():
     access_token = request.json["access_token"]
 
     if isRightToken(str(access_token)) == 0:
-        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+        return jsonify({"message": "Error occurred with your access token."}), 404
 
     parking = request.json["parking"]
     res = urlOfTheParkingTargeted(parking)
     if res == "ERROR":
-        return jsonify({"success": 404, "message": "Error with your parking targeted."})
+        return jsonify({"message": "Error with your parking targeted."}), 404
     obj = getXml(res)
     mlist = obj['park']
     tmpDict = {}
 
     for x in mlist:
         tmpDict[x] = mlist[x]
-    return jsonify(tmpDict)
+    return jsonify(tmpDict), 200

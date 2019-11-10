@@ -142,7 +142,7 @@ def rankLeague():
     access_token = request.json["access_token"]
 
     if isRightToken(str(access_token)) == 0:
-        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+        return jsonify({"message": "Error occurred with your access token."}), 404
 
     league_id = getLeagueByName(country, league)
     print(league_id)
@@ -175,7 +175,7 @@ def rankLeague():
         for x in response.json():
             if x == "error":
                 print("Error Request: " + response.json()['message'])
-                return jsonify({"success": 404, "message": "Error when fetching rank leagues."})
+                return jsonify({"message": "Error when fetching rank leagues."}), 404
             tmpDict = {
                 "name": x['team_name'],
                 "position": x['overall_league_position'],
@@ -185,7 +185,7 @@ def rankLeague():
                 "match_loosed": x['overall_league_L']
             }
             teams.append(tmpDict)
-    return jsonify(teams)
+    return jsonify(teams), 200
 
 
 @footballpage.route('/services/football/live', methods=['POST'])
@@ -227,7 +227,7 @@ def liveScore():
     access_token = request.json["access_token"]
 
     if isRightToken(access_token) == 0:
-        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+        return jsonify({"message": "Error occurred with your access token."}), 404
 
     league_id = getLeagueByName(country, league)
     print(league_id)
@@ -262,7 +262,7 @@ def liveScore():
         for x in response.json():
             if x == "error":
                 print("Error Request: " + response.json()['message'])
-                return jsonify({"success": 404, "message": "Error when fetching live scores."})
+                return jsonify({"message": "Error when fetching live scores."}), 404
             if x['match_live'] == '1':
                 tmpDict = {
                     "match_hometeam_name": x['match_hometeam_name'],
@@ -271,7 +271,7 @@ def liveScore():
                     "match_awayteam_score": x['match_awayteam_score'],
                 }
                 teams.append(tmpDict)
-    return jsonify(teams)
+    return jsonify(teams), 200
 
 
 @footballpage.route('/services/football/listLeaguesDashboard', methods=['POST'])
@@ -279,7 +279,7 @@ def getListLeaguesDashboard():
     access_token = request.json["access_token"]
 
     if isRightToken(str(access_token)) == 0:
-        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+        return jsonify({"message": "Error occurred with your access token."}), 404
 
     tmpDict = {
         "France": "Ligue 1",
@@ -288,4 +288,4 @@ def getListLeaguesDashboard():
         "Spain": "LaLiga",
         "Germany": "Bundesliga",
     }
-    return jsonify(tmpDict)
+    return jsonify(tmpDict), 200

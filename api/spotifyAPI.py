@@ -40,8 +40,8 @@ def getUserInfo():
                     "country": response.json()["country"],
                     "userId": response.json()["id"],
                 }
-            return jsonify(infoUser)
-    return jsonify({"success": 404, "message": "Spotify problem occured.", "access_token": access_token})
+            return jsonify(infoUser), 200
+    return jsonify({"message": "Spotify problem occured.", "access_token": access_token}), 404
 
 
 @spotify.route('/services/spotify/playlistsUser', methods=['POST'])
@@ -99,5 +99,5 @@ def getPlaylistsUser():
                         "image_url": x["images"][0]["url"],
                     }
                     playlists.append(tmpDict)
-            return jsonify(playlists)
-    return jsonify({"success": 404, "message": "Spotify problem occured."})
+            return jsonify(playlists), 200
+    return jsonify({"message": "Spotify problem occured."}), 404

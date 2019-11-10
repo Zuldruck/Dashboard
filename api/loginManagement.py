@@ -59,19 +59,17 @@ def register():
 
     for x in all_users:
         if all_users[x]['email'] == login:
-            return jsonify({"success": 404, "message": "An account already exists with this email address"})
+            return jsonify({"message": "An account already exists with this email address"}), 404
 
     access_token = secrets.token_hex(20)
     loginUser = {"email": login, "password": hashed, "admin": admin, "access_token": "0",
                  "access_token_fb": 0,
                  "access_token_google": 0,
-                 "access_token_outlook": 0,
                  "access_token_spotify": 0,
                  "access_token_github": 0,
                  "intra_autologin": "0",
                  "services" : {
                      "football": 1,
-                    "outlook": 0,
                     "epitech": 0,
                     "spotify": 0,
                     "github": 0,
@@ -83,7 +81,7 @@ def register():
                  }
                  }
     db.child("users").push(loginUser, user['idToken'])
-    return jsonify({"success": 200, "message": "User registered.", "access_token": access_token})
+    return jsonify({"message": "User registered.", "access_token": access_token}), 200
 
 
 @loginManagement.route('/login', methods=['POST'])
@@ -117,12 +115,11 @@ def login():
                 access_token = secrets.token_hex(20)
                 db.child("users").child(x).update({"access_token": access_token}, user['idToken'])
                 admin = all_users[x]["admin"]
-                return jsonify(
-                    {"success": 200, "access_token": access_token, "is_admin": True if admin == 1 else False})
+                return jsonify({"access_token": access_token, "is_admin": True if admin == 1 else False}), 200
             else:
-                return jsonify({"success": 404, "message": "Wrong password or username"})
+                return jsonify({"message": "Wrong password or username"}), 404
 
-    return jsonify({"success": 404, "message": "Wrong password or username"})
+    return jsonify({"message": "Wrong password or username"}), 404
 
 
 @loginManagement.route('/loginWithFacebook', methods=['POST'])
@@ -144,8 +141,8 @@ def loginWithFacebook():
             access_token = secrets.token_hex(20)
             db.child("users").child(x).update({"access_token": access_token, "access_token_fb": access_token_fb},
                                               user['idToken'])
-            return jsonify({"success": 200, "message": "Fb User Login.", "access_token": access_token,
-                            "access_token_fb": access_token_fb, "admin": True if all_users[x]["admin"] == 1 else False})
+            return jsonify({"message": "Fb User Login.", "access_token": access_token,
+                            "access_token_fb": access_token_fb, "admin": True if all_users[x]["admin"] == 1 else False}), 200
 
     access_token = secrets.token_hex(20)
     hashed = makePasswordHash(secrets.token_hex(20))
@@ -154,7 +151,6 @@ def loginWithFacebook():
                  "access_token_fb": access_token_fb,
                  "services" : {
                      "football": 1,
-                    "outlook": 0,
                     "epitech": 0,
                     "spotify": 0,
                     "github": 0,
@@ -165,14 +161,13 @@ def loginWithFacebook():
                      "0": "0"
                  },
                  "access_token_google": 0,
-                 "access_token_outlook": 0,
                  "access_token_spotify": 0,
                  "access_token_github": 0,
                  "intra_autologin": "0"
                  }
     db.child("users").push(loginUser, user['idToken'])
-    return jsonify({"success": 200, "message": "Fb User registered.", "access_token": access_token,
-                    "access_token_fb": access_token_fb, "admin": False})
+    return jsonify({"message": "Fb User registered.", "access_token": access_token,
+                    "access_token_fb": access_token_fb, "admin": False}), 200
 
 
 @loginManagement.route('/loginWithGoogle', methods=['POST'])
@@ -194,9 +189,9 @@ def loginWithGoogle():
             access_token = secrets.token_hex(20)
             db.child("users").child(x).update(
                 {"access_token": access_token, "access_token_google": access_token_google}, user['idToken'])
-            return jsonify({"success": 200, "message": "Google User Login.", "access_token": access_token,
+            return jsonify({"message": "Google User Login.", "access_token": access_token,
                             "access_token_google": access_token_google,
-                            "admin": True if all_users[x]["admin"] == 1 else False})
+                            "admin": True if all_users[x]["admin"] == 1 else False}), 200
 
     access_token = secrets.token_hex(20)
     hashed = makePasswordHash(secrets.token_hex(20))
@@ -204,7 +199,6 @@ def loginWithGoogle():
     loginUser = {"email": login, "password": hashed, "admin": 0, "access_token": access_token,
                  "services" : {
                      "football": 1,
-                    "outlook": 0,
                     "epitech": 0,
                     "spotify": 0,
                     "github": 0,
@@ -216,14 +210,13 @@ def loginWithGoogle():
                  },
                  "access_token_fb": 0,
                  "access_token_google": access_token_google,
-                 "access_token_outlook": 0,
                  "access_token_spotify": 0,
                  "access_token_github": 0,
                  "intra_autologin": "0"
                  }
     db.child("users").push(loginUser, user['idToken'])
-    return jsonify({"success": 200, "message": "Google User registered.", "access_token": access_token,
-                    "access_token_google": access_token_google, "admin": False})
+    return jsonify({"message": "Google User registered.", "access_token": access_token,
+                    "access_token_google": access_token_google, "admin": False}), 200
 
 
 @loginManagement.route('/delete', methods=['POST'])
@@ -262,10 +255,10 @@ def delete():
         for x in all_users:
             if all_users[x]["email"] == login:
                 db.child("users").child(x).remove(user['idToken'])
-                return jsonify({"success": 200, "message": "user deleted."})
+                return jsonify({"message": "user deleted."}), 200
 
-    return jsonify({"success": 404, "message": "Either the access_token doesn't have the right access or your user "
-                                               "doesn't exist in our database."})
+    return jsonify({"message": "Either the access_token doesn't have the right access or your user "
+                                               "doesn't exist in our database."}), 404
 
 
 @loginManagement.route('/modifyPermission', methods=['POST'])
@@ -306,10 +299,10 @@ def modifyPermission():
         for x in all_users:
             if all_users[x]["email"] == login:
                 db.child("users").child(x).update({"admin": admin}, user['idToken'])
-                return jsonify({"success": 200, "message": "Account updated"})
+                return jsonify({"message": "Account updated"}), 200
 
-    return jsonify({"success": 404, "message": "Either the access_token doesn't have the right access or your user "
-                                               "doesn't exist in our database."})
+    return jsonify({"message": "Either the access_token doesn't have the right access or your user "
+                                               "doesn't exist in our database."}), 404
 
 
 @loginManagement.route('/getUserInformations', methods=['POST'])
@@ -337,9 +330,9 @@ def getUserInformations():
 
     for x in all_users:
         if all_users[x]["access_token"] == access_token:
-            return jsonify({"success": 200, "user": all_users[x]})
-    return jsonify({"success": 404, "message": "Either the access_token doesn't have the right access or your user "
-                                               "doesn't exist in our database."})
+            return jsonify({"user": all_users[x]}), 200
+    return jsonify({"message": "Either the access_token doesn't have the right access or your user "
+                                               "doesn't exist in our database."}), 404
 
 
 @loginManagement.route('/getUsers', methods=['POST'])
@@ -372,8 +365,8 @@ def getUsers():
             right_access = 1
             break
     if right_access == 1:
-        return jsonify({"success": 200, "message": "", "users": all_users})
-    return jsonify({"success": 404, "message": "The access token is wrong or the user doesn't have the right access"})
+        return jsonify({"message": "", "users": all_users}), 200
+    return jsonify({"message": "The access token is wrong or the user doesn't have the right access"}), 404
 
 
 @loginManagement.route('/addSubscribedService', methods=['POST'])
@@ -388,8 +381,8 @@ def addSubscribedService():
     for x in all_users:
         if all_users[x]["access_token"] == access_token:
             db.child("users").child(x).child("services").update({service: 1}, user['idToken'])
-            return jsonify({"success": 200, "message": "service user updated."})
-    return jsonify({"success": 404, "message": "user not found"})
+            return jsonify({"message": "service user updated."}), 200
+    return jsonify({"message": "user not found"}), 404
 
 
 @loginManagement.route('/getSubscribedServices', methods=['POST'])
@@ -402,17 +395,15 @@ def getSusbscribedServices():
 
     for x in all_users:
         if all_users[x]["access_token"] == access_token:
-            return jsonify({"success": 200,
-                            "services" : {
+            return jsonify({"services" : {
                                 "football": all_users[x]["services"]['football'],
-                                "outlook": all_users[x]["services"]['outlook'],
                                 "epitech": all_users[x]["services"]['epitech'],
                                 "spotify": all_users[x]["services"]['spotify'],
                                 "github": all_users[x]["services"]['github'],
                                 "cocktail": all_users[x]["services"]['cocktail'],
                                 "open_data": all_users[x]["services"]['open_data']}
-                            })
-    return jsonify({"success": 404, "message": "user not found"})
+                            }), 200
+    return jsonify({"message": "user not found"}), 404
 
 
 @loginManagement.route('/removeSubscribedService', methods=['POST'])
@@ -426,34 +417,13 @@ def removeSubscribedService():
 
     for x in all_users:
         if all_users[x]["access_token"] == access_token:
-            if service == "github" or service == "outlook" or service == "spotify":
+            if service == "github" or service == "spotify":
                 db.child("users").child(x).update({"access_token_" + service: 0}, user['idToken'])
                 db.child("users").child(x).child("services").update({service: 0}, user['idToken'])
             else:
                 db.child("users").child(x).child("services").update({service: 0}, user['idToken'])
-            return jsonify({"success": 200, "message": "Service removed."})
-    return jsonify({"success": 404, "message": "user not found"})
-
-
-@loginManagement.route('/loginWithOutlook', methods=['POST'])
-def loginWithOutlook():
-    from index import db, user
-
-    access_token_outlook = request.json["access_token_outlook"]
-    access_token = request.json["access_token"]
-
-    all_users = db.child("users").get(user['idToken']).val()
-
-    for x in all_users:
-        if all_users[x]['access_token'] == access_token:
-            print("chef")
-            db.child("users").child(x).update(
-                {"access_token_outlook": access_token_outlook},
-                user['idToken'])
-            return jsonify({"success": 200, "message": "Outlook User Login.",
-                            "access_token_outlook": access_token_outlook,
-                            "admin": True if all_users[x]["admin"] == 1 else False})
-    return jsonify({"success": 404, "message": "Outlook problem occured.", "access_token": access_token})
+            return jsonify({"message": "Service removed."}), 200
+    return jsonify({"message": "user not found"}), 404
 
 
 @loginManagement.route('/loginWithSpotify', methods=['POST'])
@@ -470,10 +440,10 @@ def loginWithSpotify():
             db.child("users").child(x).update(
                 {"access_token_spotify": access_token_spotify},
                 user['idToken'])
-            return jsonify({"success": 200, "message": "Spotify User Login.",
+            return jsonify({"message": "Spotify User Login.",
                             "access_token_spotify": access_token_spotify,
-                            "admin": True if all_users[x]["admin"] == 1 else False})
-    return jsonify({"success": 404, "message": "Spotify problem occured.", "access_token": access_token})
+                            "admin": True if all_users[x]["admin"] == 1 else False}), 200
+    return jsonify({"message": "Spotify problem occured.", "access_token": access_token}), 404
 
 
 @loginManagement.route('/loginWithGithub', methods=['POST'])
@@ -490,10 +460,10 @@ def loginWithGithub():
             db.child("users").child(x).update(
                 {"access_token_github": access_token_github},
                 user['idToken'])
-            return jsonify({"success": 200, "message": "Github User Login.",
+            return jsonify({"message": "Github User Login.",
                             "access_token_github": access_token_github,
-                            "admin": True if all_users[x]["admin"] == 1 else False})
-    return jsonify({"success": 404, "message": "Github problem occured.", "access_token": access_token})
+                            "admin": True if all_users[x]["admin"] == 1 else False}), 200
+    return jsonify({"message": "Github problem occured.", "access_token": access_token}), 404
 
 
 @loginManagement.route('/setEpitechAutologin', methods=['POST'])
@@ -508,8 +478,8 @@ def setAutologin():
     for x in all_users:
         if all_users[x]["access_token"] == access_token:
             db.child("users").child(x).update({"intra_autologin": autologin}, user['idToken'])
-            return jsonify({"success": 200, "message": "Autologin added."})
-    return jsonify({"success": 404, "message": "User not found"})
+            return jsonify({"message": "Autologin added."}), 200
+    return jsonify({"message": "User not found"}), 404
 
 
 @loginManagement.route('/addWidget', methods=['POST'])
@@ -526,8 +496,8 @@ def addWidget():
     for x in all_users:
         if all_users[x]["access_token"] == access_token:
             db.child("users").child(x).child("widgets").push(widget, user['idToken'])
-            return jsonify({"success": 200, "message": "Widget added.", "id": widget["id"]})
-    return jsonify({"success": 404, "message": "User not found"})
+            return jsonify({"message": "Widget added.", "id": widget["id"]}), 200
+    return jsonify({"message": "User not found"}), 404
 
 
 @loginManagement.route('/updateWidget', methods=['POST'])
@@ -548,8 +518,8 @@ def updateWidget():
                     continue
                 if widgets[y]["id"] == widgetId:
                     db.child("users").child(x).child("widgets").child(y).update({"settings": settings}, user['idToken'])
-                    return jsonify({"success": 200, "message": "Widget updated."})
-    return jsonify({"success": 404, "message": "User or widget not found"})
+                    return jsonify({"message": "Widget updated."}), 200
+    return jsonify({"message": "User or widget not found"}), 404
 
 
 @loginManagement.route('/removeWidget', methods=['POST'])
@@ -569,8 +539,8 @@ def removeWidget():
                     continue
                 if widgets[y]["id"] == widgetId:
                     db.child("users").child(x).child("widgets").child(y).remove(user['idToken'])
-                    return jsonify({"success": 200, "message": "Widget removed."})
-    return jsonify({"success": 404, "message": "User or widget not found"})
+                    return jsonify({"message": "Widget removed."}), 200
+    return jsonify({"message": "User or widget not found"}), 404
 
 
 @loginManagement.route('/getWidgets', methods=['POST'])
@@ -583,5 +553,5 @@ def getWidgets():
 
     for x in all_users:
         if all_users[x]["access_token"] == access_token:
-            return jsonify({"success": 200, "widgets" : all_users[x]["widgets"]})
-    return jsonify({"success": 404, "message": "User not found"})
+            return jsonify({"widgets" : all_users[x]["widgets"]}), 200
+    return jsonify({"message": "User not found"}), 404

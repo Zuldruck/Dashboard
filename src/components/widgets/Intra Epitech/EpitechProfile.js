@@ -57,7 +57,7 @@ export class EpitechProfile extends Component {
                 <div style={{
                     fontSize: 20,
                 }}>
-                    {this.props.showPicture ? <div ><img style={{borderRadius: '100%'}} src={this.state.picture} width={75} height={90}/><br/></div> : ''}
+                    {this.props.showPicture ? <div ><img alt="user" style={{borderRadius: '100%'}} src={this.state.picture} width={75} height={90}/><br/></div> : ''}
                     <span>
                         {this.state.name}
                     </span>

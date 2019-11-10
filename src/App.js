@@ -8,11 +8,42 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
+    Redirect,
   } from "react-router-dom";
 import Login from './components/login/Login';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { adminAction } from './actions';
+
+export class About extends Component {
+    state = {
+        json: ''
+    }
+
+    componentDidMount = () => {
+        axios.get("https://0.0.0.0:5000/about").then(response => {
+            this.setState({json: response.data})
+        })
+    }
+    
+    render() {
+        return (
+            <div style={{all: 'initial'}}>
+                <pre>{JSON.stringify(this.state.json, null, 4) }</pre>
+            </div>
+        )
+    }
+}
+
+export class AppRedirect extends Component {
+    render() {
+        console.log('coucou')
+        return (
+            <Redirect to="/"/>
+        )
+    }
+}
+
 
 class App extends Component {
 
@@ -40,6 +71,7 @@ class App extends Component {
             <Router>
                 <Switch>
                     <Route exact component={Login} path="/login" />
+                    <Route exact component={About} path="/about.json" />
                     <Dashboard>
                         <Route exact component={Home} path="/" />
                         <Route exact component={Services} path="/services" />

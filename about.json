@@ -1,48 +1,73 @@
 {
-    "client": {
-        "host": ""
+    "customer": {
+        "host": "0.0.0.0"
     },
     "server": {
         "current_time": 0,
         "services": [{
             "name": "Epitech Intranet",
             "widgets": [{
-                "name": "Leaderboard",
-                "description": "Display of the leaderboard by gpa per city",
+                "name": "GPA Ranking",
+                "description": "Ranking by gpa per city and per promo",
                 "params": [{
                     "name": "city",
                     "type": "string"
+                }, {
+                    "name": "promo",
+                    "type": "string"
                 }]
             }, {
-                "name": "Students Card",
-                "description": "Display the student card of the authenticated user",
+                "name": "Epitech Profile",
+                "description": "Display the student profile of the authenticated user",
                 "params": [{
                     "name": "showGpa",
+                    "type": "integer"
+                }, {
+                    "name": "showPicture",
+                    "type": "integer"
+                }, {
+                    "name": "showPromo",
                     "type": "integer"
                 }]
             }]
         }, {
             "name": "Spotify",
             "widgets": [{
-                "name": "Player",
+                "name": "Spotify Player",
                 "description": "Player Spotify that plays user playlist",
                 "params": [{
                     "name": "playlist",
                     "type": "string"
                 }]
+            }, {
+                "name": "Spotify Profile",
+                "description": "Display the spotify profile of the user",
+                "params": [{
+                    "name": "showFollowers",
+                    "type": "integer"
+                }, {
+                    "name": "showName",
+                    "type": "integer"
+                }, {
+                    "name": "showUserId",
+                    "type": "integer"
+                }, {
+                    "name": "showCountry",
+                    "type": "integer"
+                }]
             }]
         }, {
             "name": "Football",
             "widgets": [{
-                "name": "Top Scorers",
-                "description": "Leaderboard of the top scorers by league",
+                "name": "Team Ranking By League",
+                "description": "Teams leaderboard by league.",
                 "params": [{
                     "name": "league",
                     "type": "string"
                 }]
             }, {
-                "name": "Top Red Cards",
-                "description": "Leaderboard of the top red cards players by league",
+                "name": "Live Scores By League",
+                "description": "Live scores of the current playing matches by league",
                 "params": [{
                     "name": "league",
                     "type": "string"
@@ -51,29 +76,49 @@
         }, {
             "name": "OpenData Montpellier",
             "widgets": [{
-                "name": "Vélomagg Disponibility",
-                "description": "Vélomagg disponibility by parking",
+                "name": "Velo Magg Parks Availability",
+                "description": "Velo Magg availability by park",
                 "params": [{
-                    "name": "parking",
+                    "name": "park",
                     "type": "string"
                 }]
             }, {
-                "name": "Cars Parking Disponibility",
-                "description": "Cars parking disponibility by parking",
+                "name": "Parking Availability",
+                "description": "Cars parking availability by parking",
                 "params": [{
                     "name": "parking",
                     "type": "string"
                 }]
             }]
         }, {
-            "name": "Twitter",
+            "name": "Cocktails",
             "widgets": [{
-                "name": "User Feed",
-                "description": "Display the user's feed",
-                "params": []
+                "name": "Cocktails List By Ingredient",
+                "description": "Display cocktail list by ingredient",
+                "params": [{
+                    "name": "ingredient",
+                    "type": "string"
+                }]
             }, {
-                "name": "User Card",
-                "description": "Display the user informations card",
+                "name": "Cocktails List By Glass",
+                "description": "Display cocktail list by glass",
+                "params": [{
+                    "name": "glass",
+                    "type": "string"
+                }]
+            }]
+        }, {
+            "name": "GitHub",
+            "widgets": [{
+                "name": "Most Popular Repositories",
+                "description": "Leaderboard of the most stared repo by language",
+                "params": [{
+                    "name": "language",
+                    "type": "string"
+                }]
+            }, {
+                "name": "Github Profile",
+                "description": "Display cocktail list by glass",
                 "params": [{
                     "name": "showFollowers",
                     "type": "integer"
@@ -81,37 +126,10 @@
                     "name": "showFollowing",
                     "type": "integer"
                 }, {
-                    "name": "showPseudo",
+                    "name": "showBio",
                     "type": "integer"
                 }, {
-                    "name": "showPhoto",
-                    "type": "integer"
-                }]
-            }]
-        }, {
-            "name": "Outlook",
-            "widgets": [{
-                "name": "Mails",
-                "description": "Display users's mails",
-                "params": [{
-                    "name": "showOnlyNonRead",
-                    "type": "integer"
-                }]
-            }]
-        }, {
-            "name": "Cocktails",
-            "widgets": [{
-                "name": "Cocktail list",
-                "description": "Display cocktail list by ingredient",
-                "params": [{
-                    "name": "ingredient",
-                    "type": "string"
-                }]
-            }, {
-                "name": "Cocktail Popularity",
-                "description": "Display the cocktails leaderboard by popularity",
-                "params": [{
-                    "name": "showAlcohoolicCocktail",
+                    "name": "showName",
                     "type": "integer"
                 }]
             }]

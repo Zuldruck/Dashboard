@@ -42,15 +42,15 @@ def getpopularRepositories():
                 for x in response.json()["items"]:
                     if x == "error":
                         print("Error Request: " + response.json()['message'])
-                        return jsonify({"success": 404, "message": "Error when fetching github repository."})
+                        return jsonify({"message": "Error when fetching github repository."}), 404
                     tmpDict = {
                         "name": x["name"],
                         "stars": x["watchers_count"],
                         "forks": x["forks"]
                     }
                     repo.append(tmpDict)
-                return jsonify(repo)
-    return jsonify({"success": 404, "message": "Github problem occured.", "access_token": access_token})
+                return jsonify(repo), 200
+    return jsonify({"message": "Github problem occured.", "access_token": access_token}), 404
 
 
 @github.route('/services/github/userInfo', methods=['POST'])
@@ -90,8 +90,8 @@ def getuserInfo():
                     "followers": response.json()["followers"],
                     "following": response.json()["following"]
                 }
-            return jsonify(infoUser)
-    return jsonify({"success": 404, "message": "Github problem occured.", "access_token": access_token})
+            return jsonify(infoUser), 200
+    return jsonify({"message": "Github problem occured.", "access_token": access_token}), 404
 
 
 def isRightToken(token):
@@ -110,7 +110,7 @@ def getlanguagesList():
     access_token = request.json["access_token"]
 
     if isRightToken(str(access_token)) == 0:
-        return jsonify({"success": 404, "message": "Error occurred with your access token."})
+        return jsonify({"message": "Error occurred with your access token."}), 404
 
     tmpDict =  [
         "4th Dimension/4D",
@@ -367,4 +367,4 @@ def getlanguagesList():
         "yacc",
         "Yorick",
         "Z shell"]
-    return json.dumps(tmpDict)
+    return jsonify(tmpDict), 200

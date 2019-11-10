@@ -4,7 +4,6 @@ import ReactSVG from 'react-svg';
 import GitHubLogin from 'react-github-login';
 import SpotifyLogin from 'react-spotify-login';
 import axios from 'axios';
-import { msalInstance } from '../msal';
 import * as qs from 'querystring';
 
 class ServiceCard extends Component {
@@ -46,11 +45,6 @@ class ServiceCard extends Component {
             title: 'Github',
             icon: 'github.svg'
         }, {
-            type: 'outlook',
-            color: '#0378D4',
-            title: 'Outlook',
-            icon: 'outlook.svg'
-        }, {
             type: 'cocktail',
             color: '#FF8C00',
             title: 'Cocktails',
@@ -82,25 +76,6 @@ class ServiceCard extends Component {
         this.setState({
             modalEpitechVisible: false,
         });
-    }
-
-    requestMicrosoftAccesToken = () => {
-        msalInstance.acquireTokenPopup({scopes: ["user.read"]}).then(response => {
-            console.log(response.accessToken)
-            axios.post("https://0.0.0.0:5000/loginWithOutlook", {
-                access_token_outlook: response.accessToken,
-                access_token: this.state.access_token,
-            }).then((response) => {
-                if (response.data.success !== 200) {
-                    message.error(response.data.message)
-                    return;
-                }
-                message.success("Outlook services Added.")
-            }).catch(error => {
-                message.error("An error occured, please retry.")
-            })
-            this.props.onClick();
-        })
     }
 
     onSuccessGithub = (response) => {
@@ -216,16 +191,7 @@ class ServiceCard extends Component {
                                                     <Input placeholder="Autologin" value={this.state.autologinEpitech} onChange={(event) => this.setState({autologinEpitech: event.target.value})}/>
                                                 </Modal>
                                             </div> :
-                                            this.props.type === 'outlook' && !this.props.subscribed ?
-                                                <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={() => msalInstance.loginPopup({scopes: ["user.read"]})
-                                                    .then(response => {
-                                                        this.requestMicrosoftAccesToken()
-                                                        this.props.onClick();
-                                                    })
-                                                    .catch(err => {
-                                                        message.error("An error occured, please retry.");
-                                                    })}/> :
-                                                <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={this.props.onClick}/>
+                                            <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={this.props.onClick}/>
                             }
                         </div>
                         : ''}
