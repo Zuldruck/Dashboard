@@ -5,3 +5,5 @@ requests
 bcrypt
 pyopenssl
 datetime
+xmltodict
+urllib3
