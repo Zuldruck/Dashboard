@@ -62,7 +62,7 @@ def register():
             return jsonify({"message": "An account already exists with this email address"}), 404
 
     access_token = secrets.token_hex(20)
-    loginUser = {"email": login, "password": hashed, "admin": admin, "access_token": "0",
+    loginUser = {"email": login, "password": hashed, "admin": admin, "access_token": access_token,
                  "access_token_fb": 0,
                  "access_token_google": 0,
                  "access_token_spotify": 0,

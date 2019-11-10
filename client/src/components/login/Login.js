@@ -30,6 +30,7 @@ class Login extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
+        console.log('submit')
         this.setState({isLoading: true});
 
         if (this.state.sliderClass === ''
@@ -41,6 +42,7 @@ class Login extends Component {
                 console.log(response)
                 this.setState({isLoading: false});
                 if (response.status !== 200) {
+                    this.setState({isLoading: false});
                     message.error(response.data.message)
                     return;
                 }
@@ -54,6 +56,7 @@ class Login extends Component {
             })
         } else {
             if (this.state.registerPassword !== this.state.registerRepeatedPassword) {
+                this.setState({isLoading: false});
                 message.warning('Passwords do not match', 3);
                 return;
             }
@@ -64,6 +67,7 @@ class Login extends Component {
             }).then((response) => {
                 this.setState({isLoading: false});
                 if (response.status !== 200) {
+                    this.setState({isLoading: false});
                     message.error(response.data.message)
                     return;
                 }
@@ -97,6 +101,7 @@ class Login extends Component {
             }).then((response) => {
                 this.setState({isLoading: false});
                 if (response.status !== 200) {
+                    this.setState({isLoading: false});
                     message.error(response.data.message)
                     return;
                 }
@@ -105,6 +110,7 @@ class Login extends Component {
                 this.props.setAdmin(response.data.admin);
                 this.props.history.push('/');
             }).catch(error => {
+                this.setState({isLoading: false});
                 message.error("An error occured, please retry.")
             })
         }
@@ -115,6 +121,8 @@ class Login extends Component {
                 message.error(responseData['error'] );
                 return;
             }
+            console.log('google')
+            console.log(responseData)
             this.setState({isLoading: true});
             axios.post("https://0.0.0.0:5000/loginWithGoogle", {
                 email: responseData['profileObj']['email'],
@@ -122,6 +130,7 @@ class Login extends Component {
             }).then((response) => {
                 this.setState({isLoading: false});
                 if (response.status !== 200) {
+                    this.setState({isLoading: false});
                     message.error(response.data.message)
                     return;
                 }
@@ -131,6 +140,7 @@ class Login extends Component {
                 this.props.setAdmin(response.data.admin);
                 this.props.history.push('/');
             }).catch(error => {
+                this.setState({isLoading: false});
                 message.error("An error occured, please retry.")
             })
         }

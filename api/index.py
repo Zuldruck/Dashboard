@@ -46,7 +46,7 @@ user = auth.sign_in_with_email_and_password("lucas.sanchez@epitech.eu", "dashboa
 
 @app.route('/about', methods=['GET'])
 def about():
-    file = open("../about.json", "r")
+    file = open("./about.json", "r")
     content = file.read()
     about_json = json.loads(content)
     about_json["server"]["current_time"] = int(time.time())

@@ -1,0 +1,12 @@
+version: '3'
+services:
+  client:
+    build: ./client
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+  api:
+    build: ./api
+    ports:
+      - "5000:5000"
+    restart: unless-stopped

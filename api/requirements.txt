@@ -1,0 +1,7 @@
+flask
+flask-cors
+pyrebase
+requests
+bcrypt
+pyopenssl
+datetime

@@ -166,14 +166,14 @@ class ServiceCard extends Component {
                                 this.props.type === 'spotify' && !this.props.subscribed ?
                                     <SpotifyLogin
                                         clientId="50cbf128edfa408db0ecff0298802b5f"
-                                        redirectUri="https://localhost:3000"
+                                        redirectUri="https://localhost:8080"
                                         onSuccess={response => {this.onSuccessSpotify(response)}}
                                         onFailure={() => {
                                             message.error("An error occured, please retry.");
                                         }}><ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"}/></SpotifyLogin> :
                                     this.props.type === 'github' && !this.props.subscribed ?
                                         <GitHubLogin clientId="Iv1.3cb565ed2a57480d"
-                                                     redirectUri="https://localhost:3000"
+                                                     redirectUri="https://localhost:8080"
                                                      onSuccess={this.onSuccessGithub}
                                                      onFailure={() => {message.error("An error occured, please retry.")}}
                                         ><ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"}/></GitHubLogin> :
