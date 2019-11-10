@@ -9,6 +9,8 @@ import PopularRepo from './Github/PopularRepo'
 import GithubProfile from './Github/GithubProfile'
 import SpotifyPlayer from './Spotify/SpotifyPlayer'
 import SpotifyProfile from './Spotify/SpotifyProfile'
+import EpitechRanking from './Intra Epitech/EpitechRanking'
+import EpitechProfile from './Intra Epitech/EpitechProfile'
 
 export class ComponentWrapper extends Component {
 
@@ -52,6 +54,12 @@ export class ComponentWrapper extends Component {
 
                     this.props.type === 'Spotify Profile' ?
                     <SpotifyProfile style={this.props.style} {...this.props.settings}/> :
+
+                    this.props.type === 'GPA Ranking' ?
+                    <EpitechRanking style={this.props.style} {...this.props.settings}/> :
+
+                    this.props.type === 'Epitech Profile' ?
+                    <EpitechProfile style={this.props.style} {...this.props.settings}/> :
                     
                     ''
                 }

@@ -19,6 +19,10 @@ import SpotifyPlayer from './Spotify/SpotifyPlayer'
 import SpotifyPlayerSettings from './Spotify/SpotifyPlayerSettings'
 import SpotifyProfile from './Spotify/SpotifyProfile'
 import SpotifyProfileSettings from './Spotify/SpotifyProfileSettings'
+import EpitechRanking from './Intra Epitech/EpitechRanking'
+import EpitechRankingSettings from './Intra Epitech/EpitechRankingSettings'
+import EpitechProfile from './Intra Epitech/EpitechProfile'
+import EpitechProfileSettings from './Intra Epitech/EpitechProfileSettings'
 
 const config = [
     {
@@ -110,6 +114,24 @@ const config = [
         color: '#1DB954',
         component: <SpotifyProfile />,
         settings: <SpotifyProfileSettings />,
+    },
+    {
+        name: "GPA Ranking",
+        service: 'epitech',
+        heightGridSize: 8,
+        widthGridSize: 4,        
+        color: '#0F6AB3',
+        component: <EpitechRanking />,
+        settings: <EpitechRankingSettings />,
+    },
+    {
+        name: "Epitech Profile",
+        service: 'epitech',
+        heightGridSize: 4,
+        widthGridSize: 4,        
+        color: '#0F6AB3',
+        component: <EpitechProfile />,
+        settings: <EpitechProfileSettings />,
     }
 ]
 

@@ -35,14 +35,21 @@ def getUserInfo():
             except Exception as err:
                 print(f'Other error occurred: {err}')  # Python 3.6
             else:
+                login = response.json().get("login", "null")
+                loginWithoutEnd = ''
+                for x in login:
+                    if x == '@':
+                        break
+                    loginWithoutEnd += x
                 infoUser = {
                     "name": response.json().get("title", "null"),
-                    "picture": response.json()["picture"],
+                    "picture": "https://intra.epitech.eu/file/userprofil/commentview/" + loginWithoutEnd + ".jpg",
                     "promo": "0",
                     "gpa": "0",
                 }
                 gpaValue = response.json().get("gpa", "null")
                 promoValue = response.json().get("promo", "null")
+                print(response.json())
                 if gpaValue != "null":
                     infoUser.update({"gpa": response.json()["gpa"][0]["gpa"]})
                 if promoValue != "null":
@@ -73,7 +80,6 @@ def getListCity():
 
     access_token = request.json["access_token"]
 
-    rankingList = []
     all_users = db.child("users").get(user['idToken']).val()
 
     for x in all_users:
@@ -83,7 +89,6 @@ def getListCity():
                 "Bruxel": "BE/BRU",
                 "Cotonou": "BJ/COT",
                 "Bordeaux": "FR/BDX",
-                "Montpellier": "FR/RUN",
                 "Lille": "FR/LIL",
                 "Lyon": "FR/LYN",
                 "Marseille": "FR/MAR",
