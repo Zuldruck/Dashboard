@@ -20,19 +20,6 @@ def isRightToken(token):
 
 @cocktailPage.route('/services/cocktail/listIngredients', methods=['POST'])
 def getingredientList():
-    """
-    getingredientList -> This function will send you all the ingredients available.
-    @access_token\n
-
-    Example :\n
-    url : "http://127.0.0.1:5000/services/cocktail/listIngredients"\n
-    param : "access_token"\n
-
-    output : {"name": "'57 Chevy with a White License Plate", "picCocktail": "https://www.thecocktaildb.com/images/media/drink/qyyvtu1468878544.jpg", "id": "14029"}\n
-
-    :return: list of dict.
-    """
-
     url = "https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list"
     ingredients = []
     access_token = request.json["access_token"]
@@ -57,18 +44,6 @@ def getingredientList():
 
 @cocktailPage.route('/services/cocktail/ingredients', methods=['POST'])
 def getCocktailWithIngredient():
-    """
-    getCocktailWithIngredient -> This function will send you all the cocktails with the ingredient given in body args.
-    @ingredient = "Vodka" for example.\n
-
-    Example :\n
-    url : "http://127.0.0.1:5000/services/cocktail/ingredients"\n
-    param : "ingredient=Vodka"\n
-
-    output : {"name": "'57 Chevy with a White License Plate", "picCocktail": "https://www.thecocktaildb.com/images/media/drink/qyyvtu1468878544.jpg", "id": "14029"}\n
-
-    :return: list of dict.
-    """
 
     ingredient = request.json["ingredient"]
     access_token = request.json["access_token"]
@@ -107,17 +82,6 @@ def getCocktailWithIngredient():
 
 @cocktailPage.route('/services/cocktail/listGlasses', methods=['POST'])
 def getListOfDifferentGlasses():
-    """
-      getListOfDifferentGlasses -> This function will send you in json format all the glasses that the API contains.
-
-      Example :\n
-      url : "http://127.0.0.1:5000/services/cocktail/listGlasses"\n
-
-      output : {"strGlass": "Highball glass"}, {"strGlass": "Collins glass"}\n
-
-      :return: list of dict.
-    """
-
     glasses = []
     access_token = request.json["access_token"]
 
@@ -144,20 +108,6 @@ def getListOfDifferentGlasses():
 
 @cocktailPage.route('/services/cocktail/cocktailGlasses', methods=['POST'])
 def getAllCocktailsWithGlasses():
-    """
-         getAllCocktailsWithGlasses -> This function will send you all the cocktails that the glasses given in argument could be done with it.
-
-         Example :\n
-         url : "http://127.0.0.1:5000/services/cocktail/cocktailGlasses"\n
-         param : "glass=Cocktail_glass"
-
-         output :
-         {"name": "9 1/2 Weeks", "pic": "https://www.thecocktaildb.com/images/media/drink/xvwusr1472669302.jpg", "id": "16108"},
-         {"name": "A. J.", "pic": "https://www.thecocktaildb.com/images/media/drink/uryyrr1472811418.jpg", "id": "17833"},\n
-
-         :return: list of dict.
-    """
-
     cocktails = []
 
     # api-endpoint

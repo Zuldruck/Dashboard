@@ -94,47 +94,6 @@ def isRightToken(token):
 
 @footballpage.route('/services/football/rank', methods=['POST'])
 def rankLeague():
-    """
-    rankLeague is the route which will be called when the user want to know the rank of the popular competition in the world of the football. \n
-    this route needed two different arguments :  \n
-
-    @country = the country that you target. \n
-    @league = the competition name that you target in the country chosen. \n
-
-    An exemple with this route :
-    url : "http://127.0.0.1:5000/services/football/rank" \n
-    league=Ligue 1 \n
-    country=France \n
-    url + param : http://127.0.0.1:5000/services/football/rank?league=Ligue 1&country=France \n \n
-
-    An example of output :
-        "name":"Paris SG", \n
-        "position":"1", \n
-        "match_played":"11", \n
-        "match_winned":"9", \n
-        "match_draw":"0", \n
-        "match_loosed":"2" \n
-        next:
-        "name":"Nantes", \n
-        "position":"2", \n
-        "match_played":"11", \n
-        "match_winned":"6", \n
-        "match_draw":"1", \n
-        "match_loosed":"4" \n
-    :return: The function will return a list of dict which will contained this kind of variable. \n
-        ⚫ name of the club. \n
-        ⚫ position in the ranking (sort in order by default). \n
-        ⚫ count of played match. \n
-        ⚫ count of won match. \n
-        ⚫ count of draw match. \n
-        ⚫ count of loosed match. \n
-    If there is problem with the name of the country or the league our API will return this kind of json :
-    {
-    "error": 404,
-    "message": "No league found (please check your plan)!!"
-    }
-    """
-
     from index import db, user
 
     country = request.json["country"]
@@ -190,36 +149,6 @@ def rankLeague():
 
 @footballpage.route('/services/football/live', methods=['POST'])
 def liveScore():
-    """
-        liveScore is the route which will be called when the user want to know actual live score of the popular competitions match in the world of the football today.
-        \nthis route needed two different arguments :\n\n
-
-        @country = the country that you target.\n
-        @league = the competition name that you target in the country chosen.\n
-
-        An exemple with this route :
-            url : "http://127.0.0.1:5000/services/football/live"\n
-            league=Ligue 1\n
-            country=France\n
-            url + param : http://127.0.0.1:5000/services/football/live?league=Coupe de la Ligue\n
-
-        An example of output :
-            "match_hometeam_name":"Amiens",\n
-            "match_hometeam_score":"3",\n
-            "match_awayteam_name":"Angers",\n
-            "match_awayteam_score":"2"\n
-
-        :return:
-            The function will return a list of dict which will contained this kind of variable :
-            name of the club  [HOME]
-            score of the club  [HOME]
-            name of the club  [AWAY]
-            score of the club  [AWAY]
-            If there is no event today the API will return this kind of json :
-            "error": 404,
-            "message": "No event found (please check your plan)!"
-    """
-
     from index import db, user
 
     country = request.json["country"]
