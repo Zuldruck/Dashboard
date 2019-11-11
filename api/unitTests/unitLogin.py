@@ -11,7 +11,7 @@ class UnitTestsLoginManagement(unittest.TestCase):
     def testRegisterAlreadyExist(self):
 
         # api-endpoint
-        url = "https://127.0.0.1:5000/register"
+        url = "https://0.0.0.0:5000/register"
         login = "simon1.provost@epitech.eu"
         password = "dasboard1234"
         admin = "1"
@@ -22,18 +22,11 @@ class UnitTestsLoginManagement(unittest.TestCase):
             'admin': admin,
         }
 
-        try:
-            response = requests.post(url=url, json=PARAMS, verify=False)
-            response.raise_for_status()
-        except HTTPError as http_err:
-            print(f'HTTP error occurred: {http_err}')  # Python 3.6
-        except Exception as err:
-            print(f'Other error occurred: {err}')  # Python 3.6
+        response = requests.post(url=url, json=PARAMS, verify=False)
+        if response.status_code == 404:
+            self.assertGreater(response.text.find('An account already exists with this email address'), -1)
         else:
-            print("debug : " + str(response.text.find('"success": 404')))
-            self.assertGreater(response.text.find('"success": 404'), -1)
-            return
-        self.assertEqual(1, 2)
+            self.assertEqual(1, 2)
 
     def testRegisterDidNotExist(self):
 
@@ -49,62 +42,46 @@ class UnitTestsLoginManagement(unittest.TestCase):
             'admin': admin,
         }
 
-        try:
-            response = requests.post(url=url, json=PARAMS, verify=False)
-            response.raise_for_status()
-        except HTTPError as http_err:
-            print(f'HTTP error occurred: {http_err}')  # Python 3.6
-        except Exception as err:
-            print(f'Other error occurred: {err}')  # Python 3.6
-        else:
-            self.assertGreater(response.text.find('"success": 200'), -1)
-
+        response = requests.post(url=url, json=PARAMS, verify=False)
+        if response.status_code == 200:
+            self.assertGreater(response.text.find('User registered.'), -1)
+            print("JE SUIS LA")
             # api-endpoint
             url = "https://127.0.0.1:5000/delete"
             login = "unitTestDashBoard@epitech.eu"
-            access_token = "5bb64545a192205b4ceaee83383206adff987fa9"
+            access_token = "bfac2a1da953e6d1df10d42747defc4391a7f918"
 
             PARAMS = {
                 'login': login,
                 'access_token': access_token,
             }
 
-            try:
-                response = requests.post(url=url, json=PARAMS, verify=False)
-                response.raise_for_status()
-            except HTTPError as http_err:
-                print(f'HTTP error occurred: {http_err}')  # Python 3.6
-            except Exception as err:
-                print(f'Other error occurred: {err}')  # Python 3.6
+            response = requests.post(url=url, json=PARAMS, verify=False)
+            print("debug : " + str(response.status_code))
+            if response.status_code == 200:
+                self.assertGreater(response.text.find('user deleted.'), -1)
             else:
-                self.assertGreater(response.text.find('"success": 200'), -1)
-                return
-            return
-        self.assertEqual(1, 2)
+                self.assertEqual(3, 2)
+        else:
+            self.assertEqual(1, 2)
 
     def testDeleteDoesntExist(self):
 
         # api-endpoint
         url = "https://127.0.0.1:5000/delete"
         login = "PUTE@epitech.eu"
-        access_token = "5bb64545a192205b4ceaee83383206adff987fa9"
+        access_token = "bfac2a1da953e6d1df10d42747defc4391a7f918"
 
         PARAMS = {
             'login': login,
             'access_token': access_token,
         }
 
-        try:
-            response = requests.post(url=url, json=PARAMS, verify=False)
-            response.raise_for_status()
-        except HTTPError as http_err:
-            print(f'HTTP error occurred: {http_err}')  # Python 3.6
-        except Exception as err:
-            print(f'Other error occurred: {err}')  # Python 3.6
+        response = requests.post(url=url, json=PARAMS, verify=False)
+        if response.status_code == 404:
+            self.assertGreater(response.text.find('Either the access_token doesn\'t have the right access or your user doesn\'t exist in our database.'), -1)
         else:
-            self.assertGreater(response.text.find('"success": 404'), -1)
-            return
-        self.assertEqual(1, 2)
+            self.assertEqual(1, 2)
 
     def testManagePermissionWithRightAccessToken(self):
 
@@ -120,18 +97,13 @@ class UnitTestsLoginManagement(unittest.TestCase):
             'admin': admin,
         }
 
-        try:
-            response = requests.post(url=url, json=PARAMS, verify=False)
-            response.raise_for_status()
-        except HTTPError as http_err:
-            print(f'HTTP error occurred: {http_err}')  # Python 3.6
-        except Exception as err:
-            print(f'Other error occurred: {err}')  # Python 3.6
-        else:
-            self.assertGreater(response.text.find('"success": 200'), -1)
-            url = "https://127.0.0.1:5000/permission"
+        response = requests.post(url=url, json=PARAMS, verify=False)
+        print("BITCHASS : " + str(response.status_code))
+        if response.status_code == 200:
+            self.assertGreater(response.text.find('User registered.'), -1)
+            url = "https://127.0.0.1:5000/modifyPermission"
             login = "unitTestDashBoard@epitech.eu"
-            access_token = "5bb64545a192205b4ceaee83383206adff987fa9"
+            access_token = "bfac2a1da953e6d1df10d42747defc4391a7f918"
             admin = "1"
 
             PARAMS = {
@@ -140,38 +112,32 @@ class UnitTestsLoginManagement(unittest.TestCase):
                 'admin': admin,
             }
 
-            try:
-                response = requests.post(url=url, json=PARAMS, verify=False)
-                response.raise_for_status()
-            except HTTPError as http_err:
-                print(f'HTTP error occurred: {http_err}')  # Python 3.6
-            except Exception as err:
-                print(f'Other error occurred: {err}')  # Python 3.6
-            else:
-                self.assertGreater(response.text.find('"success": 200'), -1)
+            response = requests.post(url=url, json=PARAMS, verify=False)
+            print("CHIEF DEL CHIEF : " + str(response.status_code))
+            if response.status_code == 200:
+                self.assertGreater(response.text.find('Account updated'), -1)
                 # api-endpoint
                 url = "https://127.0.0.1:5000/delete"
                 login = "unitTestDashBoard@epitech.eu"
-                access_token = "5bb64545a192205b4ceaee83383206adff987fa9"
+                access_token = "bfac2a1da953e6d1df10d42747defc4391a7f918"
 
                 PARAMS = {
                     'login': login,
                     'access_token': access_token,
                 }
 
-                try:
-                    response = requests.post(url=url, json=PARAMS, verify=False)
-                    response.raise_for_status()
-                except HTTPError as http_err:
-                    print(f'HTTP error occurred: {http_err}')  # Python 3.6
-                except Exception as err:
-                    print(f'Other error occurred: {err}')  # Python 3.6
+                response = requests.post(url=url, json=PARAMS, verify=False)
+                print("debug : " + str(response.status_code))
+                if response.status_code == 200:
+                    self.assertGreater(response.text.find('user deleted.'), -1)
                 else:
-                    self.assertGreater(response.text.find('"success": 200'), -1)
-                    return
+                    self.assertEqual(8, 0)
                 return
-            self.assertEqual(1, 2)
-        self.assertEqual(1, 2)
+            else:
+                self.assertEqual(9, 0)
+                return
+        else:
+            self.assertEqual(1, 3)
 
     def testManagePermissionWithouttRightAccessToken(self):
 
@@ -187,16 +153,11 @@ class UnitTestsLoginManagement(unittest.TestCase):
             'admin': admin,
         }
 
-        try:
-            response = requests.post(url=url, json=PARAMS, verify=False)
-            response.raise_for_status()
-        except HTTPError as http_err:
-            print(f'HTTP error occurred: {http_err}')  # Python 3.6
-        except Exception as err:
-            print(f'Other error occurred: {err}')  # Python 3.6
-        else:
-            self.assertGreater(response.text.find('"success": 200'), -1)
-            url = "https://127.0.0.1:5000/permission"
+        response = requests.post(url=url, json=PARAMS, verify=False)
+        print("BITCHASS : " + str(response.status_code))
+        if response.status_code == 200:
+            self.assertGreater(response.text.find('User registered.'), -1)
+            url = "https://127.0.0.1:5000/modifyPermission"
             login = "unitTestDashBoard@epitech.eu"
             access_token = "BAD/ACCESS/TOKEN"
             admin = "1"
@@ -207,38 +168,31 @@ class UnitTestsLoginManagement(unittest.TestCase):
                 'admin': admin,
             }
 
-            try:
-                response = requests.post(url=url, json=PARAMS, verify=False)
-                response.raise_for_status()
-            except HTTPError as http_err:
-                print(f'HTTP error occurred: {http_err}')  # Python 3.6
-            except Exception as err:
-                print(f'Other error occurred: {err}')  # Python 3.6
-            else:
-                self.assertGreater(response.text.find('"success": 404'), -1)
+            response = requests.post(url=url, json=PARAMS, verify=False)
+            print("BITCHASS#2 : " + str(response.status_code))
+            if response.status_code == 404:
+                self.assertGreater(response.text.find('Either the access_token doesn\'t have the right access or your user doesn\'t exist in our database.'), -1)
                 # api-endpoint
                 url = "https://127.0.0.1:5000/delete"
                 login = "unitTestDashBoard@epitech.eu"
-                access_token = "5bb64545a192205b4ceaee83383206adff987fa9"
+                access_token = "bfac2a1da953e6d1df10d42747defc4391a7f918"
 
                 PARAMS = {
                     'login': login,
                     'access_token': access_token,
                 }
 
-                try:
-                    response = requests.post(url=url, json=PARAMS, verify=False)
-                    response.raise_for_status()
-                except HTTPError as http_err:
-                    print(f'HTTP error occurred: {http_err}')  # Python 3.6
-                except Exception as err:
-                    print(f'Other error occurred: {err}')  # Python 3.6
+                response = requests.post(url=url, json=PARAMS, verify=False)
+                print("BITCHASS#2 : " + str(response.status_code))
+                if response.status_code == 200:
+                    self.assertGreater(response.text.find('user deleted.'), -1)
                 else:
-                    self.assertGreater(response.text.find('"success": 200'), -1)
-                    return
+                    self.assertEqual(1, 2)
                 return
+            else:
+                self.assertEqual(1, 2)
+        else:
             self.assertEqual(1, 2)
-        self.assertEqual(1, 2)
 
 
 if __name__ == '__main__':
