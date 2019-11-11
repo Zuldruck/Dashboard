@@ -39,10 +39,10 @@ export class EpitechProfile extends Component {
 
     componentDidMount = () => {
         this.updateList()
-    }
 
-    componentDidUpdate = () => {
-        console.log(this.props)
+        setInterval(() => {
+            this.updateList()
+        }, this.props.timer * 60 * 1000)
     }
 
     render() {

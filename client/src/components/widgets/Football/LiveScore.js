@@ -37,6 +37,10 @@ export class LiveScore extends Component {
 
     componentDidMount = () => {
         this.updateList()
+
+        setInterval(() => {
+            this.updateList()
+        }, this.props.timer * 60 * 1000)
     }
 
     componentWillUpdate = (nextProps) => {

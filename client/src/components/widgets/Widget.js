@@ -17,6 +17,7 @@ export class Widget extends Component {
             settings: props.settings,
             saveSettings: {},
         }
+        this.myRef = React.createRef()
     }
 
     shadeColor = (color, percent) => {
@@ -48,9 +49,6 @@ export class Widget extends Component {
             color: this.shadeColor(widget.color, 10),
             component: widget.component
         })
-        setInterval(() => this.setState({
-            settings: this.state.settings
-        }), this.state.settings.timer * 1000 * 60)
     }
 
     handleOk = () => {
@@ -75,7 +73,7 @@ export class Widget extends Component {
         return nextProps.settings !== this.props.settings
         || nextProps.type !== this.props.type
         || this.state !== nextState
-    } 
+    }
 
     render() {
         return (
@@ -90,7 +88,7 @@ export class Widget extends Component {
                     position: 'relative',
                 }}
             >
-                <ComponentWrapper 
+                <ComponentWrapper
                     type={this.state.type}
                     style={{
                         fontWeight: 'bold',

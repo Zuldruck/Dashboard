@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 
 export class SpotifyPlayer extends Component {
+
+    componentDidMount = () => {
+        setInterval(() => {
+            this.forceUpdate()
+        }, this.props.timer * 60 * 1000)
+    }
+
     render() {
         return (
             <div>

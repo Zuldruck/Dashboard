@@ -12,10 +12,10 @@ export class GithubProfile extends Component {
             name: '',
             bio: '',
         }
-        console.log(props)
     }
 
     updateList = () => {
+        console.log('test update')
         axios.post("https://0.0.0.0:5000/getUserInformations", {
             access_token: localStorage.getItem("access_token"),
         }).then(response => {
@@ -39,10 +39,10 @@ export class GithubProfile extends Component {
 
     componentDidMount = () => {
         this.updateList()
-    }
 
-    componentDidUpdate = () => {
-        console.log(this.props)
+        setInterval(() => {
+            this.updateList()
+        }, this.props.timer * 60 * 1000)
     }
 
     render() {

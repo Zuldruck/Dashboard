@@ -14,12 +14,15 @@ import EpitechProfile from './Intra Epitech/EpitechProfile'
 
 export class ComponentWrapper extends Component {
 
+    componentDidMount = () => {
+        setInterval(() => {this.forceUpdate()}, this.props.timer * 1000 * 60)
+    }
+
     shouldComponentUpdate = (nextProps) => {
         return nextProps.settings !== this.props.settings
     }
 
     render() {
-        console.log(this.props)
         return (
             <div style={{
                 height: '100%',

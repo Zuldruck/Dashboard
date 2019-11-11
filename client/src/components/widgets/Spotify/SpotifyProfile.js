@@ -12,7 +12,6 @@ export class SpotifyProfile extends Component {
             name: '',
             userId: '',
         }
-        console.log(props)
     }
 
     updateList = () => {
@@ -39,10 +38,10 @@ export class SpotifyProfile extends Component {
 
     componentDidMount = () => {
         this.updateList()
-    }
 
-    componentDidUpdate = () => {
-        console.log(this.props)
+        setInterval(() => {
+            this.updateList()
+        }, this.props.timer * 60 * 1000)
     }
 
     render() {

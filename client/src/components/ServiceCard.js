@@ -101,7 +101,6 @@ class ServiceCard extends Component {
             }).catch(error => {
                 message.error("An error occured, please retry.")
             })
-            message.success("Spotify services Added.")
             this.props.onClick();
         }).catch(response => {
             message.error("An error occured, please retry.");
@@ -118,11 +117,10 @@ class ServiceCard extends Component {
                 return;
             }
             message.success("Spotify services added.")
-
+            this.props.onClick();
         }).catch(error => {
             message.error("An error occured, please retry.")
         })
-        this.props.onClick();
     }
 
     render() {
