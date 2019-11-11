@@ -1,0 +1,2 @@
+client: cd client && yarn && yarn start
+api: cd api && pip3 install -r requirements.txt && python3 index.py
