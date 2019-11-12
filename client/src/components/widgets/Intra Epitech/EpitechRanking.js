@@ -23,8 +23,10 @@ export class EpitechRanking extends Component {
             year: nextPromo || this.state.promo,
             access_token: localStorage.getItem("access_token"),
         }).then(response => {
-            if (response.status !== 200)
+            if (response.status !== 200) {
+                this.setState({list: []})                
                 return;
+            }
             let list = []
 
             for (let x in response.data) {
@@ -43,13 +45,20 @@ export class EpitechRanking extends Component {
     componentDidMount = () => {
         this.updateList()
 
-        setInterval(() => {
+        let interval = setInterval(() => {
             this.updateList()
         }, this.props.timer * 60 * 1000)
+
+        this.setState({interval})
+    }
+    
+    componentWillUnmount = () => { 
+        clearInterval(this.state.interval)
     }
 
     componentWillUpdate = (nextProps) => {
-        if (nextProps !== this.props) {
+        if (nextProps.city !== this.props.city
+        || nextProps.promo !== this.props.promo) {
             this.updateList(nextProps.city, nextProps.promo)
         }
     }

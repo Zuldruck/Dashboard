@@ -2,10 +2,23 @@ import React, { Component } from 'react';
 
 export class SpotifyPlayer extends Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            interval: 0,
+        }
+    }
+
     componentDidMount = () => {
-        setInterval(() => {
+        let interval = setInterval(() => {
             this.forceUpdate()
         }, this.props.timer * 60 * 1000)
+
+        this.setState({interval})
+    }
+    
+    componentWillUnmount = () => { 
+        clearInterval(this.state.interval)
     }
 
     render() {

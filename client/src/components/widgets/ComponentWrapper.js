@@ -10,13 +10,10 @@ import GithubProfile from './Github/GithubProfile'
 import SpotifyPlayer from './Spotify/SpotifyPlayer'
 import SpotifyProfile from './Spotify/SpotifyProfile'
 import EpitechRanking from './Intra Epitech/EpitechRanking'
-import EpitechProfile from './Intra Epitech/EpitechProfile'
+import EpitechBinomes from './Intra Epitech/EpitechBinomes'
+import EpitechModules from './Intra Epitech/EpitechModules'
 
 export class ComponentWrapper extends Component {
-
-    componentDidMount = () => {
-        setInterval(() => {this.forceUpdate()}, this.props.timer * 1000 * 60)
-    }
 
     shouldComponentUpdate = (nextProps) => {
         return nextProps.settings !== this.props.settings
@@ -61,8 +58,11 @@ export class ComponentWrapper extends Component {
                     this.props.type === 'GPA Ranking' ?
                     <EpitechRanking style={this.props.style} {...this.props.settings}/> :
 
-                    this.props.type === 'Epitech Profile' ?
-                    <EpitechProfile style={this.props.style} {...this.props.settings}/> :
+                    this.props.type === "User's Top Binomes" ?
+                    <EpitechBinomes style={this.props.style} {...this.props.settings}/> :
+
+                    this.props.type === "User's Year Modules" ?
+                    <EpitechModules style={this.props.style} {...this.props.settings}/> :
                     
                     ''
                 }

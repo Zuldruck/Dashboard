@@ -70,7 +70,7 @@ def register():
                  "intra_autologin": "0",
                  "services" : {
                      "football": 1,
-                    "epitech": 0,
+                    "epitech": 1,
                     "spotify": 0,
                     "github": 0,
                     "cocktail": 1,
@@ -153,7 +153,7 @@ def loginWithFacebook():
                  "access_token_fb": access_token_fb,
                  "services" : {
                      "football": 1,
-                    "epitech": 0,
+                    "epitech": 1,
                     "spotify": 0,
                     "github": 0,
                     "cocktail": 1,
@@ -201,7 +201,7 @@ def loginWithGoogle():
     loginUser = {"email": login, "password": hashed, "admin": 0, "access_token": access_token,
                  "services" : {
                      "football": 1,
-                    "epitech": 0,
+                    "epitech": 1,
                     "spotify": 0,
                     "github": 0,
                     "cocktail": 1,

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Input, message } from 'antd';
+import { message } from 'antd';
 import ReactSVG from 'react-svg';
 import GitHubLogin from 'react-github-login';
 import SpotifyLogin from 'react-spotify-login';
@@ -175,21 +175,7 @@ class ServiceCard extends Component {
                                                      onSuccess={this.onSuccessGithub}
                                                      onFailure={() => {message.error("An error occured, please retry.")}}
                                         ><ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"}/></GitHubLogin> :
-                                        this.props.type === 'epitech' && !this.props.subscribed ?
-                                            <div>
-                                                <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={() => this.setState({modalEpitechVisible: true})}/>
-                                                <Modal
-                                                    title="Basic Modal"
-                                                    visible={this.state.modalEpitechVisible}
-                                                    onOk={this.handleEpitechModalOk}
-                                                    onCancel={() => this.setState({modalEpitechVisible: false})}
-                                                >
-                                                    <h4>Enter your Epitech Intranet autologin :</h4>
-                                                    <br/>
-                                                    <Input placeholder="Autologin" value={this.state.autologinEpitech} onChange={(event) => this.setState({autologinEpitech: event.target.value})}/>
-                                                </Modal>
-                                            </div> :
-                                            <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={this.props.onClick}/>
+                                        <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={this.props.onClick}/>
                             }
                         </div>
                         : ''}

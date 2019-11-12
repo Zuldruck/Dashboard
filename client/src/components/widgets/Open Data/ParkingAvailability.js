@@ -25,13 +25,19 @@ export class ParkingAvailability extends Component {
     componentDidMount = () => {
         this.updateList()
 
-        setInterval(() => {
+        let interval = setInterval(() => {
             this.updateList()
         }, this.props.timer * 60 * 1000)
+
+        this.setState({interval})
+    }
+    
+    componentWillUnmount = () => { 
+        clearInterval(this.state.interval)
     }
 
     componentWillUpdate = (nextProps) => {
-        if (nextProps !== this.props) {
+        if (nextProps.park !== this.props.park) {
             this.updateList(nextProps.park)
         }
     }

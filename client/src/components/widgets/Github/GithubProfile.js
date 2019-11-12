@@ -40,9 +40,15 @@ export class GithubProfile extends Component {
     componentDidMount = () => {
         this.updateList()
 
-        setInterval(() => {
+        let interval = setInterval(() => {
             this.updateList()
         }, this.props.timer * 60 * 1000)
+
+        this.setState({interval})
+    }
+    
+    componentWillUnmount = () => { 
+        clearInterval(this.state.interval)
     }
 
     render() {
