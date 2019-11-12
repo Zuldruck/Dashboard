@@ -59,6 +59,7 @@ def getuserInfo():
 
     access_token_github = request.json["accessTokenGithub"]
     access_token = request.json["access_token"]
+    userName = request.json["name"]
 
     infoUser = []
     all_users = db.child("users").get(user['idToken']).val()
@@ -66,14 +67,11 @@ def getuserInfo():
     for x in all_users:
         if all_users[x]['access_token'] == access_token:
 
-            url = "https://api.github.com/user"
-            PARAMS = {
-                'Authorization': "token " + access_token_github,
-            }
+            url = "https://api.github.com/users/" + userName
 
             try:
                 # sending get request and saving the response as response object
-                response = requests.get(url=url, headers=PARAMS)
+                response = requests.get(url=url)
 
                 # If the response was successful, no Exception will be raised
                 response.raise_for_status()
@@ -103,6 +101,44 @@ def isRightToken(token):
         if all_users[x]["access_token"] == token:
             return 1
     return 0
+
+
+@github.route('/services/github/userFollowers', methods=['POST'])
+def getUserFollowers():
+    from index import db, user
+
+    access_token = request.json["access_token"]
+    access_token_github = request.json["access_token_github"]
+
+    followers = []
+
+    if isRightToken(str(access_token)) == 0:
+        return jsonify({"message": "Error occurred with your access token."}), 404
+
+    url = "https://api.github.com/user/followers"
+    PARAMS = {
+        'Authorization': "token " + access_token_github,
+    }
+
+    try:
+        # sending get request and saving the response as response object
+        response = requests.get(url=url, headers=PARAMS)
+
+        # If the response was successful, no Exception will be raised
+        response.raise_for_status()
+    except HTTPError as http_err:
+        print(f'HTTP error occurred: {http_err}')  # Python 3.6
+    except Exception as err:
+        print(f'Other error occurred: {err}')  # Python 3.6
+    else:
+        json_data = json.loads(response.text)
+        for x in json_data:
+            infoUser = {
+                "name": x["login"],
+            }
+            followers.append(infoUser)
+        return jsonify(followers), 200
+    return jsonify({"message": "Error occurred with /user/followers."}), 404
 
 
 @github.route('/services/github/languagesList', methods=['POST'])
