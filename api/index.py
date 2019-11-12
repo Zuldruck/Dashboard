@@ -5,6 +5,7 @@ from cocktailAPI import cocktailPage
 from openDataMontpellierAPI import openDataMontpellier
 from githubAPI import github
 from spotifyAPI import spotify
+from deezerAPI import deezer
 from intraAPI import intra
 
 from flask import jsonify
@@ -27,6 +28,7 @@ app.register_blueprint(openDataMontpellier)
 app.register_blueprint(github)
 app.register_blueprint(spotify)
 app.register_blueprint(intra)
+app.register_blueprint(deezer)
 
 CORS(app)
 

@@ -17,6 +17,8 @@ import GithubProfile from './Github/GithubProfile'
 import GithubProfileSettings from './Github/GithubProfileSettings'
 import SpotifyPlayer from './Spotify/SpotifyPlayer'
 import SpotifyPlayerSettings from './Spotify/SpotifyPlayerSettings'
+import DeezerPlayer from './Deezer/DeezerPlayer'
+import DeezerPlayerSettings from './Deezer/DeezerPlayerSettings'
 import SpotifyProfile from './Spotify/SpotifyProfile'
 import SpotifyProfileSettings from './Spotify/SpotifyProfileSettings'
 import EpitechRanking from './Intra Epitech/EpitechRanking'
@@ -105,6 +107,15 @@ const config = [
         color: '#1DB954',
         component: <SpotifyPlayer />,
         settings: <SpotifyPlayerSettings />,
+    },
+    {
+        name: "Deezer Player",
+        service: 'deezer',
+        heightGridSize: 6,
+        widthGridSize: 4,
+        color: '#1A1722',
+        component: <DeezerPlayer />,
+        settings: <DeezerPlayerSettings />,
     },
     {
         name: "Spotify Profile",
