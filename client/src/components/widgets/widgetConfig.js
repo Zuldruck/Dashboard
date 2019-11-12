@@ -23,8 +23,10 @@ import SpotifyProfile from './Spotify/SpotifyProfile'
 import SpotifyProfileSettings from './Spotify/SpotifyProfileSettings'
 import EpitechRanking from './Intra Epitech/EpitechRanking'
 import EpitechRankingSettings from './Intra Epitech/EpitechRankingSettings'
-import EpitechProfile from './Intra Epitech/EpitechProfile'
-import EpitechProfileSettings from './Intra Epitech/EpitechProfileSettings'
+import EpitechBinomes from './Intra Epitech/EpitechBinomes'
+import EpitechBinomesSettings from './Intra Epitech/EpitechBinomesSettings'
+import EpitechModules from './Intra Epitech/EpitechModules'
+import EpitechModulesSettings from './Intra Epitech/EpitechModulesSettings'
 
 const config = [
     {
@@ -136,13 +138,22 @@ const config = [
         settings: <EpitechRankingSettings />,
     },
     {
-        name: "Epitech Profile",
+        name: "User's Top Binomes",
         service: 'epitech',
-        heightGridSize: 4,
+        heightGridSize: 6,
         widthGridSize: 4,        
         color: '#0F6AB3',
-        component: <EpitechProfile />,
-        settings: <EpitechProfileSettings />,
+        component: <EpitechBinomes />,
+        settings: <EpitechBinomesSettings />,
+    },
+    {
+        name: "User's Year Modules",
+        service: 'epitech',
+        heightGridSize: 8,
+        widthGridSize: 4,        
+        color: '#0F6AB3',
+        component: <EpitechModules />,
+        settings: <EpitechModulesSettings />,
     }
 ]
 

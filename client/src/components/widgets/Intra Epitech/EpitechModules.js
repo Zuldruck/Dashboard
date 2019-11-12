@@ -1,35 +1,40 @@
 import React, { Component } from 'react';
-import { List, Avatar } from 'antd';
 import axios from 'axios';
+import { List } from 'antd'
 
-export class CocktailsByGlass extends Component {
+export class EpitechModules extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            glass: props.glass || 'Champagne Flute',
+            login: props.login,
+            year: props.year,
             list: [],
         }
     }
 
-    updateList = (nextGlass) => {
-        axios.post("https://0.0.0.0:5000/services/cocktail/cocktailGlasses", {
-            glass: nextGlass || this.state.glass,
+    updateList = (nextLogin, nextYear) => {
+        axios.post("https://0.0.0.0:5000/services/intra/getUserModules", {
+            login: nextLogin || this.state.login,
+            year: nextYear || this.props.year,
             access_token: localStorage.getItem("access_token"),
         }).then(response => {
             if (response.status !== 200) {
                 this.setState({list: []})                
                 return;
             }
-            let list = [];
+            let list = []
 
             for (let x in response.data) {
                 list.push({
-                    name: response.data[x].name,
-                    picture: response.data[x].pic,
+                    module: response.data[x].module,
+                    grade: response.data[x].grade,
+                    credits: response.data[x].credits,
                 })
             }
-            this.setState({list})
+            this.setState({
+                list
+            })
         });
     }
 
@@ -48,8 +53,9 @@ export class CocktailsByGlass extends Component {
     }
 
     componentWillUpdate = (nextProps) => {
-        if (nextProps.glass !== this.props.glass) {
-            this.updateList(nextProps.glass)
+        if (nextProps.login !== this.props.login
+        || nextProps.year !== this.props.year) {
+            this.updateList(nextProps.login, nextProps.year)
         }
     }
 
@@ -57,29 +63,27 @@ export class CocktailsByGlass extends Component {
         return (
             <div>
                 <h2 className="widgetTitle">
-                    {"List of Cocktails with " + this.props.glass}
+                    {this.props.login + "'s " + this.props.year + " Modules"}
                 </h2>
-                <List
+                <List 
                     itemLayout="horizontal"
                     dataSource={this.state.list}
-                    renderItem={(item) => {
-                        return(
+                    renderItem={(item) =>
                         <List.Item>
                             <List.Item.Meta
-                                avatar={<Avatar size="large" src={item.picture} />}
                                 title={
-                                    <span style={{...this.props.style, fontSize: 16}}>
-                                        {item.name}
-                                    </span>
+                                    <span style={{...this.props.style, fontSize: 16}}>{item.module + " - " + item.credits + " credits"}</span>
                                 }
                             />
+                            <div style={{...this.props.style, fontSize: 16}}>
+                                {item.grade}
+                            </div>
                         </List.Item>
-                        )
-                    }}
+                    }
                 />
             </div>
         )
     }
 }
 
-export default CocktailsByGlass;
+export default EpitechModules;

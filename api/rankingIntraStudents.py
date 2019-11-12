@@ -29,8 +29,12 @@ def ranking(year, city, autologin):
         toAdd = requests.get(
             apiRoot + autologin + "/user/filter/user?format=json&location=" + city + "&year=2019&active=true&promo=" + year + "&offset=" + str(
                 offset)).json().get("items")
+        if toAdd == None:
+            return []
         users += toAdd
 
+    if users == None or len(users) == 0:
+        return []
     for user in users:
         userInfo = requests.get(apiRoot + autologin + "/user/" + user.get("login") + '?format=json').json()
         gpa = userInfo.get("gpa")[0].get("gpa")

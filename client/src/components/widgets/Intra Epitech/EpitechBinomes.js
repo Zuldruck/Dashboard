@@ -1,35 +1,38 @@
 import React, { Component } from 'react';
-import { List, Avatar } from 'antd';
 import axios from 'axios';
+import { List, Avatar } from 'antd'
 
-export class CocktailsByGlass extends Component {
+export class EpitechBinomes extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            glass: props.glass || 'Champagne Flute',
+            login: props.login,
             list: [],
         }
     }
 
-    updateList = (nextGlass) => {
-        axios.post("https://0.0.0.0:5000/services/cocktail/cocktailGlasses", {
-            glass: nextGlass || this.state.glass,
+    updateList = (nextLogin) => {
+        axios.post("https://0.0.0.0:5000/services/intra/getUserBinomes", {
+            login: nextLogin || this.state.login,
             access_token: localStorage.getItem("access_token"),
         }).then(response => {
             if (response.status !== 200) {
                 this.setState({list: []})                
                 return;
             }
-            let list = [];
+            let list = []
 
             for (let x in response.data) {
                 list.push({
-                    name: response.data[x].name,
-                    picture: response.data[x].pic,
+                    login: response.data[x].login,
+                    picture: response.data[x].picture,
+                    projects: response.data[x].projects,
                 })
             }
-            this.setState({list})
+            this.setState({
+                list
+            })
         });
     }
 
@@ -48,8 +51,8 @@ export class CocktailsByGlass extends Component {
     }
 
     componentWillUpdate = (nextProps) => {
-        if (nextProps.glass !== this.props.glass) {
-            this.updateList(nextProps.glass)
+        if (nextProps.login !== this.props.login) {
+            this.updateList(nextProps.login)
         }
     }
 
@@ -57,29 +60,30 @@ export class CocktailsByGlass extends Component {
         return (
             <div>
                 <h2 className="widgetTitle">
-                    {"List of Cocktails with " + this.props.glass}
+                    {this.props.login + "'s Top Binomes"}
                 </h2>
-                <List
+                <List 
                     itemLayout="horizontal"
                     dataSource={this.state.list}
-                    renderItem={(item) => {
-                        return(
+                    renderItem={(item, index) =>
                         <List.Item>
                             <List.Item.Meta
-                                avatar={<Avatar size="large" src={item.picture} />}
+                                avatar={
+                                    <Avatar src={item.picture} />
+                                }
                                 title={
-                                    <span style={{...this.props.style, fontSize: 16}}>
-                                        {item.name}
-                                    </span>
+                                    <span style={{...this.props.style, fontSize: 16}}>{(index + 1).toString() + " - " + item.login}</span>
                                 }
                             />
+                            <div style={{...this.props.style, fontSize: 16}}>
+                                {item.projects}
+                            </div>
                         </List.Item>
-                        )
-                    }}
+                    }
                 />
             </div>
         )
     }
 }
 
-export default CocktailsByGlass;
+export default EpitechBinomes;
