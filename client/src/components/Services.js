@@ -10,7 +10,7 @@ export class Services extends Component {
         super(props);
         this.state = {
             loggedIn: false,
-            possibleCards: ["twitter", "football", "cocktail", "outlook", "spotify", "epitech", "open_data"],
+            possibleCards: ["twitter", "football", "cocktail", "outlook", "spotify", "epitech", "open_data", "deezer"],
             subscribedCards: [],
             nonSubscribedCards: [],
             access_token: '',
@@ -31,7 +31,7 @@ export class Services extends Component {
             let sub = [];
             let nonSub = [];
 
-            console.log(response)
+            console.log("Response:" + response)
 
             if (response.status !== 200) {
                 message.error(response.data.message);

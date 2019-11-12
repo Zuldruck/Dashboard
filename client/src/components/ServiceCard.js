@@ -5,6 +5,7 @@ import GitHubLogin from 'react-github-login';
 import SpotifyLogin from 'react-spotify-login';
 import axios from 'axios';
 import * as qs from 'querystring';
+import OauthPopup from "react-oauth-popup";
 
 class ServiceCard extends Component {
 
@@ -23,6 +24,11 @@ class ServiceCard extends Component {
             type: 'spotify',
             color: '#1DB954',
             title: 'Spotify',
+            icon: 'spotify.svg',
+        },{
+            type: 'deezer',
+            color: '#191919',
+            title: 'Deezer',
             icon: 'spotify.svg',
         }, {
             type: 'epitech',
@@ -52,6 +58,7 @@ class ServiceCard extends Component {
         }];
 
         const type = types.find((value) => {
+            console.log("debug : " + value)
             return value.type === this.props.type;
         });
 
@@ -165,7 +172,9 @@ class ServiceCard extends Component {
                                     <SpotifyLogin
                                         clientId="50cbf128edfa408db0ecff0298802b5f"
                                         redirectUri="https://localhost:8080"
-                                        onSuccess={response => {this.onSuccessSpotify(response)}}
+                                        onSuccess={response => {
+                                            this.onSuccessSpotify(response)
+                                        }}
                                         onFailure={() => {
                                             message.error("An error occured, please retry.");
                                         }}><ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"}/></SpotifyLogin> :
@@ -175,7 +184,39 @@ class ServiceCard extends Component {
                                                      onSuccess={this.onSuccessGithub}
                                                      onFailure={() => {message.error("An error occured, please retry.")}}
                                         ><ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"}/></GitHubLogin> :
-                                        <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={this.props.onClick}/>
+                                        this.props.type === 'deezer' && !this.props.subscribed ?
+                                            <OauthPopup
+                                                url="https://connect.deezer.com/oauth/auth.php?app_id=379304&redirect_uri=https://localhost:8080/&perms=basic_access,email"
+                                                onCode={
+                                                    (code) => {
+                                                        console.log("wooooo a code", code)
+                                                        axios.get("https://cors-anywhere.herokuapp.com/https://connect.deezer.com/oauth/access_token.php?app_id=379304&secret=3c52bb46b68de1f2bcd33ec179cd98ce&code=" + code).then(response => {
+                                                            if (response.status !== 200 && response.data.split('&')[0].split('=')[1] !== undefined)
+                                                                return;
+                                                            axios.post("https://0.0.0.0:5000/loginWithDeezer", {
+                                                                access_token_deezer: response.data.split('&')[0].split('=')[1],
+                                                                access_token: this.state.access_token,
+                                                            }).then((response) => {
+                                                                if (response.status !== 200) {
+                                                                    message.error(response.data.message)
+                                                                    return;
+                                                                }
+                                                                message.success("Deezer services added.")
+                                                                this.props.onClick();
+                                                            }).catch(error => {
+                                                                message.error("An error occured, please retry.")
+                                                            })
+                                                        })
+                                                    }
+                                                }
+                                                width={200}
+                                                height={300}
+                                                title={"Deezer Login"}
+                                            >
+                                                <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"}/>
+                                            </OauthPopup>
+                                            :
+                                            <ReactSVG src={this.props.subscribed ? "remove.svg" : "add.svg"} onClick={this.props.onClick}/>
                             }
                         </div>
                         : ''}

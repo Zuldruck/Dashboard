@@ -66,15 +66,16 @@ def register():
                  "access_token_fb": 0,
                  "access_token_google": 0,
                  "access_token_spotify": 0,
+                 "access_token_deezer": 0,
                  "access_token_github": 0,
                  "intra_autologin": "0",
-                 "services" : {
+                 "services": {
                      "football": 1,
                     "epitech": 1,
                     "spotify": 0,
+                    "deezer": 0,
                     "github": 0,
                     "cocktail": 1,
-                    "open_data": 1,
                  },
                  "widgets": {
                      "0": "0"
@@ -144,17 +145,19 @@ def loginWithFacebook():
             db.child("users").child(x).update({"access_token": access_token, "access_token_fb": access_token_fb},
                                               user['idToken'])
             return jsonify({"message": "Fb User Login.", "access_token": access_token,
-                            "access_token_fb": access_token_fb, "admin": True if all_users[x]["admin"] == 1 else False}), 200
+                            "access_token_fb": access_token_fb,
+                            "admin": True if all_users[x]["admin"] == 1 else False}), 200
 
     access_token = secrets.token_hex(20)
     hashed = makePasswordHash(secrets.token_hex(20))
 
     loginUser = {"email": login, "password": hashed, "admin": 0, "access_token": access_token,
                  "access_token_fb": access_token_fb,
-                 "services" : {
+                 "services": {
                      "football": 1,
                     "epitech": 1,
                     "spotify": 0,
+                    "deezer": 0,
                     "github": 0,
                     "cocktail": 1,
                     "open_data": 1,
@@ -164,6 +167,7 @@ def loginWithFacebook():
                  },
                  "access_token_google": 0,
                  "access_token_spotify": 0,
+                 "access_token_deezer": 0,
                  "access_token_github": 0,
                  "intra_autologin": "0"
                  }
@@ -199,10 +203,11 @@ def loginWithGoogle():
     hashed = makePasswordHash(secrets.token_hex(20))
 
     loginUser = {"email": login, "password": hashed, "admin": 0, "access_token": access_token,
-                 "services" : {
+                 "services": {
                      "football": 1,
                     "epitech": 1,
                     "spotify": 0,
+                    "deezer": 0,
                     "github": 0,
                     "cocktail": 1,
                     "open_data": 1,
@@ -213,6 +218,7 @@ def loginWithGoogle():
                  "access_token_fb": 0,
                  "access_token_google": access_token_google,
                  "access_token_spotify": 0,
+                 "access_token_deezer": 0,
                  "access_token_github": 0,
                  "intra_autologin": "0"
                  }
@@ -260,7 +266,7 @@ def delete():
                 return jsonify({"message": "user deleted."}), 200
 
     return jsonify({"message": "Either the access_token doesn't have the right access or your user "
-                                               "doesn't exist in our database."}), 404
+                               "doesn't exist in our database."}), 404
 
 
 @loginManagement.route('/modifyPermission', methods=['POST'])
@@ -304,7 +310,7 @@ def modifyPermission():
                 return jsonify({"message": "Account updated"}), 200
 
     return jsonify({"message": "Either the access_token doesn't have the right access or your user "
-                                               "doesn't exist in our database."}), 404
+                               "doesn't exist in our database."}), 404
 
 
 @loginManagement.route('/getUserInformations', methods=['POST'])
@@ -334,7 +340,7 @@ def getUserInformations():
         if all_users[x]["access_token"] == access_token:
             return jsonify({"user": all_users[x]}), 200
     return jsonify({"message": "Either the access_token doesn't have the right access or your user "
-                                               "doesn't exist in our database."}), 404
+                               "doesn't exist in our database."}), 404
 
 
 @loginManagement.route('/getUsers', methods=['POST'])
@@ -397,14 +403,16 @@ def getSusbscribedServices():
 
     for x in all_users:
         if all_users[x]["access_token"] == access_token:
-            return jsonify({"services" : {
-                                "football": all_users[x]["services"]['football'],
-                                "epitech": all_users[x]["services"]['epitech'],
-                                "spotify": all_users[x]["services"]['spotify'],
-                                "github": all_users[x]["services"]['github'],
-                                "cocktail": all_users[x]["services"]['cocktail'],
-                                "open_data": all_users[x]["services"]['open_data']}
-                            }), 200
+            return jsonify({"services": {
+                "football": all_users[x]["services"]['football'],
+                "epitech": all_users[x]["services"]['epitech'],
+                "spotify": all_users[x]["services"]['spotify'],
+                "github": all_users[x]["services"]['github'],
+                "cocktail": all_users[x]["services"]['cocktail'],
+                "open_data": all_users[x]["services"]['open_data'],
+                "deezer": all_users[x]["services"]['deezer'],
+            }
+            }), 200
     return jsonify({"message": "user not found"}), 404
 
 
@@ -419,13 +427,33 @@ def removeSubscribedService():
 
     for x in all_users:
         if all_users[x]["access_token"] == access_token:
-            if service == "github" or service == "spotify":
+            if service == "github" or service == "spotify" or service == "deezer":
                 db.child("users").child(x).update({"access_token_" + service: 0}, user['idToken'])
                 db.child("users").child(x).child("services").update({service: 0}, user['idToken'])
             else:
                 db.child("users").child(x).child("services").update({service: 0}, user['idToken'])
             return jsonify({"message": "Service removed."}), 200
     return jsonify({"message": "user not found"}), 404
+
+
+@loginManagement.route('/loginWithDeezer', methods=['POST'])
+def loginWithDeezer():
+    from index import db, user
+
+    access_token_deezer= request.json["access_token_deezer"]
+    access_token = request.json["access_token"]
+
+    all_users = db.child("users").get(user['idToken']).val()
+
+    for x in all_users:
+        if all_users[x]['access_token'] == access_token:
+            db.child("users").child(x).update(
+                {"access_token_deezer": access_token_deezer},
+                user['idToken'])
+            return jsonify({"message": "Deezer User Login.",
+                            "access_token_deezer": access_token_deezer,
+                            "admin": True if all_users[x]["admin"] == 1 else False}), 200
+    return jsonify({"message": "Deezer problem occured.", "access_token": access_token}), 404
 
 
 @loginManagement.route('/loginWithSpotify', methods=['POST'])
@@ -555,5 +583,5 @@ def getWidgets():
 
     for x in all_users:
         if all_users[x]["access_token"] == access_token:
-            return jsonify({"widgets" : all_users[x]["widgets"]}), 200
+            return jsonify({"widgets": all_users[x]["widgets"]}), 200
     return jsonify({"message": "User not found"}), 404

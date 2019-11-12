@@ -12,6 +12,7 @@ import SpotifyProfile from './Spotify/SpotifyProfile'
 import EpitechRanking from './Intra Epitech/EpitechRanking'
 import EpitechBinomes from './Intra Epitech/EpitechBinomes'
 import EpitechModules from './Intra Epitech/EpitechModules'
+import DeezerPlayer from "./Deezer/DeezerPlayer"
 
 export class ComponentWrapper extends Component {
 
@@ -30,7 +31,7 @@ export class ComponentWrapper extends Component {
 
                     this.props.type === 'Cocktails List By Glass' ?
                     <CocktailsByGlass style={this.props.style} {...this.props.settings}/> :
-                    
+
                     this.props.type === 'Teams Ranking By League' ?
                     <TeamsRanking style={this.props.style} {...this.props.settings}/> :
 
@@ -63,6 +64,9 @@ export class ComponentWrapper extends Component {
 
                     this.props.type === "User's Year Modules" ?
                     <EpitechModules style={this.props.style} {...this.props.settings}/> :
+
+                    this.props.type === 'Deezer Player' ?
+                    <DeezerPlayer style={this.props.style} {...this.props.settings}/> :
                     
                     ''
                 }
