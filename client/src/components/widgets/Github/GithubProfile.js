@@ -7,30 +7,31 @@ export class GithubProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            followers: 0,
-            following: 0,
-            name: '',
-            bio: '',
+            name: props.name || '',
         }
     }
 
-    updateList = () => {
-        console.log('test update')
+    updateList = (nextName) => {
         axios.post("https://0.0.0.0:5000/getUserInformations", {
             access_token: localStorage.getItem("access_token"),
         }).then(response => {
             if (response.status !== 200)
                 return
+            console.log(nextName || this.state.name)
+            console.log(nextName)
+            console.log(this.state.name)
             axios.post("https://0.0.0.0:5000/services/github/userInfo", {
                 access_token: localStorage.getItem("access_token"),
                 accessTokenGithub: response.data.user.access_token_github,
+                name: nextName || this.state.name,
             }).then(response => {
                 if (response.status !== 200)
                     return;
+                
                 this.setState({
                     followers: parseInt(response.data.followers),
                     following: parseInt(response.data.following),
-                    name: response.data.name,
+                    displayedName: response.data.name,
                     bio: response.data.bio,
                 })
             });
@@ -51,6 +52,14 @@ export class GithubProfile extends Component {
         clearInterval(this.state.interval)
     }
 
+    componentWillUpdate = (nextProps) => {
+        console.log(nextProps.name)
+        console.log(this.props.name)
+        if (nextProps.name !== this.props.name) {
+            this.updateList(nextProps.name)
+        }
+    }
+
     render() {
         return (
             <div style={{
@@ -64,13 +73,13 @@ export class GithubProfile extends Component {
                     fontSize: 20,
                 }}>
                     <span>
-                        {this.props.showName && this.state.name}
+                        {this.state.displayedName}
                     </span>
                     <br/>
                     <span style={{
                         fontSize: 14,
                     }}>
-                        {this.props.showBio && this.state.bio}
+                        {this.state.bio}
                     </span>
                 </div>
                 <div style={{
@@ -88,15 +97,13 @@ export class GithubProfile extends Component {
                     <span style={{
                         fontSize: 32
                     }}>
-                        {this.props.showFollowers && this.state.followers}
+                        {this.state.followers}
                     </span>
-                    {
-                        this.props.showFollowers ? 
                         <div style={{
                             marginTop: '5px'
-                        }}>Followers</div>
-                        : ''
-                    }
+                        }}>
+                            Followers
+                        </div>
                 </div>
                 <div style={{
                     textAlign: 'right',
@@ -107,15 +114,13 @@ export class GithubProfile extends Component {
                     <span style={{
                         fontSize: 32
                     }}>
-                        {this.props.showFollowing && this.state.following}
+                        {this.state.following}
                     </span>
-                    {
-                        this.props.showFollowing ?
                         <div style={{
                             marginTop: '5px'
-                        }}>Following</div>
-                        : ''
-                    }
+                        }}>
+                            Following
+                        </div>
                 </div>
             </div>
         )

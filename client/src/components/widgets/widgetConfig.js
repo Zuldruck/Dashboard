@@ -19,8 +19,6 @@ import SpotifyPlayer from './Spotify/SpotifyPlayer'
 import SpotifyPlayerSettings from './Spotify/SpotifyPlayerSettings'
 import DeezerPlayer from './Deezer/DeezerPlayer'
 import DeezerPlayerSettings from './Deezer/DeezerPlayerSettings'
-import SpotifyProfile from './Spotify/SpotifyProfile'
-import SpotifyProfileSettings from './Spotify/SpotifyProfileSettings'
 import EpitechRanking from './Intra Epitech/EpitechRanking'
 import EpitechRankingSettings from './Intra Epitech/EpitechRankingSettings'
 import EpitechBinomes from './Intra Epitech/EpitechBinomes'
@@ -118,15 +116,6 @@ const config = [
         color: '#1A1722',
         component: <DeezerPlayer />,
         settings: <DeezerPlayerSettings />,
-    },
-    {
-        name: "Spotify Profile",
-        service: 'spotify',
-        heightGridSize: 4,
-        widthGridSize: 4,        
-        color: '#1DB954',
-        component: <SpotifyProfile />,
-        settings: <SpotifyProfileSettings />,
     },
     {
         name: "GPA Ranking",

@@ -52,16 +52,16 @@ export class EpitechModulesSettings extends Component {
     render() {
         return (
             <div>
-                <h4>Login</h4>
+                <h4>Epitech Login</h4>
                 <Input style={{
                     width: '100%',
                     marginBottom: '5%',
-                }} value={this.state.login} onChange={this.onLoginChange}/>
+                }} value={this.state.login} placeholder="Enter your epitech login" onChange={this.onLoginChange}/>
                 <h4>Year</h4>
                 <InputNumber style={{
                     width: '100%',
                     marginBottom: '5%',
-                }} value={this.state.year} onChange={this.onYearChange}/>
+                }} value={this.state.year} placeholder="Enter scolar year" onChange={this.onYearChange}/>
                 <h4>Timer (in minutes)</h4>
                 <InputNumber min={1} max={60} defaultValue={this.state.timer} onChange={this.onTimerChange}/>
             </div>

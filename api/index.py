@@ -44,10 +44,6 @@ db = firebase.database()
 auth = firebase.auth()
 user = auth.sign_in_with_email_and_password("lucas.sanchez@epitech.eu", "dashboard1234")
 
-@app.before_request
-def before_request_func():
-    global user
-    user = auth.sign_in_with_email_and_password("lucas.sanchez@epitech.eu", "dashboard1234")
 
 @app.route('/about', methods=['GET'])
 def about():

@@ -17,16 +17,20 @@
                     "type": "string"
                 }]
             }, {
-                "name": "Epitech Profile",
-                "description": "Display the student profile of the authenticated user",
+                "name": "Epitech Binomes",
+                "description": "Display the student's epitech top binomes of an user",
                 "params": [{
-                    "name": "showGpa",
-                    "type": "integer"
+                    "name": "login",
+                    "type": "string"
+                }]
+            }, {
+                "name": "Epitech Modules",
+                "description": "Display the student's epitech modules of a year",
+                "params": [{
+                    "name": "login",
+                    "type": "string"
                 }, {
-                    "name": "showPicture",
-                    "type": "integer"
-                }, {
-                    "name": "showPromo",
+                    "name": "year",
                     "type": "integer"
                 }]
             }]
@@ -38,22 +42,6 @@
                 "params": [{
                     "name": "playlist",
                     "type": "string"
-                }]
-            }, {
-                "name": "Spotify Profile",
-                "description": "Display the spotify profile of the user",
-                "params": [{
-                    "name": "showFollowers",
-                    "type": "integer"
-                }, {
-                    "name": "showName",
-                    "type": "integer"
-                }, {
-                    "name": "showUserId",
-                    "type": "integer"
-                }, {
-                    "name": "showCountry",
-                    "type": "integer"
                 }]
             }]
         }, {
@@ -118,19 +106,20 @@
                 }]
             }, {
                 "name": "Github Profile",
-                "description": "Display cocktail list by glass",
+                "description": "Display github profile of a follower",
                 "params": [{
-                    "name": "showFollowers",
-                    "type": "integer"
-                }, {
-                    "name": "showFollowing",
-                    "type": "integer"
-                }, {
-                    "name": "showBio",
-                    "type": "integer"
-                }, {
-                    "name": "showName",
-                    "type": "integer"
+                    "name": "name",
+                    "type": "string"
+                }]
+            }]
+        }, {
+            "name": "Deezer",
+            "widgets": [{
+                "name": "Deezer Player",
+                "description": "Display a deezer player by playlist",
+                "params": [{
+                    "name": "playlist",
+                    "type": "string"
                 }]
             }]
         }]
