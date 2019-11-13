@@ -10,7 +10,6 @@ export class Services extends Component {
         super(props);
         this.state = {
             loggedIn: false,
-            possibleCards: ["twitter", "football", "cocktail", "outlook", "spotify", "epitech", "open_data", "deezer"],
             subscribedCards: [],
             nonSubscribedCards: [],
             access_token: '',
