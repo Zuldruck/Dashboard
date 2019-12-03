@@ -1,5 +1,5 @@
-# Epitech Dashboard
-Epitech Dashboard is a web app which allow the users to connect to several services and create widgets linked to them.
+# Dashboard
+Dashboard is a web app which allow the users to connect to several services and create widgets linked to them.
 
 ## Summary
 
