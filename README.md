@@ -19,23 +19,25 @@ Dashboard is a web app which allow the users to connect to several services and 
 
 Components/ServiceCard.js :
 
-    const  types  = [{
-			type:  'spotify',
-			color:  '#1DB954',
-			title:  'Spotify',
-			icon:  'spotify.svg',
-		},{
-			type:  'deezer',
-			color:  '#191919',
-			title:  'Deezer',
-			icon:  'spotify.svg',
-		}, {
-			type:  'epitech',
-			color:  '#0F6AB3',
-			title:  'Intranet Epitech',
-			icon:  'epitech.svg'
-		}
-	]
+```js
+const  types  = [{
+		type:  'spotify',
+		color:  '#1DB954',
+		title:  'Spotify',
+		icon:  'spotify.svg',
+	},{
+		type:  'deezer',
+		color:  '#191919',
+		title:  'Deezer',
+		icon:  'spotify.svg',
+	}, {
+		type:  'epitech',
+		color:  '#0F6AB3',
+		title:  'Intranet Epitech',
+		icon:  'epitech.svg'
+	}
+]
+```
 
 ## <a name="widget"></a>How to implement a widget ?
 
@@ -43,26 +45,28 @@ Components/ServiceCard.js :
 
 components/widgets/widgetConfig.js:
 
-	const config = [
-		{
-			name:  "Cocktails List By Ingredient",
-			service:  'cocktail',
-			heightGridSize:  8,
-			widthGridSize:  4,
-			color:  '#FF8C00',
-			component:  <CocktailsByIngredient/>,
-			settings:  <CocktailsByIngredientSettings/>,
-		},
-		{
-			name:  "Teams Ranking By League",
-			service:  'football',
-			heightGridSize:  8,
-			widthGridSize:  8,
-			color:  '#608038',
-			component:  <TeamsRanking  />,
-			settings:  <TeamsRankingSettings/>,
-		}
-	]
+```js
+const config = [
+	{
+		name:  "Cocktails List By Ingredient",
+		service:  'cocktail',
+		heightGridSize:  8,
+		widthGridSize:  4,
+		color:  '#FF8C00',
+		component:  <CocktailsByIngredient/>,
+		settings:  <CocktailsByIngredientSettings/>,
+	},
+	{
+		name:  "Teams Ranking By League",
+		service:  'football',
+		heightGridSize:  8,
+		widthGridSize:  8,
+		color:  '#608038',
+		component:  <TeamsRanking  />,
+		settings:  <TeamsRankingSettings/>,
+	}
+]
+```
  > Don't forget to create the widget component
 
 ## <a name="services"></a>Available Services: (7)
